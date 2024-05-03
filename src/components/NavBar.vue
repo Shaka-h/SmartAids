@@ -34,7 +34,7 @@
   const activeComponent = ref('home');
   const components = ref([
     { name: "Home", id: "home" },
-    { name: "Connect Wallet", id: "wallet" }
+    { name: "Disconnect Wallet", id: "wallet" }
   ]);
   
   const handleComponentClick = (id) => {
