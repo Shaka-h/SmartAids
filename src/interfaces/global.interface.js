@@ -1,6 +1,4 @@
 import {notifyError, notifySuccess} from "@/services/notificationService.js";
-import {apolloClient} from "@/apollo.js";
-import {uploadBase64File} from "@/graphql/uploadFile.graphql.js";
 
 
 export const patchFormFields = (formFields, defaultValues) => {
