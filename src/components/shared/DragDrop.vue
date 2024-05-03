@@ -36,9 +36,9 @@
       @dragover.prevent
       @click="$refs.file.click()"
     >
-      <span>{{ $t('click') }} <span v-if="allowDrop">{{ $t('or') }} </span></span>
-      <span v-if="allowDrop">{{ multipleFiles ? $t('dropMultipleFiles') : $t('dropSingleFile')  }}</span>
-      <span>{{ $t('toUploadDocuments') }}</span>
+      <span> Click  <span v-if="allowDrop"> or </span></span>
+      <span v-if="allowDrop">{{ multipleFiles ? dropMultipleFiles : dropSingleFile  }}</span>
+      <span>Upload Documents</span>
     </div>
     <input type="file" style="display: none" ref="file" :accept="accept" :multiple="multipleFiles" @input="handleFileInput" />
   </div>

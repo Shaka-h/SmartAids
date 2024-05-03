@@ -13,7 +13,8 @@
           <v-card title="Make a post">
             <v-card-text>
               <div> 
-                <drag-drop />
+                <FormRichText />
+                <DragDropVue />
               </div>
             </v-card-text>
       
@@ -32,6 +33,7 @@
 
 <script setup>
 import DragDropVue from '@/components/shared/DragDrop.vue';
+import FormRichText from '@/components/shared/FormRichText.vue'
 import { ref } from 'vue';
 
 const props = defineProps(["openDialog", "selectedData"]);
