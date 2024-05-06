@@ -1,20 +1,25 @@
 <template>
-    <v-dialog max-width="500">
+    <v-dialog max-width="60%">
         <template v-slot:activator="{ props: activatorProps }">
           <v-btn
             v-bind="activatorProps"
             color="surface-variant"
             text="Post"
             variant="flat"
+            persistent
           ></v-btn>
         </template>
       
         <template v-slot:default="{ isActive }">
           <v-card title="Make a post">
             <v-card-text>
-              <div> 
-                <FormRichText />
-                <DragDropVue />
+              <div>
+                <v-card-text>
+                  <div> 
+                    <FormRichText />
+                    <DragDropVue />
+                  </div>
+                </v-card-text>
               </div>
             </v-card-text>
       
@@ -22,7 +27,7 @@
               <v-spacer></v-spacer>
       
               <v-btn
-                text="Close Dialog"
+                text="Close"
                 @click="isActive.value = false"
               ></v-btn>
             </v-card-actions>
@@ -42,5 +47,7 @@ const emits = defineEmits(["closeDialog"]);
 const dialog = ref(false);
 
 const close = ref(false)
+
+
 
 </script>

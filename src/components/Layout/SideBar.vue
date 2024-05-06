@@ -1,14 +1,14 @@
 <template>
     <div class="p-3 flex-col font-bold hidden sm:flex" style="width: 280px;">
   
-      <div class="capitalize border-b pt-2 pb-3 text-center mb-2 font-bold text-primary2">
-        Dwitter
+      <div class="capitalize name border-b pt-2 pb-3 text-center mb-2 font-bold text-primary2">
+        AlphaConnect
       </div>
   
-      <div class="overflow-y-scroll h-full">
+      <div class="overflow-y-scroll mt-8 h-full space-y-4">
         <template v-for="(navigationLink, index) of navigationLinks" :key="index">
           <template v-if="!navigationLink?.children?.length">
-            <div class="flex items-center rounded-md" v-if="isActive(navigationLink?.link)" style="background-color: #c6deff">
+            <div class="flex items-center rounded-md " v-if="isActive(navigationLink?.link)" style="background-color: #c6deff">
               <span class="bg-primary2 h-8 rounded-r" style="width: 4px;"></span>
               <div class="flex items-center p-2 text-primary2 font-bold">
                 <svg-icon :name="navigationLink?.icon" height="h-5" width="w-5" class="icon" color="#257ae4"></svg-icon>
@@ -69,7 +69,7 @@
   </template>
   
   <script setup>
-  import Post from '../../views/Post.vue'
+  import Post from '../../views/Post/PostForm.vue'
   import SvgIcon from "@/components/shared/SvgIcon.vue";
   import {useRoute} from "vue-router";
   import {ref} from "vue";
@@ -131,5 +131,9 @@ const closeDialog = () => {
     color: #257ae4
   }
   
+  .name{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 25px;
+  }
   </style>
   

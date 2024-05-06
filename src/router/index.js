@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Connected from '@/views/Connected.vue'
 import Profile from '@/views/Profile/Profile.vue'
-import Post from '@/views/Post.vue'
+import Post from '@/views/Post/Post.vue'
 import Setting from '@/views/Setting.vue'
 import news from '@/views/news.vue'
 const router = createRouter({
