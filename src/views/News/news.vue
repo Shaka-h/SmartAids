@@ -2,28 +2,17 @@
     <div class=""> 
         <div>
             <div class="font text-2xl">NEWS</div>
+            <div class="p-2 flex justify-end mx-8 cursor-pointer">
+                <NewsForm @closeDialog="makeAPost=false" :open-dialog="makeAPost"  ></NewsForm>
+              </div>
             <div class="mt-8 row" > 
-                <div v-for="(post, index) of posts" :key="index" class="col-md-5 flex flex-col justify-center border m-4 p-4 cursor-pointer mt-4 rounded-lg" > 
-                    <div class="font-bold">{{ post.title }}</div>
+                <div @click="viewNews(post.postId)" v-for="(post, index) of posts" :key="index" class="col-md-5 flex flex-col justify-center border m-4 p-4 cursor-pointer mt-4 rounded-lg" > 
+                    <div class="font-bold">{{ post.title }}</div>{{ post.postId }}
                     <div class="mt-2 ">
                         <img :src="post.image" class="rounded-lg h-64 "></img>
                     </div>
                     <div> 
                         <div class="mt-2 ">{{ post.details }}</div>
-                        <div class="flex space-x-4 m-4"> 
-                          <div class="flex space-x-2">
-                            <div><svg-icon :name="'comment'" class="icon cursor-pointer" color="#020202"></svg-icon></div>
-                            <div>{{ post.comment }}</div>
-                          </div>
-                          <div class="flex space-x-2">
-                            <div><svg-icon :name="'like'" class="icon cursor-pointer" color="#020202"></svg-icon></div>
-                            <div>{{ post.likes }}</div>
-                          </div>
-                          <div class="flex space-x-2">
-                            <div><svg-icon :name="'dislike'" class="icon cursor-pointer" color="#020202"></svg-icon></div>
-                            <div>{{ post.unlikes }}</div>
-                          </div>
-                        </div>
                     </div>
                   </div>
 
@@ -37,7 +26,15 @@
 <script setup>
 import { ref } from 'vue';
 import SvgIcon from "@/components/shared/SvgIcon.vue";
+import NewsForm from '@/views/News/NewsForm.vue';
+import { useRouter } from 'vue-router';
 
+const makeAPost = ref(false)
+const router = useRouter()
+
+const viewNews = (postId) => {
+  router.push(`/news/${postId}`)
+}
 // Define posts as a reactive reference
 const posts = ref([
   {

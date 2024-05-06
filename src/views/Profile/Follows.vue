@@ -51,9 +51,11 @@ import BusinessCard from "@/views/Profile/BusinessCard.vue"
 
 const activeTab = ref("followers")
 const addEditTestimonials = ref(false)
+
 const viewProfile = () => {
   addEditTestimonials.value = true
 };
+
 const follows = ref([
   {
     name: "Followers",

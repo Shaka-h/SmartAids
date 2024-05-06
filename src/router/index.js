@@ -4,7 +4,9 @@ import Connected from '@/views/Connected.vue'
 import Profile from '@/views/Profile/Profile.vue'
 import Post from '@/views/Post/Post.vue'
 import Setting from '@/views/Setting.vue'
-import news from '@/views/news.vue'
+import news from '@/views/News/news.vue'
+import NewsDetails from '@/views/News/newsDetails.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -32,6 +34,11 @@ const router = createRouter({
           path: 'news',
           name: 'news',
           component: news 
+        },
+        {
+          path: '/news/:newsId',
+          name: 'newsDetail',
+          component: NewsDetails 
         },
         {
           path: 'setting',
