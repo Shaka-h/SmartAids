@@ -15,11 +15,13 @@
             rounded-lg border border-dashed border-primary/80 relative"
             @mouseenter="triggerRemove({show: true, index})"
             @mouseleave="triggerRemove({show: false, index})"
-            :style="{ 'background-image': `url(${selectedFile?.base64})` }">
+            :style="{ 'background-image': `url(http://127.0.0.1:8080/ipfs/${selectedFile?.attachmentPath})` }">
+
           <div class="">
             <span class="text-center font-semibold my-1">{{ selectedFile?.name }}</span>
             <div class="w-full flex items-center justify-center" v-if="fileIsDocumentType(selectedFile.name)" style="height: 100%">
-              <img :src="fetchDocumentIcon(selectedFile.name)" class="w-28 h-28"/>
+              <!-- <img :src="fetchDocumentIcon(selectedFile.name)" class="w-28 h-28"/> -->
+              <img :src="`http://127.0.0.1:8080/ipfs/${selectedFile?.attachmentPath}`" alt="icon description" class="p-2 h-64">
             </div>
           </div>
           <div class="backdrop-blur absolute top-0 w-full flex items-center justify-center hidden"
@@ -132,9 +134,10 @@ export default {
       // let result = this.uploadFile(files)
       let updatedFileList = []
       for(let file of files) {
+        console.log(file);
         let uploadResult = files.length ? await uploadFile(file) : null
         updatedFileList.push({
-          file: file,
+          fileName: file.name,
           uploadResult
         })
       }
@@ -144,23 +147,23 @@ export default {
     },
     showFiles(files) {
       for(let file of files) {
-        let reader = new FileReader();
-        reader.onload = (e) => {
-          this.selectedFiles.push( {base64: e.target.result, name: file?.file?.name} )
-        }
-        if(reader.DONE) {
-          reader.readAsDataURL(file.file)
-        }
+        this.selectedFiles.push( 
+          {
+            attachmentName: file?.fileName,
+            attachmentPath: file?.uploadResult,
+          }
+        )
       }
       let inputValue = {}
       inputValue[this.name] = files.map(file => {
         return {
-          attachmentName: file.uploadResult?.fileName,
-          attachmentPath: file.uploadResult?.fullFileName,
+          attachmentName: file?.fileName,
+          attachmentPath: file?.uploadResult,
         }
       })
       this.$emit('inputValue', inputValue)
     },
+
     removeFile(fileIndex) {
       this.selectedFiles.splice(fileIndex, 1)
       this.$emit("remove-files", fileIndex)

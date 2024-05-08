@@ -5,8 +5,8 @@ export const walletAddressConnected = ref("");
 
 export const ipfsGateway = 'http://127.0.0.1:8080/ipfs'
 
-export const marketPlace = "0x1db3f82a1c9AB1b28F0F9FF69DbB4d0375487FE7"
-export const marketPlace_ABI = [
+export const socialMedia = "0x75f027a326C4AE150e79BB095Ccf8aa62EEfFEd6"
+export const socialMedia_ABI = [
 	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
@@ -34,126 +34,49 @@ export const marketPlace_ABI = [
 		"type": "error"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			}
-		],
-		"name": "OwnableInvalidOwner",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "OwnableUnauthorizedAccount",
-		"type": "error"
-	},
-	{
 		"anonymous": false,
 		"inputs": [
 			{
 				"indexed": true,
 				"internalType": "uint256",
-				"name": "auctionID",
+				"name": "PostId",
 				"type": "uint256"
 			},
 			{
 				"indexed": true,
 				"internalType": "address",
-				"name": "nftContract",
+				"name": "profileContract",
 				"type": "address"
 			},
 			{
 				"indexed": true,
 				"internalType": "uint256",
-				"name": "tokenId",
+				"name": "postTokenId",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
 				"internalType": "address",
-				"name": "seller",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "owner",
+				"name": "creator",
 				"type": "address"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "price",
+				"name": "like",
 				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "bool",
-				"name": "sold",
-				"type": "bool"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "currentBiddingPrice",
+				"name": "dislike",
 				"type": "uint256"
-			}
-		],
-		"name": "AuctionItemCreated",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "uint256",
-				"name": "itemId",
-				"type": "uint256"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "nftContract",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "seller",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "price",
+				"name": "comment",
 				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "bool",
-				"name": "sold",
-				"type": "bool"
 			},
 			{
 				"indexed": false,
@@ -162,7 +85,7 @@ export const marketPlace_ABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "MarketItemCreated",
+		"name": "PostCreated",
 		"type": "event"
 	},
 	{
@@ -170,18 +93,30 @@ export const marketPlace_ABI = [
 		"inputs": [
 			{
 				"indexed": true,
-				"internalType": "address",
-				"name": "previousOwner",
-				"type": "address"
+				"internalType": "uint256",
+				"name": "postID",
+				"type": "uint256"
 			},
 			{
 				"indexed": true,
 				"internalType": "address",
-				"name": "newOwner",
+				"name": "liker",
 				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "like",
+				"type": "bool"
 			}
 		],
-		"name": "OwnershipTransferred",
+		"name": "PostLiked",
 		"type": "event"
 	},
 	{
@@ -264,27 +199,33 @@ export const marketPlace_ABI = [
 		"inputs": [
 			{
 				"indexed": false,
-				"internalType": "uint256",
-				"name": "Id",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
 				"internalType": "address",
-				"name": "seller",
+				"name": "profileContract",
 				"type": "address"
 			},
 			{
 				"indexed": false,
 				"internalType": "address",
-				"name": "buyer",
+				"name": "commentor",
 				"type": "address"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "price",
+				"name": "PostID",
 				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "commentID",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "commentUrl",
+				"type": "string"
 			},
 			{
 				"indexed": false,
@@ -293,56 +234,7 @@ export const marketPlace_ABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "itemSold",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "itemId",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "from",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "price",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "tax",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "total",
-				"type": "uint256"
-			}
-		],
-		"name": "taxation",
+		"name": "commentMade",
 		"type": "event"
 	},
 	{
@@ -359,13 +251,44 @@ export const marketPlace_ABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "GOVERN_ROLE",
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "PostComment",
 		"outputs": [
 			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
+				"internalType": "address",
+				"name": "profileContract",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "commentor",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "PostID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "commentID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "commentUrl",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -375,16 +298,16 @@ export const marketPlace_ABI = [
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "auctionID",
+				"name": "postID",
 				"type": "uint256"
 			},
 			{
-				"internalType": "address",
-				"name": "nftContract",
-				"type": "address"
+				"internalType": "string",
+				"name": "commentUrl",
+				"type": "string"
 			}
 		],
-		"name": "acceptOffer",
+		"name": "commentPost",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -393,16 +316,46 @@ export const marketPlace_ABI = [
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "itemID",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
 				"type": "uint256"
 			}
 		],
-		"name": "approveBuyer",
+		"name": "commentsMadeToPost",
 		"outputs": [
 			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
+				"internalType": "address",
+				"name": "profileContract",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "commentor",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "PostID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "commentID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "commentUrl",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -411,164 +364,69 @@ export const marketPlace_ABI = [
 	{
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "profileContract",
+				"type": "address"
+			},
+			{
 				"internalType": "uint256",
-				"name": "itemID",
+				"name": "tokenId",
 				"type": "uint256"
 			}
 		],
-		"name": "buyItem",
+		"name": "createPost",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "buyersMadeToItem",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "nftContract",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "itemID",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "buyingPrice",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "buyer",
-				"type": "address"
-			},
-			{
-				"internalType": "address payable",
-				"name": "seller",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "nftContract",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "price",
-				"type": "uint256"
-			}
-		],
-		"name": "createAuctionItem",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "nftContract",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "price",
-				"type": "uint256"
-			}
-		],
-		"name": "createMarketItem",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
 		"inputs": [],
-		"name": "fetchAuctionItemsUnsold",
+		"name": "fetchMyPostsCreated",
 		"outputs": [
 			{
 				"components": [
 					{
 						"internalType": "uint256",
-						"name": "auctionID",
+						"name": "PostId",
 						"type": "uint256"
 					},
 					{
-						"internalType": "address payable",
-						"name": "nftContract",
+						"internalType": "uint256",
+						"name": "postTokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "profileContract",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "creator",
 						"type": "address"
 					},
 					{
 						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address payable",
-						"name": "seller",
-						"type": "address"
-					},
-					{
-						"internalType": "address payable",
-						"name": "owner",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "price",
+						"name": "like",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
-						"name": "tax",
+						"name": "dislike",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
-						"name": "total",
+						"name": "comment",
 						"type": "uint256"
 					},
 					{
-						"internalType": "bool",
-						"name": "sold",
-						"type": "bool"
-					},
-					{
 						"internalType": "uint256",
-						"name": "currentBiddingPrice",
+						"name": "time",
 						"type": "uint256"
 					}
 				],
-				"internalType": "struct NFTMarket.AuctionItem[]",
+				"internalType": "struct AlphaConnect.Post[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -578,242 +436,52 @@ export const marketPlace_ABI = [
 	},
 	{
 		"inputs": [],
-		"name": "fetchAuctionsCreated",
+		"name": "fetchPostsCreated",
 		"outputs": [
 			{
 				"components": [
 					{
 						"internalType": "uint256",
-						"name": "auctionID",
+						"name": "PostId",
 						"type": "uint256"
 					},
 					{
-						"internalType": "address payable",
-						"name": "nftContract",
+						"internalType": "uint256",
+						"name": "postTokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "profileContract",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "creator",
 						"type": "address"
 					},
 					{
 						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address payable",
-						"name": "seller",
-						"type": "address"
-					},
-					{
-						"internalType": "address payable",
-						"name": "owner",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "price",
+						"name": "like",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
-						"name": "tax",
+						"name": "dislike",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
-						"name": "total",
+						"name": "comment",
 						"type": "uint256"
 					},
 					{
-						"internalType": "bool",
-						"name": "sold",
-						"type": "bool"
-					},
-					{
 						"internalType": "uint256",
-						"name": "currentBiddingPrice",
+						"name": "time",
 						"type": "uint256"
 					}
 				],
-				"internalType": "struct NFTMarket.AuctionItem[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "fetchItemsCreated",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "itemId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address payable",
-						"name": "nftContract",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address payable",
-						"name": "seller",
-						"type": "address"
-					},
-					{
-						"internalType": "address payable",
-						"name": "owner",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "price",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "tax",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "total",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bool",
-						"name": "sold",
-						"type": "bool"
-					}
-				],
-				"internalType": "struct NFTMarket.MarketItem[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "fetchMarketItemsUnsold",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "itemId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address payable",
-						"name": "nftContract",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address payable",
-						"name": "seller",
-						"type": "address"
-					},
-					{
-						"internalType": "address payable",
-						"name": "owner",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "price",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "tax",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "total",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bool",
-						"name": "sold",
-						"type": "bool"
-					}
-				],
-				"internalType": "struct NFTMarket.MarketItem[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "fetchMyNFTs",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "itemId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address payable",
-						"name": "nftContract",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address payable",
-						"name": "seller",
-						"type": "address"
-					},
-					{
-						"internalType": "address payable",
-						"name": "owner",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "price",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "tax",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "total",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bool",
-						"name": "sold",
-						"type": "bool"
-					}
-				],
-				"internalType": "struct NFTMarket.MarketItem[]",
+				"internalType": "struct AlphaConnect.Post[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -825,61 +493,48 @@ export const marketPlace_ABI = [
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "auctionID",
+				"name": "postID",
 				"type": "uint256"
 			}
 		],
-		"name": "getAllOffersMade",
+		"name": "getAllCommentsMadeToPost",
 		"outputs": [
 			{
 				"components": [
 					{
 						"internalType": "address",
-						"name": "nftContract",
+						"name": "profileContract",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "commentor",
 						"type": "address"
 					},
 					{
 						"internalType": "uint256",
-						"name": "auctionID",
+						"name": "PostID",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
-						"name": "offerPrice",
+						"name": "commentID",
 						"type": "uint256"
 					},
 					{
-						"internalType": "address payable",
-						"name": "offerer",
-						"type": "address"
-					},
-					{
-						"internalType": "bool",
-						"name": "offerAccepted",
-						"type": "bool"
+						"internalType": "string",
+						"name": "commentUrl",
+						"type": "string"
 					},
 					{
 						"internalType": "uint256",
-						"name": "offerID",
+						"name": "time",
 						"type": "uint256"
 					}
 				],
-				"internalType": "struct NFTMarket.Offer[]",
+				"internalType": "struct AlphaConnect.Comment[]",
 				"name": "",
 				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getContractBalance",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -954,56 +609,36 @@ export const marketPlace_ABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "idAuctionItem",
+		"name": "idComment",
 		"outputs": [
 			{
-				"internalType": "uint256",
-				"name": "auctionID",
-				"type": "uint256"
+				"internalType": "address",
+				"name": "profileContract",
+				"type": "address"
 			},
 			{
-				"internalType": "address payable",
-				"name": "nftContract",
+				"internalType": "address",
+				"name": "commentor",
 				"type": "address"
 			},
 			{
 				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address payable",
-				"name": "seller",
-				"type": "address"
-			},
-			{
-				"internalType": "address payable",
-				"name": "owner",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "price",
+				"name": "PostID",
 				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
-				"name": "tax",
+				"name": "commentID",
 				"type": "uint256"
 			},
 			{
-				"internalType": "uint256",
-				"name": "total",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bool",
-				"name": "sold",
-				"type": "bool"
+				"internalType": "string",
+				"name": "commentUrl",
+				"type": "string"
 			},
 			{
 				"internalType": "uint256",
-				"name": "currentBiddingPrice",
+				"name": "time",
 				"type": "uint256"
 			}
 		],
@@ -1018,235 +653,50 @@ export const marketPlace_ABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "idMarketItem",
+		"name": "idPost",
 		"outputs": [
 			{
 				"internalType": "uint256",
-				"name": "itemId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address payable",
-				"name": "nftContract",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address payable",
-				"name": "seller",
-				"type": "address"
-			},
-			{
-				"internalType": "address payable",
-				"name": "owner",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "price",
+				"name": "PostId",
 				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
-				"name": "tax",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "total",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bool",
-				"name": "sold",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "auctionID",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "offerPrice",
-				"type": "uint256"
-			}
-		],
-		"name": "makeOffer",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "mySales",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "itemId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
+				"name": "postTokenId",
 				"type": "uint256"
 			},
 			{
 				"internalType": "address",
-				"name": "owner",
+				"name": "profileContract",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "creator",
 				"type": "address"
 			},
 			{
 				"internalType": "uint256",
-				"name": "price",
+				"name": "like",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "dislike",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "comment",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "time",
 				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "mytaxes",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "itemId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "from",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "price",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tax",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "total",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "offersMadeToItem",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "nftContract",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "auctionID",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "offerPrice",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address payable",
-				"name": "offerer",
-				"type": "address"
-			},
-			{
-				"internalType": "bool",
-				"name": "offerAccepted",
-				"type": "bool"
-			},
-			{
-				"internalType": "uint256",
-				"name": "offerID",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -1288,24 +738,6 @@ export const marketPlace_ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "itemID",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "sellingPrice",
-				"type": "uint256"
-			}
-		],
-		"name": "sellItem",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
 				"internalType": "bytes4",
 				"name": "interfaceId",
 				"type": "bytes4"
@@ -1321,63 +753,11 @@ export const marketPlace_ABI = [
 		],
 		"stateMutability": "view",
 		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
 	}
 ]
 
-export const nftFactory_Address = "0xF272B0343b705cD5246dd53E48bB7d920942F86E"
-export const nftFactory_ABI = [
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_marketContractAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "_name",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_symbol",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_logo",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_description",
-				"type": "string"
-			}
-		],
-		"name": "deployNFTContract",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
+export const profileFactory_Address = "0x8892942e8D166A6d1C973bA4F314eF9c3a6A18F4"
+export const profileFactory_ABI = [
 	{
 		"anonymous": false,
 		"inputs": [
@@ -1390,31 +770,19 @@ export const nftFactory_ABI = [
 			{
 				"indexed": true,
 				"internalType": "address",
-				"name": "nftContract",
+				"name": "ProfileContract",
 				"type": "address"
 			},
 			{
 				"indexed": false,
 				"internalType": "string",
-				"name": "name",
+				"name": "username",
 				"type": "string"
 			},
 			{
 				"indexed": false,
 				"internalType": "string",
-				"name": "symbol",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "logo",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "description",
+				"name": "profileUrl",
 				"type": "string"
 			},
 			{
@@ -1424,7 +792,26 @@ export const nftFactory_ABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "NFTDeployed",
+		"name": "NFTProfileDeployed",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "follower",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "profile",
+				"type": "address"
+			}
+		],
+		"name": "ProfileFollowed",
 		"type": "event"
 	},
 	{
@@ -1435,7 +822,7 @@ export const nftFactory_ABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "allNFTCollections",
+		"name": "allNFTProfiles",
 		"outputs": [
 			{
 				"internalType": "address",
@@ -1444,28 +831,113 @@ export const nftFactory_ABI = [
 			},
 			{
 				"internalType": "address",
-				"name": "NftContract",
+				"name": "ProfileContract",
 				"type": "address"
 			},
 			{
 				"internalType": "string",
-				"name": "name",
+				"name": "username",
 				"type": "string"
 			},
 			{
 				"internalType": "string",
-				"name": "symbol",
+				"name": "profileUrl",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_tweetContractAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "_username",
 				"type": "string"
 			},
 			{
 				"internalType": "string",
-				"name": "logo",
+				"name": "_profileUrl",
 				"type": "string"
+			}
+		],
+		"name": "deployNFTProfileContract",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "profileContract",
+				"type": "address"
+			}
+		],
+		"name": "followProfile",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
 			},
 			{
-				"internalType": "string",
-				"name": "description",
-				"type": "string"
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "followersProfiles",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "followingProfiles",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
 			}
 		],
 		"stateMutability": "view",
@@ -1484,31 +956,26 @@ export const nftFactory_ABI = [
 					},
 					{
 						"internalType": "address",
-						"name": "NftContract",
+						"name": "ProfileContract",
 						"type": "address"
 					},
 					{
 						"internalType": "string",
-						"name": "name",
+						"name": "username",
 						"type": "string"
 					},
 					{
 						"internalType": "string",
-						"name": "symbol",
+						"name": "profileUrl",
 						"type": "string"
 					},
 					{
-						"internalType": "string",
-						"name": "logo",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "description",
-						"type": "string"
+						"internalType": "uint256",
+						"name": "time",
+						"type": "uint256"
 					}
 				],
-				"internalType": "struct NFTFactory.MyNFTCollection[]",
+				"internalType": "struct ProfileFactory.MyNFTProfile[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -1517,45 +984,38 @@ export const nftFactory_ABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "getCollectionsByOwner",
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "profile",
+				"type": "address"
+			}
+		],
+		"name": "getAllfollowers",
 		"outputs": [
 			{
-				"components": [
-					{
-						"internalType": "address",
-						"name": "owner",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "NftContract",
-						"type": "address"
-					},
-					{
-						"internalType": "string",
-						"name": "name",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "symbol",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "logo",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "description",
-						"type": "string"
-					}
-				],
-				"internalType": "struct NFTFactory.MyNFTCollection",
+				"internalType": "address[]",
 				"name": "",
-				"type": "tuple"
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "profile",
+				"type": "address"
+			}
+		],
+		"name": "getAllfollowing",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "",
+				"type": "address[]"
 			}
 		],
 		"stateMutability": "view",
@@ -1569,7 +1029,7 @@ export const nftFactory_ABI = [
 				"type": "address"
 			}
 		],
-		"name": "getNFTCollectionByAddress",
+		"name": "getprofileByAddressContract",
 		"outputs": [
 			{
 				"components": [
@@ -1580,33 +1040,138 @@ export const nftFactory_ABI = [
 					},
 					{
 						"internalType": "address",
-						"name": "NftContract",
+						"name": "ProfileContract",
 						"type": "address"
 					},
 					{
 						"internalType": "string",
-						"name": "name",
+						"name": "username",
 						"type": "string"
 					},
 					{
 						"internalType": "string",
-						"name": "symbol",
+						"name": "profileUrl",
 						"type": "string"
 					},
 					{
-						"internalType": "string",
-						"name": "logo",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "description",
-						"type": "string"
+						"internalType": "uint256",
+						"name": "time",
+						"type": "uint256"
 					}
 				],
-				"internalType": "struct NFTFactory.MyNFTCollection",
+				"internalType": "struct ProfileFactory.MyNFTProfile",
 				"name": "",
 				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getprofileByAddressOwner",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "ProfileContract",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "username",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "profileUrl",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "time",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct ProfileFactory.MyNFTProfile",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_username",
+				"type": "string"
+			}
+		],
+		"name": "getprofileByUsername",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "ProfileContract",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "username",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "profileUrl",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "time",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct ProfileFactory.MyNFTProfile",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "follower",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "profileContract",
+				"type": "address"
+			}
+		],
+		"name": "isFollowingProfile",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
@@ -1620,7 +1185,7 @@ export const nftFactory_ABI = [
 				"type": "address"
 			}
 		],
-		"name": "nftCollectionsByAddress",
+		"name": "profileByAddressContract",
 		"outputs": [
 			{
 				"internalType": "address",
@@ -1629,28 +1194,62 @@ export const nftFactory_ABI = [
 			},
 			{
 				"internalType": "address",
-				"name": "NftContract",
+				"name": "ProfileContract",
 				"type": "address"
 			},
 			{
 				"internalType": "string",
-				"name": "name",
+				"name": "username",
 				"type": "string"
 			},
 			{
 				"internalType": "string",
-				"name": "symbol",
+				"name": "profileUrl",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "profileByAddressOwner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "ProfileContract",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "username",
 				"type": "string"
 			},
 			{
 				"internalType": "string",
-				"name": "logo",
+				"name": "profileUrl",
 				"type": "string"
 			},
 			{
-				"internalType": "string",
-				"name": "description",
-				"type": "string"
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -1658,32 +1257,22 @@ export const nftFactory_ABI = [
 	}
 ]
 
-export const nftMyCollection_ABI = [
+export const nftMyProfile_ABI = [
 	{
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "_marketContractAddress",
+				"name": "_tweetContractAddress",
 				"type": "address"
 			},
 			{
 				"internalType": "string",
-				"name": "name",
+				"name": "_username",
 				"type": "string"
 			},
 			{
 				"internalType": "string",
-				"name": "symbol",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_logo",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_description",
+				"name": "_profileUrl",
 				"type": "string"
 			}
 		],
@@ -1906,13 +1495,13 @@ export const nftMyCollection_ABI = [
 			{
 				"indexed": false,
 				"internalType": "string",
-				"name": "tokenURI",
+				"name": "profileURI",
 				"type": "string"
 			},
 			{
 				"indexed": false,
 				"internalType": "uint256",
-				"name": "itemId",
+				"name": "profileId",
 				"type": "uint256"
 			},
 			{
@@ -1922,7 +1511,7 @@ export const nftMyCollection_ABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "tokenCreated",
+		"name": "profileCreated",
 		"type": "event"
 	},
 	{
@@ -1937,7 +1526,7 @@ export const nftMyCollection_ABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "allCollectionTokens",
+		"name": "allProfilePosts",
 		"outputs": [
 			{
 				"internalType": "string",
@@ -1989,11 +1578,11 @@ export const nftMyCollection_ABI = [
 		"inputs": [
 			{
 				"internalType": "string",
-				"name": "tokenURI",
+				"name": "postURI",
 				"type": "string"
 			}
 		],
-		"name": "createToken",
+		"name": "createPost",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -2006,20 +1595,7 @@ export const nftMyCollection_ABI = [
 	},
 	{
 		"inputs": [],
-		"name": "description",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getAllCollectionTokens",
+		"name": "getAllPosts",
 		"outputs": [
 			{
 				"internalType": "string[]",
@@ -2053,11 +1629,11 @@ export const nftMyCollection_ABI = [
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "tokenId",
+				"name": "profileId",
 				"type": "uint256"
 			}
 		],
-		"name": "getTokenURIById",
+		"name": "getPostsURIById",
 		"outputs": [
 			{
 				"internalType": "string",
@@ -2094,32 +1670,6 @@ export const nftMyCollection_ABI = [
 	},
 	{
 		"inputs": [],
-		"name": "logo",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "marketContractAddress",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"name": "name",
 		"outputs": [
 			{
@@ -2145,6 +1695,19 @@ export const nftMyCollection_ABI = [
 				"internalType": "address",
 				"name": "",
 				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "profileUrl",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
 			}
 		],
 		"stateMutability": "view",
@@ -2294,717 +1857,33 @@ export const nftMyCollection_ABI = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "tweetContractAddress",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "username",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"stateMutability": "payable",
 		"type": "receive"
-	}
-]
-
-export const atsh_contractAddress ="0x56057f1591eCF99f8CC92322d7D62Cd3a6C11ab4"
-export const atsh_abi = [
-	{
-		"inputs": [],
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
-		"inputs": [],
-		"name": "AccessControlBadConfirmation",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			},
-			{
-				"internalType": "bytes32",
-				"name": "neededRole",
-				"type": "bytes32"
-			}
-		],
-		"name": "AccessControlUnauthorizedAccount",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "spender",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "value",
-				"type": "uint256"
-			}
-		],
-		"name": "approve",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "value",
-				"type": "uint256"
-			}
-		],
-		"name": "burn",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "value",
-				"type": "uint256"
-			}
-		],
-		"name": "burnFrom",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "spender",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "allowance",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "needed",
-				"type": "uint256"
-			}
-		],
-		"name": "ERC20InsufficientAllowance",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "sender",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "balance",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "needed",
-				"type": "uint256"
-			}
-		],
-		"name": "ERC20InsufficientBalance",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "approver",
-				"type": "address"
-			}
-		],
-		"name": "ERC20InvalidApprover",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "receiver",
-				"type": "address"
-			}
-		],
-		"name": "ERC20InvalidReceiver",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "sender",
-				"type": "address"
-			}
-		],
-		"name": "ERC20InvalidSender",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "spender",
-				"type": "address"
-			}
-		],
-		"name": "ERC20InvalidSpender",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "grantRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "mint",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			}
-		],
-		"name": "OwnableInvalidOwner",
-		"type": "error"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "OwnableUnauthorizedAccount",
-		"type": "error"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "spender",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "value",
-				"type": "uint256"
-			}
-		],
-		"name": "Approval",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "previousOwner",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "OwnershipTransferred",
-		"type": "event"
-	},
-	{
-		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "callerConfirmation",
-				"type": "address"
-			}
-		],
-		"name": "renounceRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "revokeRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"indexed": true,
-				"internalType": "bytes32",
-				"name": "previousAdminRole",
-				"type": "bytes32"
-			},
-			{
-				"indexed": true,
-				"internalType": "bytes32",
-				"name": "newAdminRole",
-				"type": "bytes32"
-			}
-		],
-		"name": "RoleAdminChanged",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "sender",
-				"type": "address"
-			}
-		],
-		"name": "RoleGranted",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "sender",
-				"type": "address"
-			}
-		],
-		"name": "RoleRevoked",
-		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "value",
-				"type": "uint256"
-			}
-		],
-		"name": "transfer",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "from",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "value",
-				"type": "uint256"
-			}
-		],
-		"name": "Transfer",
-		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "from",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "value",
-				"type": "uint256"
-			}
-		],
-		"name": "transferFrom",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "value",
-				"type": "uint256"
-			}
-		],
-		"name": "transferWei",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "owner",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "spender",
-				"type": "address"
-			}
-		],
-		"name": "allowance",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "balanceOf",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "decimals",
-		"outputs": [
-			{
-				"internalType": "uint8",
-				"name": "",
-				"type": "uint8"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "DEFAULT_ADMIN_ROLE",
-		"outputs": [
-			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getOwner",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			}
-		],
-		"name": "getRoleAdmin",
-		"outputs": [
-			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "hasRole",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "MANAGER_ROLE",
-		"outputs": [
-			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "name",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes4",
-				"name": "interfaceId",
-				"type": "bytes4"
-			}
-		],
-		"name": "supportsInterface",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "symbol",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "totalSupply",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
 	}
 ]

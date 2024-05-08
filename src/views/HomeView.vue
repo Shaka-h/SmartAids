@@ -10,7 +10,7 @@
 
             </div>
 
-            <button class="border border-black h-fit p-2 rounded  my-auto hover:text-white font-sans font-medium hover:bg-[#40128B] transition-colors duration-300 ease-in-out">Connect</button>
+            <button @click="connect" class="border border-black h-fit p-2 rounded  my-auto hover:text-white font-sans font-medium hover:bg-[#40128B] transition-colors duration-300 ease-in-out">Connect</button>
         </div>
     </nav>
     <div class="h-[99.5vh] bg-gray-100 relative rounded-t-xl overflow-hidden">
@@ -102,7 +102,7 @@ const connect = () => {
                   walletAddressConnected.value = accounts[0];
                   console.log('Connected with account:', walletAddressConnected.value);
                   // Now you can use userAccount to interact with the blockchain
-                  router.push(`/${walletAddressConnected.value}`); // Access the value of wallet using .value
+                  router.push(`/${walletAddressConnected.value}/posts`); // Access the value of wallet using .value
 
               })
               .catch((error) => {

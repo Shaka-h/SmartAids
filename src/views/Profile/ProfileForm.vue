@@ -18,7 +18,7 @@
                         :form-fields="formFields"
                         submit-label="send"
                         :showLabels="true"
-                        @on-submit="submitForm"
+                        @on-submit="CreateProfile"
                     ></dynamic-form-main>
                 </div>
             </v-card-text>
@@ -38,6 +38,13 @@
 <script setup>
 import { ref } from 'vue';
 import DynamicFormMain from "@/components/shared/forms/DynamicFormMain.vue";
+import {getSignerContract} from '../../scripts/ContractUtils';
+import addMetadata  from '@/scripts/IPFS'
+import router from '@/router';
+import {socialMedia } from '@/scripts/ContractConstants'
+import addMetadataFile  from '@/scripts/IPFSJSON'
+
+let {nftProfileFactory_contract} = getSignerContract();
 
 const props = defineProps(["openDialog", "selectedData"]);
 const emits = defineEmits(["closeDialog"]);
@@ -60,7 +67,15 @@ const formFields = [
         type: "input",
         name: "name",
         label: "Name",
-        size: "medium",
+        size: "small",
+        required: true,
+    },
+    {
+        inputType: "input",
+        type: "input",
+        name: "fullName",
+        label: "Full Name",
+        size: "small",
         required: true,
     },
     {
@@ -68,7 +83,7 @@ const formFields = [
         type: "input",
         name: "institution",
         label: "Institution/ Organisation",
-        size: "medium",
+        size: "small",
         required: true,
     },
     {
@@ -80,13 +95,13 @@ const formFields = [
                 name: "Contact",
                 label: "Contact",
                 options: [
-                    { name: "Linkln", value: "Linkln" }, 
-                    { name: "Instagram", value: "Instagram" },
-                    { name: "Linkln", value: "Linkln" }, 
-                    { name: "Facebook", value: "Facebook" },
-                    { name: "Xtwitter", value: "Xtwitter" }, 
-                    { name: "Github", value: "Github" }, 
-                    { name: "Phone", value: "Phone" },
+                    { name: "Linkln", value: "linkln" }, 
+                    { name: "Instagram", value: "instagram" },
+                    { name: "Linkln", value: "linkln" }, 
+                    { name: "Facebook", value: "facebook" },
+                    { name: "Xtwitter", value: "twitter" }, 
+                    { name: "Github", value: "github" }, 
+                    { name: "Phone", value: "phone" },
                 ],
                 size: "medium",
                 required: true,
@@ -103,7 +118,7 @@ const formFields = [
     },
     {
         inputType: "rich-text",
-        name: "Bibliography",
+        name: "bibliography",
         label: "Bibliography",
         size: "large",
         required: true,
@@ -123,4 +138,51 @@ const formFields = [
         ]
     },
 ];
+
+const CreateProfile = async (formValues) => {
+    console.log(formValues);
+    console.log(formValues.photo[0].attachmentPath)
+    const profileCID = await addMetadataFile(
+        {
+            "name": formValues.name,
+            "fullName": formValues.fullName,
+            "photoCID": formValues.photo[0].attachmentPath,
+            "organisation": formValues.institution,
+            "bibliography": formValues.bibliography,
+            "skills": formValues.skills,
+            "contacts": formValues.links
+        }
+        
+    );
+    console.log('Item created successfully with metadata. CID:', profileCID);
+
+    try {
+        const deployedContractAddress = await nftProfileFactory_contract.deployNFTProfileContract(
+            socialMedia,
+            formValues.name,
+            profileCID
+        );
+        console.log(deployedContractAddress); // Log the deployed contract address
+
+        // wait() function allows to wait for transaction to be completed
+        let receipt = await deployedContractAddress.wait()  
+
+        console.log(receipt);
+
+        // not decodeFunctionData
+        // let decodedData = new ethers.utils.Interface(nftFactory_ABI).decodeFunctionResult('deployNFTContract', encodedData)
+        // encodedData is found in receipt
+
+        // Ensure that deployedContractAddress is not null or undefined before routing
+        if (receipt?.events[0]?.args?.ProfileContract) {
+            window.location.reload()
+        } else {
+            console.error('Error creating profile: Deployed contract address not returned.');
+        }
+
+    } catch (error) {
+        console.error('Error creating collection:', error);
+    }
+}
+
 </script>

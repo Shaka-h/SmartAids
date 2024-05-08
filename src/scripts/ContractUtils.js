@@ -1,4 +1,4 @@
-import { nftFactory_Address, nftFactory_ABI, marketPlace_ABI, marketPlace, atsh_abi, atsh_contractAddress } from '@/scripts/ContractConstants'
+import { profileFactory_Address, profileFactory_ABI, socialMedia_ABI, socialMedia } from '@/scripts/ContractConstants'
 import {ethers} from 'ethers';
 
 export const getProvider = () => {
@@ -13,9 +13,8 @@ export const getProvider = () => {
 
 export const getSignerContract = () => {
     const signer = getProvider()?.getSigner();
-    const nftFactory_contract = new ethers.Contract(nftFactory_Address, nftFactory_ABI, signer);
-    const marketPlace_contract = new ethers.Contract(marketPlace, marketPlace_ABI, signer);
-    const atsh_contract = new ethers.Contract(atsh_contractAddress, atsh_abi, signer);
+    const nftProfileFactory_contract = new ethers.Contract(profileFactory_Address, profileFactory_ABI, signer);
+    const socialMedia_contract = new ethers.Contract(socialMedia, socialMedia_ABI, signer);
 
-    return { signer, nftFactory_contract, marketPlace_contract, atsh_contract}
+    return { signer, nftProfileFactory_contract, socialMedia_contract }
 }
