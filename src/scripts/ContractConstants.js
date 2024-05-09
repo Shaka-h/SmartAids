@@ -756,33 +756,226 @@ export const socialMedia_ABI = [
 	}
 ]
 
-export const profileFactory_Address = "0x8892942e8D166A6d1C973bA4F314eF9c3a6A18F4"
+export const profileFactory_Address = "0xf433aB30698f91e56EE250dB84559EA99230C9a2"
 export const profileFactory_ABI = [
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [],
+		"name": "AccessControlBadConfirmation",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "neededRole",
+				"type": "bytes32"
+			}
+		],
+		"name": "AccessControlUnauthorizedAccount",
+		"type": "error"
+	},
 	{
 		"anonymous": false,
 		"inputs": [
 			{
 				"indexed": true,
+				"internalType": "uint256",
+				"name": "PostId",
+				"type": "uint256"
+			},
+			{
+				"indexed": true,
 				"internalType": "address",
-				"name": "owner",
+				"name": "profileContract",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "postTokenId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "creator",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "like",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "dislike",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "comment",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
+			}
+		],
+		"name": "PostCreated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "postID",
+				"type": "uint256"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "liker",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "like",
+				"type": "bool"
+			}
+		],
+		"name": "PostLiked",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "previousAdminRole",
+				"type": "bytes32"
+			},
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "newAdminRole",
+				"type": "bytes32"
+			}
+		],
+		"name": "RoleAdminChanged",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "account",
 				"type": "address"
 			},
 			{
 				"indexed": true,
 				"internalType": "address",
-				"name": "ProfileContract",
+				"name": "sender",
+				"type": "address"
+			}
+		],
+		"name": "RoleGranted",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			}
+		],
+		"name": "RoleRevoked",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "profileContract",
 				"type": "address"
 			},
 			{
 				"indexed": false,
-				"internalType": "string",
-				"name": "username",
-				"type": "string"
+				"internalType": "address",
+				"name": "commentor",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "PostID",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "commentID",
+				"type": "uint256"
 			},
 			{
 				"indexed": false,
 				"internalType": "string",
-				"name": "profileUrl",
+				"name": "commentUrl",
 				"type": "string"
 			},
 			{
@@ -792,27 +985,21 @@ export const profileFactory_ABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "NFTProfileDeployed",
+		"name": "commentMade",
 		"type": "event"
 	},
 	{
-		"anonymous": false,
-		"inputs": [
+		"inputs": [],
+		"name": "DEFAULT_ADMIN_ROLE",
+		"outputs": [
 			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "follower",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "profile",
-				"type": "address"
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
 			}
 		],
-		"name": "ProfileFollowed",
-		"type": "event"
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -822,26 +1009,31 @@ export const profileFactory_ABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "allNFTProfiles",
+		"name": "PostComment",
 		"outputs": [
 			{
 				"internalType": "address",
-				"name": "owner",
+				"name": "profileContract",
 				"type": "address"
 			},
 			{
 				"internalType": "address",
-				"name": "ProfileContract",
+				"name": "commentor",
 				"type": "address"
 			},
 			{
-				"internalType": "string",
-				"name": "username",
-				"type": "string"
+				"internalType": "uint256",
+				"name": "PostID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "commentID",
+				"type": "uint256"
 			},
 			{
 				"internalType": "string",
-				"name": "profileUrl",
+				"name": "commentUrl",
 				"type": "string"
 			},
 			{
@@ -856,30 +1048,68 @@ export const profileFactory_ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "_tweetContractAddress",
-				"type": "address"
+				"internalType": "uint256",
+				"name": "postID",
+				"type": "uint256"
 			},
 			{
 				"internalType": "string",
-				"name": "_username",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_profileUrl",
+				"name": "commentUrl",
 				"type": "string"
 			}
 		],
-		"name": "deployNFTProfileContract",
+		"name": "commentPost",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "commentsMadeToPost",
 		"outputs": [
 			{
 				"internalType": "address",
-				"name": "",
+				"name": "profileContract",
 				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "commentor",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "PostID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "commentID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "commentUrl",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
 			}
 		],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -888,86 +1118,58 @@ export const profileFactory_ABI = [
 				"internalType": "address",
 				"name": "profileContract",
 				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
 			}
 		],
-		"name": "followProfile",
+		"name": "createPost",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "followersProfiles",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "followingProfiles",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [],
-		"name": "getAllDeployedNFTCollections",
+		"name": "fetchAllPostsCreated",
 		"outputs": [
 			{
 				"components": [
 					{
+						"internalType": "uint256",
+						"name": "PostId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "postTokenId",
+						"type": "uint256"
+					},
+					{
 						"internalType": "address",
-						"name": "owner",
+						"name": "profileContract",
 						"type": "address"
 					},
 					{
 						"internalType": "address",
-						"name": "ProfileContract",
+						"name": "creator",
 						"type": "address"
 					},
 					{
-						"internalType": "string",
-						"name": "username",
-						"type": "string"
+						"internalType": "uint256",
+						"name": "like",
+						"type": "uint256"
 					},
 					{
-						"internalType": "string",
-						"name": "profileUrl",
-						"type": "string"
+						"internalType": "uint256",
+						"name": "dislike",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "comment",
+						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
@@ -975,7 +1177,62 @@ export const profileFactory_ABI = [
 						"type": "uint256"
 					}
 				],
-				"internalType": "struct ProfileFactory.MyNFTProfile[]",
+				"internalType": "struct AlphaConnect.Post[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "fetchMyPostsCreated",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "PostId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "postTokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "profileContract",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "creator",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "like",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dislike",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "comment",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "time",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct AlphaConnect.Post[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -986,71 +1243,38 @@ export const profileFactory_ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "profile",
-				"type": "address"
+				"internalType": "uint256",
+				"name": "postID",
+				"type": "uint256"
 			}
 		],
-		"name": "getAllfollowers",
-		"outputs": [
-			{
-				"internalType": "address[]",
-				"name": "",
-				"type": "address[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "profile",
-				"type": "address"
-			}
-		],
-		"name": "getAllfollowing",
-		"outputs": [
-			{
-				"internalType": "address[]",
-				"name": "",
-				"type": "address[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_contractAddress",
-				"type": "address"
-			}
-		],
-		"name": "getprofileByAddressContract",
+		"name": "getAllCommentsMadeToPost",
 		"outputs": [
 			{
 				"components": [
 					{
 						"internalType": "address",
-						"name": "owner",
+						"name": "profileContract",
 						"type": "address"
 					},
 					{
 						"internalType": "address",
-						"name": "ProfileContract",
+						"name": "commentor",
 						"type": "address"
 					},
 					{
-						"internalType": "string",
-						"name": "username",
-						"type": "string"
+						"internalType": "uint256",
+						"name": "PostID",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "commentID",
+						"type": "uint256"
 					},
 					{
 						"internalType": "string",
-						"name": "profileUrl",
+						"name": "commentUrl",
 						"type": "string"
 					},
 					{
@@ -1059,49 +1283,9 @@ export const profileFactory_ABI = [
 						"type": "uint256"
 					}
 				],
-				"internalType": "struct ProfileFactory.MyNFTProfile",
+				"internalType": "struct AlphaConnect.Comment[]",
 				"name": "",
-				"type": "tuple"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getprofileByAddressOwner",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "address",
-						"name": "owner",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "ProfileContract",
-						"type": "address"
-					},
-					{
-						"internalType": "string",
-						"name": "username",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "profileUrl",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "time",
-						"type": "uint256"
-					}
-				],
-				"internalType": "struct ProfileFactory.MyNFTProfile",
-				"name": "",
-				"type": "tuple"
+				"type": "tuple[]"
 			}
 		],
 		"stateMutability": "view",
@@ -1110,44 +1294,17 @@ export const profileFactory_ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "string",
-				"name": "_username",
-				"type": "string"
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
 			}
 		],
-		"name": "getprofileByUsername",
+		"name": "getRoleAdmin",
 		"outputs": [
 			{
-				"components": [
-					{
-						"internalType": "address",
-						"name": "owner",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "ProfileContract",
-						"type": "address"
-					},
-					{
-						"internalType": "string",
-						"name": "username",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "profileUrl",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "time",
-						"type": "uint256"
-					}
-				],
-				"internalType": "struct ProfileFactory.MyNFTProfile",
+				"internalType": "bytes32",
 				"name": "",
-				"type": "tuple"
+				"type": "bytes32"
 			}
 		],
 		"stateMutability": "view",
@@ -1156,17 +1313,35 @@ export const profileFactory_ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "follower",
-				"type": "address"
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
 			},
 			{
 				"internalType": "address",
-				"name": "profileContract",
+				"name": "account",
 				"type": "address"
 			}
 		],
-		"name": "isFollowingProfile",
+		"name": "grantRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "hasRole",
 		"outputs": [
 			{
 				"internalType": "bool",
@@ -1180,31 +1355,36 @@ export const profileFactory_ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "address",
+				"internalType": "uint256",
 				"name": "",
-				"type": "address"
+				"type": "uint256"
 			}
 		],
-		"name": "profileByAddressContract",
+		"name": "idComment",
 		"outputs": [
 			{
 				"internalType": "address",
-				"name": "owner",
+				"name": "profileContract",
 				"type": "address"
 			},
 			{
 				"internalType": "address",
-				"name": "ProfileContract",
+				"name": "commentor",
 				"type": "address"
 			},
 			{
-				"internalType": "string",
-				"name": "username",
-				"type": "string"
+				"internalType": "uint256",
+				"name": "PostID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "commentID",
+				"type": "uint256"
 			},
 			{
 				"internalType": "string",
-				"name": "profileUrl",
+				"name": "commentUrl",
 				"type": "string"
 			},
 			{
@@ -1219,37 +1399,107 @@ export const profileFactory_ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "address",
+				"internalType": "uint256",
 				"name": "",
-				"type": "address"
+				"type": "uint256"
 			}
 		],
-		"name": "profileByAddressOwner",
+		"name": "idPost",
 		"outputs": [
 			{
+				"internalType": "uint256",
+				"name": "PostId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "postTokenId",
+				"type": "uint256"
+			},
+			{
 				"internalType": "address",
-				"name": "owner",
+				"name": "profileContract",
 				"type": "address"
 			},
 			{
 				"internalType": "address",
-				"name": "ProfileContract",
+				"name": "creator",
 				"type": "address"
 			},
 			{
-				"internalType": "string",
-				"name": "username",
-				"type": "string"
+				"internalType": "uint256",
+				"name": "like",
+				"type": "uint256"
 			},
 			{
-				"internalType": "string",
-				"name": "profileUrl",
-				"type": "string"
+				"internalType": "uint256",
+				"name": "dislike",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "comment",
+				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
 				"name": "time",
 				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "callerConfirmation",
+				"type": "address"
+			}
+		],
+		"name": "renounceRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "revokeRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes4",
+				"name": "interfaceId",
+				"type": "bytes4"
+			}
+		],
+		"name": "supportsInterface",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
@@ -1511,7 +1761,7 @@ export const nftMyProfile_ABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "profileCreated",
+		"name": "postCreated",
 		"type": "event"
 	},
 	{

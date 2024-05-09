@@ -56,7 +56,7 @@
           </template>
         </template>
 
-        <div class="p-2 mt-8 mx-8 cursor-pointer">
+        <div v-if="profileContract" class="p-2 mt-8 mx-8 cursor-pointer">
           <Post @closeDialog="makeAPost=false" :open-dialog="makeAPost"  ></Post>
         </div>
 
@@ -72,13 +72,15 @@
   import Post from '../../views/Post/PostForm.vue'
   import SvgIcon from "@/components/shared/SvgIcon.vue";
   import {useRoute} from "vue-router";
-  import {ref} from "vue";
+  import {onMounted, ref} from "vue";
   import {walletAddressConnected} from "@/scripts/ContractConstants";
+  import {getSignerContract} from '../../scripts/ContractUtils';
 
   const route = useRoute()
   const hoveredLink = ref(null)
   const childHoveredLink = ref(null)
-  
+  let {nftProfileFactory_contract} = getSignerContract();
+
   const isActive = (link) => {
     return route.fullPath.includes(link)
   }
@@ -119,6 +121,14 @@ const closeDialog = () => {
   const postSomething = () => {
     makeAPost.value = true;
 };
+
+onMounted(async () => {
+    const getprofileContract = await nftProfileFactory_contract.profileByAddressOwner(router?.params?.wallet)
+    profileContract.value = await getprofileContract?.ProfileContract
+    console.log(profileContract.value, "profileContract");
+
+});
+
   </script>
   
   
