@@ -26,7 +26,7 @@ contract MyProfile is ERC721URIStorage {
     string[] public allProfilePosts;
     mapping (uint256 => string) profileURIById;
 
-    event profileCreated(string profileURI, uint256 profileId, uint256 time);
+    event postCreated(string profileURI, uint256 profileId, uint256 time);
 
     constructor(address _tweetContractAddress, string memory _username, string memory _profileUrl) ERC721("eGa", "eGa") {
         tweetContractAddress = _tweetContractAddress;
@@ -45,7 +45,7 @@ contract MyProfile is ERC721URIStorage {
         allProfilePosts.push(postURI); // Add the new post ID to the array
         profileURIById[newPostId] = postURI; // Store the profile URI in the mapping
         setApprovalForAll(tweetContractAddress, true); //grant transaction permission to marketplace
-        emit profileCreated(postURI, newPostId, block.timestamp);
+        emit postCreated(postURI, newPostId, block.timestamp);
 
         return newPostId; // Return the new profile ID
     }
@@ -134,7 +134,6 @@ contract ProfileFactory {
         // Emit an event to log the profile follow
         emit ProfileFollowed(msg.sender, profileContract);
     }
-
 
     function isFollowingProfile(address follower, address profileContract) public view returns (bool) {
         // Check if the follower is already following the profile

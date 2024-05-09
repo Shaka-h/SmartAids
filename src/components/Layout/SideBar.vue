@@ -3,6 +3,7 @@
   
       <div class="capitalize name border-b pt-2 pb-3 text-center mb-2 font-bold text-primary2">
         AlphaConnect
+
       </div>
   
       <div class="overflow-y-scroll mt-8 h-full space-y-4">
@@ -55,8 +56,7 @@
             </template>
           </template>
         </template>
-
-        <div v-if="profileContract" class="p-2 mt-8 mx-8 cursor-pointer">
+        <div v-if="profileContract != 0x0000000000000000000000000000000000000000" class="p-2 mt-8 mx-8 cursor-pointer">
           <Post @closeDialog="makeAPost=false" :open-dialog="makeAPost"  ></Post>
         </div>
 
@@ -80,6 +80,7 @@
   const hoveredLink = ref(null)
   const childHoveredLink = ref(null)
   let {nftProfileFactory_contract} = getSignerContract();
+  const profileContract = ref()
 
   const isActive = (link) => {
     return route.fullPath.includes(link)
@@ -123,7 +124,7 @@ const closeDialog = () => {
 };
 
 onMounted(async () => {
-    const getprofileContract = await nftProfileFactory_contract.profileByAddressOwner(router?.params?.wallet)
+    const getprofileContract = await nftProfileFactory_contract.profileByAddressOwner(route?.params?.wallet)
     profileContract.value = await getprofileContract?.ProfileContract
     console.log(profileContract.value, "profileContract");
 

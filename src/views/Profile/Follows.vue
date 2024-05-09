@@ -14,17 +14,22 @@
         </div>
 
         <div class="mt-4">
+            <div v-if="activeTab === 'all'">
+                <div v-for="(profile, index) of allDeployedNFTCollections" :key="index" class="bg-gradient border rounded-lg py-2 px-4 w-full cursor-pointer mb-2 flex justify-between"> 
+                    <div>{{ profile[2] }}</div>
+                    <div @click="follow(profile)" class="hover:border-b cursor-pointer">follow</div>
+                </div>
+            </div>
+
             <div v-if="activeTab === 'followers'">
                 <div v-for="(follow, index) of followersList" :key="index" class="bg-gradient border rounded-lg py-2 px-4 w-full cursor-pointer mb-2 flex justify-between"> 
                     <div>{{ follow.name }}</div>
-                    <div class="hover:border-b cursor-pointer">follow</div>
                 </div>
             </div>
 
             <div v-if="activeTab === 'following'">
                 <div v-for="(follow, index) of followingList" :key="index" class="bg-gradient hover:bg-blue border rounded-lg py-2 px-4 w-full cursor-pointer mb-2 flex justify-between"> 
                     <div>{{ follow.name }}</div>
-                    <div class="hover:border-b cursor-pointer">Unfollow</div>
                 </div>
             </div>
             <div v-if="activeTab === 'cards'">
@@ -45,11 +50,14 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref, onMounted, computed } from 'vue';
 import SvgIcon from "@/components/shared/SvgIcon.vue";
 import BusinessCard from "@/views/Profile/BusinessCard.vue"
+import {getSignerContract} from '../../scripts/ContractUtils';
 
-const activeTab = ref("followers")
+let {nftProfileFactory_contract} = getSignerContract();
+
+const activeTab = ref("all")
 const addEditTestimonials = ref(false)
 
 const viewProfile = () => {
@@ -57,19 +65,25 @@ const viewProfile = () => {
 };
 
 const follows = ref([
-  {
-    name: "Followers",
-    id: 'followers'
-  },
-  {
-    name: "Following",
-    id: 'following'
-  },
-  {
-    name: "Business Cards",
-    id: 'cards'
-  },
+    {
+        name: "All",
+        id: 'all'
+    },
+    {
+        name: "Followers",
+        id: 'followers'
+    },
+    {
+        name: "Following",
+        id: 'following'
+    },
+    {
+        name: "Business Cards",
+        id: 'cards'
+    },
 ])
+
+const allDeployedNFTCollections = ref()
 
 const followersList = ref([
     {
@@ -136,4 +150,19 @@ const followingList = ref([
         name: "Miriam"
     }
 ])
+
+const follow = async (profile) => {
+    console.log(profile?.ProfileContract);
+    const follow = await nftProfileFactory_contract.followProfile(profile?.ProfileContract)
+    let receipt = await follow.wait() 
+    console.log(receipt); 
+    activeTab.value = 'following'
+}
+
+onMounted(async () => {
+    const getAllDeployedNFTCollections = await nftProfileFactory_contract.getAllDeployedNFTCollections()
+    allDeployedNFTCollections.value = await getAllDeployedNFTCollections
+    console.log(allDeployedNFTCollections.value, "allDeployedNFTCollections");
+
+});
 </script>

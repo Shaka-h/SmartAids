@@ -202,23 +202,24 @@ contract AlphaConnect is ReentrancyGuard, AccessControl {
     }
 
 
-    /// @notice fetch list of NFTS owned/bought by this user
-    function fetchPostsCreated() public view returns (Post[] memory){
-        //get total number of Posts ever created
+    /// @notice Fetch list of NFTs owned/bought by this user
+    function fetchAllPostsCreated() public view returns (Post[] memory) {
+        // Get total number of Posts ever created
         uint totalPostCount = _PostIds.current();
+        
+        // Initialize array to store all posts
+        Post[] memory allPosts = new Post[](totalPostCount);
 
-        uint PostCount = 0;
-        uint currentIndex = 0;
-
-        Post[] memory Posts = new Post[](PostCount);
-        for(uint i = 0; i < totalPostCount; i++){
-            uint currentId = idPost[i+1].PostId;
-            Post storage currentPost = idPost[currentId];
-            Posts[currentIndex] = currentPost;
-            currentIndex += 1;    
+        // Iterate through all posts and copy them to the array
+        for (uint i = 1; i <= totalPostCount; i++) {
+            uint postId = idPost[i].PostId;
+            Post storage currentPost = idPost[postId];
+            allPosts[i - 1] = currentPost;
         }
-        return Posts;
+
+        return allPosts;
     }
+
 
     // function likePost(uint256 postID) public nonReentrant {
     //     // Ensure the post exists
