@@ -756,7 +756,7 @@ export const socialMedia_ABI = [
 	}
 ]
 
-export const profileFactory_Address = "0x0E1bAcA904526eDA4f14C20F3247496199208511"
+export const profileFactory_Address = "0xCdE1eBE8E1e46B6e908CbD8B971F4D4536802F79"
 export const profileFactory_ABI = [
 	{
 		"anonymous": false,
@@ -815,6 +815,25 @@ export const profileFactory_ABI = [
 		"type": "event"
 	},
 	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "profile",
+				"type": "address"
+			}
+		],
+		"name": "cardShared",
+		"type": "event"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -848,6 +867,30 @@ export const profileFactory_ABI = [
 				"internalType": "uint256",
 				"name": "time",
 				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "businessCards",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
 			}
 		],
 		"stateMutability": "view",
@@ -1011,6 +1054,19 @@ export const profileFactory_ABI = [
 			}
 		],
 		"name": "getAllfollowing",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getMybusinessCard",
 		"outputs": [
 			{
 				"internalType": "address[]",
@@ -1253,6 +1309,19 @@ export const profileFactory_ABI = [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "profileContract",
+				"type": "address"
+			}
+		],
+		"name": "shareCard",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]

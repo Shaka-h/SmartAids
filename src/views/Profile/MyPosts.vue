@@ -60,9 +60,7 @@ const fetchToken = async (tokenURI) => {
     // Handle error
   }
 
-  console.log(responseData, "yuio");
 
-  return responseData; // Return the array of response data
 };
 
 onMounted( async () => {
@@ -94,26 +92,12 @@ onMounted( async () => {
     else {
       return post;
     }
-
-    // const result = [...post];
-    // const responseData = await fetchToken(parseInt(post.PostId));
-    // result.push(responseData);
-    // console.log(result, "trial");
-    // return result;
   });
 
   listItem.value = await Promise.all(promises);
   console.log(listItem.value, "list");
 
   posts.value = listItem;
-
-
-  // await fetchData().then((responseData) => {
-  //     console.log('All response data:', responseData);
-  //     itemData.value = responseData
-  // });
-
-
 })
   </script>
   

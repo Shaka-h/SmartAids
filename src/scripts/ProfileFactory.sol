@@ -72,6 +72,7 @@ contract ProfileFactory {
 
     address[] following;
     address[] followers;
+    address[] cards;
 
     mapping(address => MyNFTProfile) public profileByAddressOwner; 
     mapping(address => MyNFTProfile) public profileByAddressContract; 
@@ -79,10 +80,12 @@ contract ProfileFactory {
     mapping(string => MyNFTProfile) private profileByUrl;
     mapping(address => address[]) public followingProfiles; // Mapping from user address to the addresses of profiles they follow
     mapping(address => address[]) public followersProfiles; // Mapping from user address to the addresses of profiles they follow
+    mapping(address => address[]) public businessCards; // Mapping from user address to the addresses of profiles they follow
 
     MyNFTProfile[] public allNFTProfiles;
 
     event ProfileFollowed(address indexed follower, address indexed profile);
+    event cardShared(address indexed sender, address indexed profile);
 
     event NFTProfileDeployed(
         address indexed owner, 
@@ -166,5 +169,21 @@ contract ProfileFactory {
         }
 
         return followingInfo;
+    }
+
+    function shareCard(address profileContract) public {
+        // Ensure the user is not following the profile already
+        // require(!isFollowingProfile(msg.sender, profileContract), "You are already sent your card to this profile");
+        address profileOwner = profileByAddressContract[profileContract].owner;
+
+        // Add the card to the list of businessCards of the user to be sent
+        businessCards[profileOwner].push(msg.sender);
+
+        // Emit an event to log the profile follow
+        emit cardShared(msg.sender, profileContract);
+    }
+
+    function getMybusinessCard() external view returns (address[] memory) {
+        return businessCards[msg.sender];
     }
 }

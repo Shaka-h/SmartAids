@@ -1,4 +1,4 @@
-<template>
+ <template>
     <div class="p-4 space-x-4">
        <div class="flex space-x-4 justify-end"> 
         <div class="px-4  cursor-pointer bg-">
@@ -70,7 +70,6 @@ const fetchData = async () => {
     }
     return responseData; // Return the array of response data
 };
-
 
 onMounted(async () => {
     profile.value = await nftProfileFactory_contract.profileByAddressOwner(router?.params?.wallet);

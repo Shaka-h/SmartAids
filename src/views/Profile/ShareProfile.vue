@@ -68,8 +68,10 @@ const filteredData = computed(() => {
     });
 });
 
-const shareProfile = (profile) => {
-    console.log(profile);
+const shareProfile = async (profile) => {
+  const shareMyCard = await nftProfileFactory_contract.shareCard(profile?.ProfileContract)
+  const result = await shareMyCard.wait();
+  console.log(result);
 }
 
 onMounted(async () => {
