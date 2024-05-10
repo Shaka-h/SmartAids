@@ -5,7 +5,7 @@
             <ShareProfile @closeDialog="makeAPost=false" :open-dialog="makeAPost"  ></ShareProfile>
         </div>
         <div class="px-4  cursor-pointer ">
-            <ProfileForm @closeDialog="makeAPost=false" :open-dialog="makeAPost"  ></ProfileForm>
+            <ProfileForm @closeDialog="makeAPost=false" :open-dialog="makeAPost" :selected-profile="profileForm"></ProfileForm>
         </div>
        </div>
 
@@ -52,6 +52,7 @@ import SvgIcon from "@/components/shared/SvgIcon.vue";
 let {nftProfileFactory_contract} = getSignerContract();
 const router = useRoute()
 const profile = ref()
+const profileForm = ref()
 const profileDetails = ref()
 const makeAPost = ref(false)
 
@@ -79,6 +80,21 @@ onMounted(async () => {
         console.log('All response data:', responseData);
         profileDetails.value = responseData
     });
+
+
+    profileForm.value = profileDetails.value.map(input => {
+        return {
+            photo: input.photoCID,
+            name: input.name,
+            fullName: input.fullName,
+            institution : input.organisation,
+            links: input.contacts,
+            bibliography : input.bibliography,
+            skills : input.skills,
+        }
+    })
+
+    console.log(profileForm.value, "formmmmmm");
 });
 
 </script>

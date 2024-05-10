@@ -36,23 +36,24 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import DynamicFormMain from "@/components/shared/forms/DynamicFormMain.vue";
 import {getSignerContract} from '../../scripts/ContractUtils';
 import addMetadata  from '@/scripts/IPFS'
 import router from '@/router';
 import {socialMedia } from '@/scripts/ContractConstants'
 import addMetadataFile  from '@/scripts/IPFSJSON'
+import {patchFormFields} from "../../interfaces/global.interface";
 
 let {nftProfileFactory_contract} = getSignerContract();
 
-const props = defineProps(["openDialog", "selectedData"]);
+const props = defineProps(["openDialog", "selectedProfile"]);
 const emits = defineEmits(["closeDialog"]);
 
 const dialog = ref(false);
 
 const close = ref(false)
-const formFields = [
+const formFields = ref([
     {
         inputType: "file",
         label: "Profile Photo",
@@ -137,7 +138,9 @@ const formFields = [
             }
         ]
     },
-];
+]);
+
+formFields.value = patchFormFields(formFields.value, props.selectedProfile)
 
 const CreateProfile = async (formValues) => {
     console.log(formValues);
@@ -185,4 +188,7 @@ const CreateProfile = async (formValues) => {
     }
 }
 
+onMounted(() => {
+    console.log(props.selectedProfile, "selectedProfile");
+});
 </script>

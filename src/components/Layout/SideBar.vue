@@ -3,7 +3,18 @@
   
       <div class="capitalize name border-b pt-2 pb-3 text-center mb-2 font-bold text-primary2">
         AlphaConnect
+      </div>
+      <div class="flex space-x-4 mt-4 items-center" v-if="profileContract != 0x0000000000000000000000000000000000000000"> 
+  <!--      <button type="button" class="border hover:font-bold btn border-white px-2 mr-3 text-white rounded-md" @click="toggleLanguage">{{ buttonText }}</button>-->
+        <div v-if="!profile" class="w-10 h-10 border rounded-full flex items-center justify-center shadow-lg bg-white">
+          <img src="@/assets/images/profile.png"  alt="Profile picture">
+        </div>
 
+        <div v-if="profile" class="rounded-md shadow intro-x ">
+          <img :src="`http://127.0.0.1:8080/ipfs/${profileImage[0]?.photoCID}`" class="w-10 h-10 border bg-blue rounded-full" alt="Profile picture"/>
+        </div>
+
+        <span class="mr-2">{{profileName}}</span>
       </div>
   
       <div class="overflow-y-scroll mt-8 h-full space-y-4">
@@ -81,6 +92,9 @@
   const childHoveredLink = ref(null)
   let {nftProfileFactory_contract} = getSignerContract();
   const profileContract = ref()
+  const profileName = ref()
+  const profileImage = ref()
+  const profile = ref()
 
   const isActive = (link) => {
     return route.fullPath.includes(link)
@@ -106,12 +120,17 @@
     permissions: ['']
   },
   {
+    name: "Notifications",
+    link: `/${walletAddressConnected.value}/setting`,
+    icon: 'notification',
+    permissions: ['']
+  },
+  {
     name: "Setting",
     link: `/${walletAddressConnected.value}/setting`,
     icon: 'category',
     permissions: ['']
   },
-  
 ])
 
 const makeAPost = ref(false)
@@ -123,10 +142,34 @@ const closeDialog = () => {
     makeAPost.value = true;
 };
 
+const fetchData = async () => {
+    const responseData = []; // Array to store response data
+
+    try {
+        const response = await fetch(`http://127.0.0.1:8080/ipfs/${profile.value}`);
+        const data = await response.json();
+        responseData.push(data); // Push data to responseData array
+        console.log('Data for', data);
+        // Handle data as needed
+    } catch (error) {
+        console.error('Error fetching data from', error);
+        // Handle error
+    }
+    return responseData; // Return the array of response data
+};
+
 onMounted(async () => {
     const getprofileContract = await nftProfileFactory_contract.profileByAddressOwner(route?.params?.wallet)
     profileContract.value = await getprofileContract?.ProfileContract
     console.log(profileContract.value, "profileContract");
+    profileName.value = await getprofileContract?.username
+    profile.value = await getprofileContract?.profileUrl
+    console.log(profile.value, "sdfghjkl;");
+
+    await fetchData().then((responseData) => {
+        console.log('All response data:', responseData);
+        profileImage.value = responseData
+    });
 
 });
 

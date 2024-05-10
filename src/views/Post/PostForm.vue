@@ -59,7 +59,7 @@ const profileContract = ref()
 const close = ref(false)
 let {signer, nftProfileFactory_contract, socialMedia_contract} = getSignerContract();
 
-const formFields = [
+const formFields = ref([
   {
       inputType: "rich-text",
       name: "description",
@@ -76,7 +76,7 @@ const formFields = [
       size: "small",
       required: false,
   }
-];
+]);
 
 
 const Post = async (formValues) => {
@@ -147,6 +147,7 @@ onMounted( async () => {
 
   nftMyProfile_contract.value = new ethers.Contract(profileContract.value, nftMyProfile_ABI, signer);    
   console.log(nftMyProfile_contract.value)
+
 
 })
 </script>

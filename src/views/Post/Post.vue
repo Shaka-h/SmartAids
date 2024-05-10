@@ -4,7 +4,7 @@
             <div class="font text-2xl">POSTS</div>
             <div class="mt-8 row" > 
                 <div class="col-md-8">
-                    <div v-for="(post, index) of posts" :key="index" class="col-md-12 flex flex-col justify-center mb-8 mt-4 rounded-lg" > 
+                    <div v-for="(post, index) of posts" :key="index" class="col-md-12 items-center flex flex-col mb-8 mt-4 rounded-lg" > 
                       <div>{{ post.details }}</div>
                       <div> 
                           <div class="">
