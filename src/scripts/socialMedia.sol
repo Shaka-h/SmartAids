@@ -220,6 +220,21 @@ contract AlphaConnect is ReentrancyGuard, AccessControl {
         return allPosts;
     }
 
+    function fetchPostsCreated() public view returns (Post[] memory){
+        uint postCount = _PostIds.current(); 
+        uint currentIndex = 0;
+
+        Post[] memory post =  new Post[](postCount);
+
+        //loop through all items ever created
+        for(uint i = 0; i < postCount; i++){
+            uint currentId = idPost[i + 1].PostId;
+            Post storage currentpost = idPost[currentId];
+            post[currentIndex] = currentpost;
+            currentIndex += 1;
+        }
+        return post; 
+    }
 
     // function likePost(uint256 postID) public nonReentrant {
     //     // Ensure the post exists
