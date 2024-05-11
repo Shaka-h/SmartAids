@@ -11,7 +11,7 @@
         </div>
 
         <div v-if="profile" class="rounded-md shadow intro-x ">
-          <img :src="`http://127.0.0.1:8080/ipfs/${profileImage[0]?.photoCID}`" class="w-10 h-10 border bg-blue rounded-full" alt="Profile picture"/>
+          <img :src="`http://127.0.0.1:8080/ipfs/${profileImage[0]?.photoCID}`" class="w-10 h-10 rounded-full" alt="Profile picture"/>
         </div>
 
         <span class="mr-2">{{profileName}}</span>
@@ -149,7 +149,6 @@ const fetchData = async () => {
         const response = await fetch(`http://127.0.0.1:8080/ipfs/${profile.value}`);
         const data = await response.json();
         responseData.push(data); // Push data to responseData array
-        console.log('Data for', data);
         // Handle data as needed
     } catch (error) {
         console.error('Error fetching data from', error);
@@ -161,13 +160,10 @@ const fetchData = async () => {
 onMounted(async () => {
     const getprofileContract = await nftProfileFactory_contract.profileByAddressOwner(route?.params?.wallet)
     profileContract.value = await getprofileContract?.ProfileContract
-    console.log(profileContract.value, "profileContract");
     profileName.value = await getprofileContract?.username
     profile.value = await getprofileContract?.profileUrl
-    console.log(profile.value, "sdfghjkl;");
 
     await fetchData().then((responseData) => {
-        console.log('All response data:', responseData);
         profileImage.value = responseData
     });
 

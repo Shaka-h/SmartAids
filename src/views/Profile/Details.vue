@@ -8,7 +8,6 @@
             <ProfileForm @closeDialog="makeAPost=false" :open-dialog="makeAPost" :selected-profile="profileForm"></ProfileForm>
         </div>
        </div>
-
         <div v-if="profileDetails" class="flex flex-col mt-8 mx-8"> 
             <div class="flex"> 
                 <div class="">
@@ -52,7 +51,7 @@ import SvgIcon from "@/components/shared/SvgIcon.vue";
 let {nftProfileFactory_contract} = getSignerContract();
 const router = useRoute()
 const profile = ref()
-const profileForm = ref()
+const profileForm = ref(null)
 const profileDetails = ref()
 const makeAPost = ref(false)
 
@@ -80,6 +79,8 @@ onMounted(async () => {
         console.log('All response data:', responseData);
         profileDetails.value = responseData
     });
+
+    console.log(profileDetails.value, "looookkkkk");
 
 
     profileForm.value = profileDetails.value.map(input => {

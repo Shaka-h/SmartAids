@@ -6,7 +6,7 @@
          
         <side-bar></side-bar>
   
-        <div class="py-3 px-4 w-full rounded-r-xl shadow-lg overflow-y-scroll" style="background-color: #E8E8E8; height: 100%;">
+        <div class="py-3 px-4 w-full rounded-r-xl shadow-lg overflow-y-scroll" style="background-color: #70426418; height: 100%;">
           <router-view></router-view>
         </div>
       </div>

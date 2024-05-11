@@ -143,11 +143,8 @@ const Post = async (formValues) => {
 onMounted( async () => {
   const getprofileContract = await nftProfileFactory_contract.profileByAddressOwner(router?.params?.wallet)
   profileContract.value = await getprofileContract?.ProfileContract
-  console.log(profileContract.value, "hello");
 
   nftMyProfile_contract.value = new ethers.Contract(profileContract.value, nftMyProfile_ABI, signer);    
-  console.log(nftMyProfile_contract.value)
-
 
 })
 </script>

@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import DynamicFormMain from "@/components/shared/forms/DynamicFormMain.vue";
 import {getSignerContract} from '../../scripts/ContractUtils';
 import addMetadata  from '@/scripts/IPFS'
@@ -140,7 +140,6 @@ const formFields = ref([
     },
 ]);
 
-formFields.value = patchFormFields(formFields.value, props.selectedProfile)
 
 const CreateProfile = async (formValues) => {
     console.log(formValues);
@@ -187,6 +186,23 @@ const CreateProfile = async (formValues) => {
         console.error('Error creating collection:', error);
     }
 }
+
+
+// watch(() => props.openDialog, (value) => {
+//   dialog.value = value
+//   if (dialog.value){
+//     console.log(props.selectedProfile);
+//     // formFields.value = patchFormFields(formFields.value, props.selectedProfile)
+// }
+// })
+
+watch(() => props.selectedProfile, (value) => {
+    if (value && value?.length){
+        console.log(value, "props.selectedProfile", formFields.value,);
+        formFields.value = patchFormFields(formFields.value, {...value[0], id: 1})
+        console.log(formFields.value, "helppppppp");
+    }
+})
 
 onMounted(() => {
     console.log(props.selectedProfile, "selectedProfile");
