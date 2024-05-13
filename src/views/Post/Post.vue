@@ -24,17 +24,17 @@
                         <div class="flex space-x-4 m-4"> 
                           <div @click="commentPost(post)" class="flex space-x-2">
                             <div><svg-icon :name="'comment'" class="icon cursor-pointer" color="#020202"></svg-icon></div>
-                            <div>{{ post[4] }}</div>
+                            <div>{{ post?.comment }}</div>
                           </div>
                           <div @click="likePost(post)" class="flex space-x-2">
                             <div v-if="!post.liked"><svg-icon :name="'like'" class="icon cursor-pointer" color="#020202" ></svg-icon></div>
                             <div v-if="post.liked"><svg-icon :name="'likefill'" class="icon cursor-pointer" color="#020202" ></svg-icon></div>
-                            <div>{{ post[5] }}</div>
+                            <div>{{ post?.like }}</div>
                           </div>
                           <div @click="unLikePost(post)" class="flex space-x-2">
                             <div v-if="!post.unliked"><svg-icon :name="'dislike'" class="icon cursor-pointer" color="#020202" ></svg-icon></div>
                             <div v-if="post.unliked"><svg-icon :name="'dislikefill'" class="icon cursor-pointer" color="#020202" ></svg-icon></div>
-                            <div>{{ post[6] }}</div>
+                            <div>{{ post?.dislike }}</div>
                           </div>
                           <div class="flex space-x-2">
                             <!-- <div><svg-icon :name="'dislike'" class="icon cursor-pointer" color="#020202"></svg-icon></div> -->

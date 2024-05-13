@@ -26,7 +26,7 @@
                 </div>
                 </div>
                 <div> 
-                    <div @click="shareProfile(profile)" v-for="(profile, index) of filteredData" :key="index" class="hover:bg-blue border rounded-lg py-2 px-4 w-full cursor-pointer mb-2 flex justify-between"> 
+                    <div @click="shareProfile(profile)" v-for="(profile, index) of filteredData" :key="index" class="hover:bg-blue-400 border rounded-lg py-2 px-4 w-full cursor-pointer mb-2 flex justify-between"> 
                         <div>{{ profile[2] }}</div>
                         <div class="cursor-pointer">
                             <svg-icon :name="'download3'" class="icon cursor-pointer" color="#020202"></svg-icon>

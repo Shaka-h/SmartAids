@@ -22,20 +22,20 @@
             </div>
 
             <div v-if="activeTab === 'followers'">
-                <div v-for="(follow, index) of allfollowers" :key="index" class="bg-gradient border rounded-lg py-2 px-4 w-full cursor-pointer mb-2 flex justify-between"> 
+                <div v-for="(follow, index) of allfollowers" :key="index" class="bg-gradient hover:bg-gray-100 border rounded-lg py-2 px-4 w-full cursor-pointer mb-2 flex justify-between"> 
                     <div>{{ follow[0][2] }}</div>
                 </div>
             </div>
 
             <div v-if="activeTab === 'following'">
-                <div v-for="(follow, index) of allfollowing" :key="index" class="bg-gradient hover:bg-blue border rounded-lg py-2 px-4 w-full cursor-pointer mb-2 flex justify-between"> 
+                <div v-for="(follow, index) of allfollowing" :key="index" class="bg-gradient hover:bg-gray-100 border rounded-lg py-2 px-4 w-full cursor-pointer mb-2 flex justify-between"> 
                     <div>{{ follow[0][2] }}</div>
                 </div>
             </div>
             <div v-if="activeTab === 'cards'">
-                <div @click="viewProfile()" v-for="(card, index) of businessCards" :key="index" class="bg-gradient hover:bg-blue border rounded-lg py-2 px-4 w-full cursor-pointer mb-2 flex justify-between"> 
+                <div @click="viewProfile()" v-for="(card, index) of businessCards" :key="index" class="bg-gradient border rounded-lg py-2 px-4 w-full cursor-pointer mb-2 flex justify-between"> 
                     <div>{{ card[0][2] }}</div>
-                    <div class="cursor-pointer">
+                    <div class="cursor-pointer hover:bg-white p-1 rounded-lg">
                         <svg-icon :name="'download3'" class="icon cursor-pointer" color="#020202"></svg-icon>
                     </div>
                 </div>

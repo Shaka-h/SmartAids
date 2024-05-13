@@ -76,7 +76,7 @@ export const uploadFile = async (file) => {
         console.log('Logo uploaded to IPFS with CID:', logoString.toString());
         let result = logoString.toString();
         if (result) {
-            notifySuccess(result);
+            notifySuccess("successfully uploaded file");
             return result;
         } else {
             console.log("error");

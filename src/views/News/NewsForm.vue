@@ -41,6 +41,7 @@ import DynamicFormMain from "@/components/shared/forms/DynamicFormMain.vue";
 import {getSignerContract} from '../../scripts/ContractUtils';
 let {signer, nftProfileFactory_contract, socialMedia_contract} = getSignerContract();
 import addMetadataFile  from '@/scripts/IPFSJSON'
+import { notifyError } from '@/services/notificationService';
 
 const props = defineProps(["openDialog", "selectedData"]);
 const emits = defineEmits(["closeDialog"]);
@@ -112,6 +113,7 @@ const createNews = async (formValues) => {
 
   } catch (error) {
       console.error('Error creating news:', error);
+      notifyError("Only the admin can post news")
   }
 }
 onMounted( async () => {

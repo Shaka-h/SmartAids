@@ -75,6 +75,11 @@
   background: linear-gradient(90deg, rgba(114,79,216,1) 0%, rgba(37,122,228,1) 100%, rgba(64,18,139,1) 15%, rgba(75, 24, 72, 0.671) 95%);
 }
 
+.bg-gradient:hover {
+  background: rgb(114,79,216);
+  background: linear-gradient(90deg, rgba(114,79,216,1) 0%, rgba(37,122,228,1) 100%, rgba(64,18,139,1) 15%, rgba(75, 24, 72, 0.671) 95%);
+}
+
 .primary-action-btn {
   align-items: center;
   appearance: none;

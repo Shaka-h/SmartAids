@@ -21,9 +21,9 @@
                         <div @click="editNews(news) "  class="rounded-lg flex items-center cursor-pointer hover:shadow p-2">
                           <svg-icon name="edit" height="h-5" width="w-5" class="mr-1" color="#0D1042"></svg-icon>
                         </div>
-                        <div @click="deleteNews(news.NewsId) "  class="rounded-lg flex items-center cursor-pointer hover:shadow p-2">
+                        <!-- <div @click="deleteNews(news.NewsId) "  class="rounded-lg flex items-center cursor-pointer hover:shadow p-2">
                           <svg-icon name="delete" height="h-5" width="w-5" class="mr-1" color="#a91926"></svg-icon>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                   </div>
@@ -58,7 +58,13 @@ const editNews = (news) => {
 }
 
 const deleteNews = async (newsId) => {
-  const fetchAllNewsCreated = await socialMedia_contract.fetchAllNewsCreated()
+  const deleteNews = await socialMedia_contract.deleteNews(newsId)
+  let receipt = await deleteNews.wait()  
+
+  console.log(receipt);
+
+  if(receipt?.events[0]?.event == "NewsDeleted")
+  window.location.reload()
 }
 
 // Define newss as a reactive reference

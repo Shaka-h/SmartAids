@@ -1,7 +1,7 @@
 <template>
-    <div class="p-3 flex-col font-bold hidden sm:flex" style="width: 280px;">
+    <div class="p-3 css-selector  flex-col font-bold hidden sm:flex" style="width: 280px; ">
   
-      <div class="capitalize name border-b pt-2 pb-3 text-center mb-2 font-bold text-primary2">
+      <div class="capitalize name border-b pt-2 pb-3 text-center mb-2 font-bold " style="color: #0D1042; " >
         AlphaConnect
       </div>
       <div class="flex space-x-4 mt-4 items-center" v-if="profileContract != 0x0000000000000000000000000000000000000000"> 
@@ -35,7 +35,7 @@
               <span class="h-8 rounded-r" style="width: 4px;" v-else></span>
               <div class="flex items-center p-2">
                 <svg-icon :name="navigationLink?.icon" height="h-5" width="w-5" class="icon" color="#257ae4" v-if="hoveredLink === index"></svg-icon>
-                <svg-icon :name="navigationLink?.icon" height="h-5" width="w-5" class="icon" color="#999999" v-else></svg-icon>
+                <svg-icon :name="navigationLink?.icon" height="h-5" width="w-5" class="icon" color="#0D1042" v-else></svg-icon>
                 <span class="px-2">{{ navigationLink?.name }}</span>
               </div>
             </div>
@@ -175,7 +175,7 @@ onMounted(async () => {
   <style scoped lang="scss">
   
   .inactive {
-    color: #707070;
+    color: #0D1042;
   }
   .inactive:hover {
     color: #257ae4
@@ -185,5 +185,35 @@ onMounted(async () => {
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     font-size: 25px;
   }
+
+  .sideBack {
+    background: rgb(187,132,147);
+    background: radial-gradient(circle, rgba(187,132,147,1) 43%, rgba(219,175,160,1) 69%, rgba(146,144,195,1) 78%);
+  }
+
+  .css-selector {
+    background: linear-gradient(270deg, #bb8493, #535c91, #9290c3);
+    background-size: 600% 600%;
+
+    -webkit-animation: AnimationName 39s ease infinite;
+    -moz-animation: AnimationName 39s ease infinite;
+    animation: AnimationName 39s ease infinite;
+}
+
+@-webkit-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-moz-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
   </style>
   

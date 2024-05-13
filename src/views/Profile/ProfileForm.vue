@@ -95,9 +95,8 @@ const formFields = ref([
                 name: "Contact",
                 label: "Contact",
                 options: [
-                    { name: "Linkln", value: "linkln" }, 
                     { name: "Instagram", value: "instagram" },
-                    { name: "Linkln", value: "linkln" }, 
+                    { name: "Linkedin", value: "linkln" }, 
                     { name: "Facebook", value: "facebook" },
                     { name: "Xtwitter", value: "twitter" }, 
                     { name: "Github", value: "github" }, 
