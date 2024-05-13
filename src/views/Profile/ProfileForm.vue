@@ -38,15 +38,14 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue';
 import DynamicFormMain from "@/components/shared/forms/DynamicFormMain.vue";
-import {getSignerContract} from '../../scripts/ContractUtils';
-import addMetadata  from '@/scripts/IPFS'
-import router from '@/router';
+import {getSignerContract} from '@/scripts/ContractUtils';
 import {socialMedia } from '@/scripts/ContractConstants'
 import addMetadataFile  from '@/scripts/IPFSJSON'
-import {patchFormFields} from "../../interfaces/global.interface";
+import {patchFormFields} from "@/interfaces/global.interface";
+import { useAlphaConnectStore } from "@/store/index.js";
 
 let {nftProfileFactory_contract} = getSignerContract();
-
+const alphaConnectStore = useAlphaConnectStore();
 const props = defineProps(["openDialog", "selectedProfile"]);
 const emits = defineEmits(["closeDialog"]);
 
@@ -140,67 +139,64 @@ const formFields = ref([
     },
 ]);
 
+//
+// const CreateProfile = async (formValues) => {
+//     console.log(formValues);
+//     console.log(formValues.photo[0].attachmentPath)
+//     const profileCID = await addMetadataFile(
+//         {
+//             "name": formValues.name,
+//             "fullName": formValues.fullName,
+//             "photoCID": formValues.photo[0].attachmentPath,
+//             "organisation": formValues.institution,
+//             "bibliography": formValues.bibliography,
+//             "skills": formValues.skills,
+//             "contacts": formValues.links
+//         }
+//
+//     );
+//     console.log('Item created successfully with metadata. CID:', profileCID);
+//
+//     try {
+//         const deployedContractAddress = await nftProfileFactory_contract.deployNFTProfileContract(
+//             socialMedia,
+//             formValues.name,
+//             profileCID
+//         );
+//         console.log(deployedContractAddress); // Log the deployed contract address
+//
+//         // wait() function allows to wait for transaction to be completed
+//         let receipt = await deployedContractAddress.wait()
+//
+//         console.log(receipt);
+//
+//         // not decodeFunctionData
+//         // let decodedData = new ethers.utils.Interface(nftFactory_ABI).decodeFunctionResult('deployNFTContract', encodedData)
+//         // encodedData is found in receipt
+//
+//         // Ensure that deployedContractAddress is not null or undefined before routing
+//         if (receipt?.events[0]?.args?.ProfileContract) {
+//             window.location.reload()
+//         } else {
+//             console.error('Error creating profile: Deployed contract address not returned.');
+//         }
+//
+//     } catch (error) {
+//         console.error('Error creating collection:', error);
+//     }
+// }
 
 const CreateProfile = async (formValues) => {
-    console.log(formValues);
-    console.log(formValues.photo[0].attachmentPath)
-    const profileCID = await addMetadataFile(
-        {
-            "name": formValues.name,
-            "fullName": formValues.fullName,
-            "photoCID": formValues.photo[0].attachmentPath,
-            "organisation": formValues.institution,
-            "bibliography": formValues.bibliography,
-            "skills": formValues.skills,
-            "contacts": formValues.links
-        }
-        
-    );
-    console.log('Item created successfully with metadata. CID:', profileCID);
-
-    try {
-        const deployedContractAddress = await nftProfileFactory_contract.deployNFTProfileContract(
-            socialMedia,
-            formValues.name,
-            profileCID
-        );
-        console.log(deployedContractAddress); // Log the deployed contract address
-
-        // wait() function allows to wait for transaction to be completed
-        let receipt = await deployedContractAddress.wait()  
-
-        console.log(receipt);
-
-        // not decodeFunctionData
-        // let decodedData = new ethers.utils.Interface(nftFactory_ABI).decodeFunctionResult('deployNFTContract', encodedData)
-        // encodedData is found in receipt
-
-        // Ensure that deployedContractAddress is not null or undefined before routing
-        if (receipt?.events[0]?.args?.ProfileContract) {
-            window.location.reload()
-        } else {
-            console.error('Error creating profile: Deployed contract address not returned.');
-        }
-
-    } catch (error) {
-        console.error('Error creating collection:', error);
-    }
-}
-
-
-// watch(() => props.openDialog, (value) => {
-//   dialog.value = value
-//   if (dialog.value){
-//     console.log(props.selectedProfile);
-//     // formFields.value = patchFormFields(formFields.value, props.selectedProfile)
-// }
-// })
+  try {
+    await alphaConnectStore.createProfile(formValues);
+  } catch (error) {
+    console.error('Error creating profile:', error);
+  }
+};
 
 watch(() => props.selectedProfile, (value) => {
     if (value && value?.length){
-        console.log(value, "props.selectedProfile", formFields.value,);
         formFields.value = patchFormFields(formFields.value, {...value[0], id: 1})
-        console.log(formFields.value, "helppppppp");
     }
 })
 

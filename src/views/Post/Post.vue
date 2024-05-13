@@ -169,7 +169,7 @@ onMounted( async () => {
 
     if (typeof comment === 'object') {
       return { 
-        ...comment, 
+        ...comment,
         timestamp: readableDate,
         commentTxt: commentsUrl,
         commentorName: commentor?.username,
