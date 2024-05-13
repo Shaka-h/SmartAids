@@ -2,7 +2,7 @@
     <div class=""> 
       <CommentForm :selected-post="selectedPost" :open-dialog="showCard" @close-dialog="showCard = false;"></CommentForm>
 
-        <div>
+        <div v-if="listItem?.length">
             <div class="font text-2xl">POSTS</div>
             <div class="mt-8 row gap-40" > 
                 <div class="col-md-6">
@@ -20,18 +20,20 @@
                           <span class="mr-2 font-bold">{{ post?.owner }}</span>
                         </div>
                         <div v-html="post.postData.description" class=""></div>
-                        <img :src="`http://127.0.0.1:8080/ipfs/${post.postData.post}`" class="rounded-lg h-64 w-full "></img>
+                        <img :src="`http://127.0.0.1:8080/ipfs/${post.postData.post}`" class="rounded-lg h-64 "></img>
                         <div class="flex space-x-4 m-4"> 
                           <div @click="commentPost(post)" class="flex space-x-2">
                             <div><svg-icon :name="'comment'" class="icon cursor-pointer" color="#020202"></svg-icon></div>
                             <div>{{ post[4] }}</div>
                           </div>
-                          <div class="flex space-x-2">
-                            <div><svg-icon :name="'like'" class="icon cursor-pointer" color="#020202"></svg-icon></div>
+                          <div @click="likePost(post)" class="flex space-x-2">
+                            <div v-if="!post.liked"><svg-icon :name="'like'" class="icon cursor-pointer" color="#020202" ></svg-icon></div>
+                            <div v-if="post.liked"><svg-icon :name="'likefill'" class="icon cursor-pointer" color="#020202" ></svg-icon></div>
                             <div>{{ post[5] }}</div>
                           </div>
-                          <div class="flex space-x-2">
-                            <div><svg-icon :name="'dislike'" class="icon cursor-pointer" color="#020202"></svg-icon></div>
+                          <div @click="unLikePost(post)" class="flex space-x-2">
+                            <div v-if="!post.unliked"><svg-icon :name="'dislike'" class="icon cursor-pointer" color="#020202" ></svg-icon></div>
+                            <div v-if="post.unliked"><svg-icon :name="'dislikefill'" class="icon cursor-pointer" color="#020202" ></svg-icon></div>
                             <div>{{ post[6] }}</div>
                           </div>
                           <div class="flex space-x-2">
@@ -73,6 +75,10 @@
             </div>
     
         </div>
+
+        <div v-if="!listItem?.length" class="h-full flex items-center justify-center text-center p-2">
+          <span class="font-semibold text-base">NO POSTS  AVAILABLE</span>
+        </div>
     </div>
 </template>
 
@@ -107,6 +113,38 @@ const commentPost = (post) => {
   selectedPost.value = parseInt(post?.PostId)
 };
 
+const likePost = async (post) => {
+  try {
+    const likePost = await socialMedia_contract.likePost(
+       parseInt(post?.PostId)
+    )
+
+    let like = await likePost.wait()
+    console.log(like);
+
+    window.location.reload();
+
+  } catch (error) {
+      console.error('Error creating collection:', error);
+  }
+};
+
+const unLikePost = async (post) => {
+  try {
+    const unLikePost = await socialMedia_contract.unLikePost(
+       parseInt(post?.PostId)
+    )
+
+    let like = await unLikePost.wait()
+    console.log(like);
+
+    window.location.reload();
+
+  } catch (error) {
+      console.error('Error creating collection:', error);
+  }
+};
+
 const fetchToken = async (tokenURI) => {
   try {
     const response = await fetch(`http://127.0.0.1:8080/ipfs/${tokenURI}`);
@@ -125,14 +163,22 @@ onMounted( async () => {
   const getMyPosts = await socialMedia_contract.fetchAllPostsCreated()
   posts.value = getMyPosts
 
-  nftMyProfile_contract.value = new ethers.Contract(posts.value[0]?.profileContract, nftMyProfile_ABI, signer);  
+  // nftMyProfile_contract.value = new ethers.Contract(posts.value[0]?.profileContract, nftMyProfile_ABI, signer);  
 
-  profile.value = await nftProfileFactory_contract.profileByAddressOwner(router?.params?.wallet);
+  // profile.value = await nftProfileFactory_contract.profileByAddressOwner(posts.value[0]?.profileContract);
 
   const promises = posts.value.map(async (post) => {
-    let postUrl = await nftMyProfile_contract.value.getPostsURIById(parseInt(post.PostId._hex));
+    
+    let nftMyProfile_contract = new ethers.Contract(post?.profileContract, nftMyProfile_ABI, signer);  
+
+    let profile = await nftProfileFactory_contract.profileByAddressOwner(post?.creator);
+
+
+    let postUrl = await nftMyProfile_contract.getPostsURIById(parseInt(post.PostId._hex));
     const responseData = await fetchToken(postUrl);
-    const image = await fetchToken(profile.value.profileUrl)
+    const image = await fetchToken(profile.profileUrl)
+    const like = await socialMedia_contract.likedBy(router?.params?.wallet, parseInt(post.PostId._hex))
+    const unlike = await socialMedia_contract.unLikedBy(router?.params?.wallet, parseInt(post.PostId._hex))
 
     let timestamp = parseInt(post);
     let readableDate = new Date(timestamp * 1000).toLocaleString();
@@ -144,8 +190,10 @@ onMounted( async () => {
         timestamp: readableDate,
         postUrl: postUrl,
         postData: responseData,
-        owner: profile.value?.username,
-        image: image?.photoCID
+        owner: profile?.username,
+        image: image?.photoCID,
+        liked: like,
+        unliked: unlike
       };
     } 
     else {
@@ -182,6 +230,6 @@ onMounted( async () => {
   });
 
   comments.value = await Promise.all(commentTxt);
-  console.log(comments.value, "commmm");
+  console.log(listItem.value, "commmm");
 })
 </script>

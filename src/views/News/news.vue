@@ -3,18 +3,31 @@
         <div>
             <div class="font text-2xl">NEWS</div>
             <div class="p-2 flex justify-end mx-8 cursor-pointer">
-                <NewsForm @closeDialog="makeAPost=false" :open-dialog="makeAPost"  ></NewsForm>
-              </div>
-            <div class="mt-8 row" > 
-                <div @click="viewNews(post.postId)" v-for="(post, index) of posts" :key="index" class="col-md-5 flex flex-col justify-center border m-4 p-4 cursor-pointer mt-4 rounded-lg" > 
-                    <div class="font-bold">{{ post.title }}</div>{{ post.postId }}
-                    <div class="mt-2 ">
-                        <img :src="post.image" class="rounded-lg h-64 "></img>
-                    </div>
-                    <div> 
-                        <div class="mt-2 ">{{ post.details }}</div>
+                <NewsForm @closeDialog="makeAnews=false" :open-dialog="makeAnews" :selected-data="selectedNews" ></NewsForm>
+             </div>
+
+            <div class="mt-8 row w-1/2" > 
+              <div  v-for="(news, index) of newsList" :key="index" class="col-md-12 flex flex-col justify-center border m-4 p-4 cursor-pointer mt-4 rounded-lg" > 
+                <div>
+                  <div class="font-bold mb-4 border-b-4">{{ news.newsData.title}}</div>
+                    <div v-html="news.newsData.description" class=""></div>
+                    <img v-if="news.newsData.photo" :src="`http://127.0.0.1:8080/ipfs/${news.newsData.photo}`" class="rounded-lg h-64 "></img>
+                    <div class="flex justify-between m-4"> 
+                      <div class="flex">
+                        <!-- <div><svg-icon :name="'dislike'" class="icon cursor-pointer" color="#020202"></svg-icon></div> -->
+                        <div>{{ news.timestamp }}</div>
+                      </div>
+                      <div class="flex space-x-4"> 
+                        <div @click="editNews(news) "  class="rounded-lg flex items-center cursor-pointer hover:shadow p-2">
+                          <svg-icon name="edit" height="h-5" width="w-5" class="mr-1" color="#0D1042"></svg-icon>
+                        </div>
+                        <div @click="deleteNews(news.NewsId) "  class="rounded-lg flex items-center cursor-pointer hover:shadow p-2">
+                          <svg-icon name="delete" height="h-5" width="w-5" class="mr-1" color="#a91926"></svg-icon>
+                        </div>
+                      </div>
                     </div>
                   </div>
+                </div>
 
             </div>
     
@@ -24,45 +37,78 @@
 
   
 <script setup>
-import { ref } from 'vue';
-import SvgIcon from "@/components/shared/SvgIcon.vue";
 import NewsForm from '@/views/News/NewsForm.vue';
 import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import SvgIcon from "@/components/shared/SvgIcon.vue";
+import {getSignerContract} from '../../scripts/ContractUtils';
 
-const makeAPost = ref(false)
+let {socialMedia_contract} = getSignerContract();
+const selectedNews = ref()
+const makeAnews = ref(false)
 const router = useRouter()
 
-const viewNews = (postId) => {
-  router.push(`/news/${postId}`)
+const viewNews = (newsId) => {
+  router.push(`/news/${newsId}`)
 }
-// Define posts as a reactive reference
-const posts = ref([
-  {
-    postId: "123",
-    title: "eGA Annual Conference 2024",
-    details: "Welcome to all to the upcoming blockchain event in Tanzania on May 26th, Dar-es-Salaam",
-    image: "/src/assets/images/landing/landing4.jpg",
-    comment: 2,
-    likes: 3,
-    unlikes: 3
-  },
-  {
-    postId: "124",
-    title: "eGA Annual Conference 2024",
-    details: "Join us for an exciting discussion on the future of decentralized finance (DeFi)!",
-    image: "/src/assets/images/landing/landing4.jpg",
-    comment: 5,
-    likes: 10,
-    unlikes: 3
-  },
-  {
-    postId: "124",
-    title: "eGA Annual Conference 2024",
-    details: "Join us for an exciting discussion on the future of decentralized finance (DeFi)!",
-    image: "/src/assets/images/landing/landing4.jpg",
-    comment: 5,
-    likes: 10,
-    unlikes: 3
+
+const editNews = (news) => {
+  selectedNews.value = news
+  makeAnews.value = true
+}
+
+const deleteNews = async (newsId) => {
+  const fetchAllNewsCreated = await socialMedia_contract.fetchAllNewsCreated()
+}
+
+// Define newss as a reactive reference
+const news = ref([]);
+const props = defineProps(['profileContract'])
+const newsList = ref()
+
+
+
+const fetchToken = async (tokenURI) => {
+  try {
+    const response = await fetch(`http://127.0.0.1:8080/ipfs/${tokenURI}`);
+    const data = await response.json();
+    return data
+
+    // Handle data as needed
+  } catch (error) {
+    console.error('Error fetching data from', router?.params?.tokenId, ':', error);
+    // Handle error
   }
-]);
+
+};
+
+onMounted( async () => {
+  const fetchAllNewsCreated = await socialMedia_contract.fetchAllNewsCreated()
+  news.value = fetchAllNewsCreated
+
+  console.log(news.value);
+
+  const promises = news.value.map(async (news) => {
+    const responseData = await fetchToken(news?.newsUrl);
+  
+    let timestamp = parseInt(news?.time);
+    let readableDate = new Date(timestamp * 1000).toLocaleString();
+
+    if (typeof news === 'object') {
+      return { 
+        ...news, 
+        hex: parseInt(news._hex),
+        timestamp: readableDate,
+        newsUrl: news?.newsUrl,
+        newsData: responseData,
+      };
+    } 
+    else {
+      return news;
+    }
+  });
+
+  newsList.value = await Promise.all(promises);
+ 
+})
 </script>

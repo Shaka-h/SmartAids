@@ -310,5 +310,4 @@ contract AlphaConnect is ReentrancyGuard, AccessControl {
         return (news.id, news.url, news.author, news.timestamp);
     }
 
-
 }

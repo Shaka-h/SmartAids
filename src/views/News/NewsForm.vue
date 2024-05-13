@@ -16,9 +16,9 @@
               <div> 
                     <dynamic-form-main
                         :form-fields="formFields"
-                        submit-label="Post"
+                        submit-label="Post News"
                         :showLabels="true"
-                        @on-submit="submitForm"
+                        @on-submit="createNews"
                     ></dynamic-form-main>
                 </div>
             </v-card-text>
@@ -36,8 +36,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import DynamicFormMain from "@/components/shared/forms/DynamicFormMain.vue";
+import {getSignerContract} from '../../scripts/ContractUtils';
+let {signer, nftProfileFactory_contract, socialMedia_contract} = getSignerContract();
+import addMetadataFile  from '@/scripts/IPFSJSON'
 
 const props = defineProps(["openDialog", "selectedData"]);
 const emits = defineEmits(["closeDialog"]);
@@ -45,7 +48,7 @@ const emits = defineEmits(["closeDialog"]);
 const dialog = ref(false);
 
 const close = ref(false)
-const formFields = [
+const formFields = ref([
     {
         inputType: "input",
         type: "input",
@@ -68,7 +71,50 @@ const formFields = [
         multipleFiles: false,
         name: "photo",
         size: "large",
-        required: true,
+        required: false,
     },
-];
+]);
+
+
+const createNews = async (formValues) => {
+  console.log(formValues);
+  let photo = ref()
+  if (formValues?.photo[0]?.attachmentPath){
+    photo.value = formValues.photo[0].attachmentPath
+  }
+  else {
+    photo.value = null
+  }
+  const newsCID = await addMetadataFile(
+      {
+          "photo": photo.value,
+          "title": formValues?.title,
+          "description": formValues?.description,
+      }
+      
+  );
+  console.log('News created successfully with metadata. CID:', newsCID);
+
+  try {
+    const createNews = await socialMedia_contract.createNews(
+      newsCID
+    )
+
+    console.log(createNews);
+    let createdNews = await createNews.wait()
+    console.log(createdNews?.events[0].args.NewsId);
+
+    if (createdNews?.events[0].args.NewsId) {
+        window.location.reload();
+    } else {
+        console.error('Error creating Item on market');
+    }
+
+  } catch (error) {
+      console.error('Error creating news:', error);
+  }
+}
+onMounted( async () => {
+  
+})
 </script>
