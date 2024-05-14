@@ -26,16 +26,15 @@
                                         <div @click="scrollToSection('contact')" class="cursor-pointer hover:border-b-2">Contacts</div>
                                     </div>
             
-                                    <button @click="connect()" class="border border-black h-fit px-4 py-2 text-xl rounded  my-auto text-white font-sans font-medium hover:bg-[#7e2eff8c] bg-[#7e2eff] transition-colors duration-150 ease-in-out">Connect</button>
+                                    <button @click="connect()" class="border border-black h-fit px-4 py-2 text-xl rounded  my-auto text-white font-sans font-medium hover:bg-[#0369A1] bg-[#0369A1] transition-colors duration-150 ease-in-out">Connect</button>
                                 </div>
                             </nav>
                           <div class="flex h-2/3  justify-center items-center flex-col xl:text-5xl md:text-3xl">
-                            <span class="font-bold bg-gradient-to-br from-[#40128bb9] via-[#401290b9] to-[#41129f9f] rounded">Welcome&nbsp;to&nbsp;AlphaConnect&nbsp;where&nbsp;privacy</span>
-                            <div class="bg-gray-60 bg-opacity-25 rounded-b"> <span class="gradient-text font-bold">meets connectivity.</span></div>
+                            <span class="font-bold bg-gradient-to-br from-[#40128bb9] via-[#401290b9] to-[#41129f9f] rounded">Welcome&nbsp;to&nbsp;AlphaConnect&nbsp;<br>where&nbsp;privacy</span>
+                            <div class="bg-gray-60 bg-opacity-25 rounded-b"> <span class="gradient-text font-bold pt-4">meets connectivity.</span></div>
                            
                         </div>
                         </div>
-                        <div class="divider"></div>
                         <div class="right">
                           <div class="moon"></div>
                         </div>
@@ -72,40 +71,41 @@
                         </div> 
 
                         <div class="flex flex-row space-x-8 mt-8 w-4/5 h-[80%] relative justify-center py-1 transition-all duration-600 ease-in">   
-                            <div class="w-1/2 h-[100%] z-20 hover:shadow overflow-hidden rounded-[1.1rem] flex items-center justify-center bg-gray-400 hover:bg-gradient-to-r hover:from-[#40128B] hover:via-[#a46fff] hover:to-[#5804ff] p-[2px]">
-                                <div class="bg-gray-300 w-full  items-center justify-center h-[100%] rounded-[0.9rem] flex flex-row">
+                            <div class="w-1/2 h-[100%] z-20 hover:shadow overflow-hidden rounded-[1.1rem] flex items-center justify-center hover:bg-gradient-to-r hover:from-[#40128B] hover:via-[#a46fff] hover:to-[#5804ff] p-[2px]">
+                                <div style="background-color: #957692;" class="w-full  items-center justify-center h-[100%] rounded-[0.9rem] flex flex-row">
                                     <div class="flex flex-col space-y-4 items-center justify-center ">
                                         <div class="w-20 h-20 flex justify-center items-center rounded-full bg-gray-200">
                                             <div class="w-20 h-20 flex justify-center items-center rounded-full bg-gray-200">
                                                 <div><svg-icon name="connect" class="icon cursor-pointer" color="#020202"></svg-icon></div>
                                             </div>
                                         </div>
-                                        <div class="text-2xl font-[600] mx-auto text-[#40128b]">
+                                        <div class="text-2xl font-[600] mx-auto text-[#fff]">
                                             Connect
                                         </div>
-                                        <div class="text-md font-semibold text-gray-600 text-center">
-                                            Start by connecting into the network 
+                                        <div class="text-md font-semibold text-gray-800 text-center">
+                                            Start by connecting your wallet into the Alphachain network<br>
+                                            <span @click="scrollToSection('contact')" class="text-blue-300 hover:border-b-2 cursor-pointer">Setup Network</span> 
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="w-1/2 h-[100%] z-20 hover:shadow overflow-hidden rounded-[1.1rem] flex items-center justify-center bg-gray-400 hover:bg-gradient-to-r hover:from-[#40128B] hover:via-[#a46fff] hover:to-[#5804ff] p-[2px]">
-                                <div class="bg-gray-300 w-full  items-center justify-center h-[100%] rounded-[0.9rem] flex flex-row">
+                                <div style="background-color: #4477CE;" class="w-full  items-center justify-center h-[100%] rounded-[0.9rem] flex flex-row">
                                     <div class="flex flex-col space-y-4 items-center justify-center ">
                                         <div class="w-20 h-20 flex justify-center items-center rounded-full bg-gray-200">
                                             <div><svg-icon name="createProfile" class="icon cursor-pointer" color="#020202"></svg-icon></div>
                                         </div>
-                                        <div class="text-2xl font-[600] mx-auto text-[#40128b]">
+                                        <div class="text-2xl font-[600] mx-auto text-[#fff]">
                                             Create Profile
                                         </div>
-                                        <div class="text-md font-semibold text-gray-600 text-center">
+                                        <div class="text-md font-semibold text-gray-800  text-center">
                                                Customize your profile so as people over the network may know alittle about you
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                          </div>
                             <div class="w-1/2 h-[100%] z-20 hover:shadow overflow-hidden rounded-[1.1rem] flex items-center justify-center bg-gray-400 hover:bg-gradient-to-r hover:from-[#40128B] hover:via-[#a46fff] hover:to-[#5804ff] p-[2px]">
-                                <div class="bg-gray-300 w-full  items-center justify-center h-[100%] rounded-[0.9rem] flex flex-row">
+                                <div style="background-color: #E19898;" class="bg-gray-30 w-full  items-center justify-center h-[100%] rounded-[0.9rem] flex flex-row">
                                     <div class="flex flex-col space-y-4 items-center justify-center ">
                                         <div class="w-20 h-20 flex justify-center items-center rounded-full bg-gray-200">
                                             <div><svg-icon name="share" class="icon cursor-pointer" color="#020202"></svg-icon></div>
@@ -113,14 +113,14 @@
                                         <div class="text-2xl font-[600] mx-auto text-[#40128b]">
                                             Share
                                         </div>
-                                        <div class="text-md font-semibold text-gray-600 text-center p-2">
-                                            Share your profile represented as an NFT with other users who may download for permanently
+                                        <div class="text-md font-semibold text-gray-800 text-center">
+                                            Share your profile represented as an NFT with other users.
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="w-1/2 h-[100%] z-20 hover:shadow overflow-hidden rounded-[1.1rem] flex items-center justify-center bg-gray-400 hover:bg-gradient-to-r hover:from-[#40128B] hover:via-[#a46fff] hover:to-[#5804ff] p-[2px]">
-                                <div class="bg-gray-300 w-full  items-center justify-center h-[100%] rounded-[0.9rem] flex flex-row">
+                                <div  style="background-color: #7074A8;" class="w-full  items-center justify-center h-[100%] rounded-[0.9rem] flex flex-row">
                                     <div class="flex flex-col space-y-4 items-center justify-center ">
                                         <div class="w-20 h-20 flex justify-center items-center rounded-full bg-gray-200">
                                             <div><svg-icon name="upload" class="icon cursor-pointer" color="#020202"></svg-icon></div>
@@ -128,7 +128,7 @@
                                         <div class="text-2xl font-[600] mx-auto text-[#40128b]">
                                             Influence
                                         </div>
-                                        <div class="text-md font-semibold text-gray-600 text-center">
+                                        <div class="text-md font-semibold text-gray-800 text-center px-2">
                                             Create posts and make comments in the network to engage freely and securly with AlphaConnect
                                         </div>
                                     </div>
@@ -157,6 +157,27 @@
                     </div>
                 </div>
 
+                <div id="about" class="h-[60%] relative ">
+                    <div class="flex flex-col bg-gray-100 h-[100%] px-8 justify-center items-center space-y-6 max-md:space-y-3">
+                        <div class="flex flex-col space-y-6 max-md:space-y-3">
+                            <h2 class="fancy" style="--w: 20vw;--c: #40128b;--b:4px;--g: 40px">Alphachain</h2>
+                            <div class="row mt-10 items-center w-full ">
+                                <a href="https://alphachain.all.co.tz/" class="col-md-6 cursor-pointer hover:bg-gray-200  text-lg bg-gray-300 flex items-center justify-center p-10 rounded-lg font-semibold text-gray-600 text-center"> 
+                                    <img width="50%" height="50%" src="/src/assets/images/alphachain.png" alt="">
+                                </a>
+                               <div class="col-md-6 text-lg font-semibold text-gray-600 text-center"> 
+                                The Alphachain Network is an ethereum based blockchain network 
+                                 to facilitate the widespread adoption of blockchain technology 
+                                <br> in Tanzania<br>
+                                <div class="flex text-blue-400 justify-space-evenly mt-4"> 
+                                    <span class="cursor-pointer hover:border-b-2"><span class="text-gray-800 mr-2">Frist </span>Join Network</span>
+                                    <a href="https://faucet.all.co.tz/" class="cursor-pointer hover:border-b-2"><span class="text-gray-800 mr-2">Then </span>Get AlphaCoin</a>
+                                </div>
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <footer id="contact" class="bottom-0 font-poppin bg-sky-950 text-white " style="background-color: #0D1042">
                     <div class="p-20">
@@ -300,7 +321,7 @@ const connect = () => {
 
     .gradient-text {
         /*--text-gradient: linear-gradient(to right, #5c0ddb 20%, #6d43b4 30%, #19083a);*/
-        --text-gradient: linear-gradient(to right, #5c0ddb 20%, #6d43b4);
+        --text-gradient: linear-gradient(to right, #5c0ddb 20%,#957692, #6d43b4);
         color: transparent; /* Make the actual text invisible */
         background-clip: text; /* Clip background to the text content */
         -webkit-text-fill-color: var(--text-gradient); /* Webkit browsers */
@@ -353,7 +374,7 @@ const connect = () => {
   
   .left { 
     left:-5%;  
-    right:50%;  
+    right:40%;  
   }
   
   .divider {
@@ -361,15 +382,15 @@ const connect = () => {
     border-left:solid 2px #000;
     border-right:solid 2px #000;
     bottom:-5%;
-    left:49.5%;
+    left:50%;
     position:absolute;
-    right:49.5%;
+    right:40%;
     top:-5%;
     z-index:1;
   }
   
   .right {
-    left:50%;
+    left:60%;
     right:-5%;
   }
   
@@ -387,6 +408,10 @@ const connect = () => {
     background-image: url(/src/assets/images/SOCIAL-MEDIA.jpg);
     background-position:center center;
     background-size:cover;
+  }
+
+  h2{ 
+    font-size: 2rem;
   }
 
 </style>

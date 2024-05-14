@@ -121,7 +121,7 @@
   },
   {
     name: "Notifications",
-    link: `/${walletAddressConnected.value}/setting`,
+    link: `/${walletAddressConnected.value}/notifications`,
     icon: 'notification',
     permissions: ['']
   },

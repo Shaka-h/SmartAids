@@ -44,6 +44,11 @@ const router = createRouter({
           path: 'setting',
           name: 'setting',
           component: Setting
+        },
+        {
+          path: 'notifications',
+          name: 'notifications',
+          component: Setting
         }
       ]
     }
