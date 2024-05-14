@@ -66,77 +66,47 @@
                             </div> -->
                             <h2 class="fancy" style="--w: 20vw;--c: #40128b;--b:4px;--g: 40px">How AlphaConnect Works</h2>
                         </div>
-                        <div class="flex font-sans text-2xl text-gray-600 font-medium items-center mt-32 justify-center text-center">
-                            Step-by-step guide on how users can join and start using AlphaConnect.
-                        </div> 
-
-                        <div class="flex flex-row space-x-8 mt-8 w-4/5 h-[80%] relative justify-center py-1 transition-all duration-600 ease-in">   
-                            <div class="w-1/2 h-[100%] z-20 hover:shadow overflow-hidden rounded-[1.1rem] flex items-center justify-center hover:bg-gradient-to-r hover:from-[#40128B] hover:via-[#a46fff] hover:to-[#5804ff] p-[2px]">
-                                <div style="background-color: #957692;" class="w-full  items-center justify-center h-[100%] rounded-[0.9rem] flex flex-row">
-                                    <div class="flex flex-col space-y-4 items-center justify-center ">
-                                        <div class="w-20 h-20 flex justify-center items-center rounded-full bg-gray-200">
-                                            <div class="w-20 h-20 flex justify-center items-center rounded-full bg-gray-200">
-                                                <div><svg-icon name="connect" class="icon cursor-pointer" color="#020202"></svg-icon></div>
-                                            </div>
-                                        </div>
-                                        <div class="text-2xl font-[600] mx-auto text-[#fff]">
-                                            Connect
-                                        </div>
-                                        <div class="text-md font-semibold text-gray-800 text-center">
-                                            Start by connecting your wallet into the Alphachain network<br>
-                                            <span @click="scrollToSection('contact')" class="text-blue-300 hover:border-b-2 cursor-pointer">Setup Network</span> 
-                                        </div>
-                                    </div>
+                        <div class="flex flex-row space-x-4 font-sans mt-12">
+                            <div class="flex flex-col items-center justify-center w-64">
+                                <div class="w-20 h-20 flex justify-center items-center rounded-full bg-gray-200 transform -rotate-45">
+                                    <span  class="material-symbols-outlined text-[30px] text-[#40128b] flex ">
+                                        send
+                                    </span>
+                                </div>
+                                <div class="text-2xl font-[600] mx-auto text-[#40128b] mt-4">
+                                    Share
+                                </div>
+                                <div class="text-md font-semibold text-gray-400 text-center">
+                                        Post and share pictures with friends <br> <br>
                                 </div>
                             </div>
-                            <div class="w-1/2 h-[100%] z-20 hover:shadow overflow-hidden rounded-[1.1rem] flex items-center justify-center bg-gray-400 hover:bg-gradient-to-r hover:from-[#40128B] hover:via-[#a46fff] hover:to-[#5804ff] p-[2px]">
-                                <div style="background-color: #4477CE;" class="w-full  items-center justify-center h-[100%] rounded-[0.9rem] flex flex-row">
-                                    <div class="flex flex-col space-y-4 items-center justify-center ">
-                                        <div class="w-20 h-20 flex justify-center items-center rounded-full bg-gray-200">
-                                            <div><svg-icon name="createProfile" class="icon cursor-pointer" color="#020202"></svg-icon></div>
-                                        </div>
-                                        <div class="text-2xl font-[600] mx-auto text-[#fff]">
-                                            Create Profile
-                                        </div>
-                                        <div class="text-md font-semibold text-gray-800  text-center">
-                                               Customize your profile so as people over the network may know alittle about you
-                                        </div>
-                                    </div>
+                            <div class="flex flex-col items-center justify-center w-64">
+                                <div class="w-20 h-20 flex justify-center items-center rounded-full bg-gray-200">
+                                    <span class="material-symbols-outlined text-[30px] text-[#40128b]">
+                                        partner_exchange
+                                    </span>
                                 </div>
-                          </div>
-                            <div class="w-1/2 h-[100%] z-20 hover:shadow overflow-hidden rounded-[1.1rem] flex items-center justify-center bg-gray-400 hover:bg-gradient-to-r hover:from-[#40128B] hover:via-[#a46fff] hover:to-[#5804ff] p-[2px]">
-                                <div style="background-color: #E19898;" class="bg-gray-30 w-full  items-center justify-center h-[100%] rounded-[0.9rem] flex flex-row">
-                                    <div class="flex flex-col space-y-4 items-center justify-center ">
-                                        <div class="w-20 h-20 flex justify-center items-center rounded-full bg-gray-200">
-                                            <div><svg-icon name="share" class="icon cursor-pointer" color="#020202"></svg-icon></div>
-                                        </div>
-                                        <div class="text-2xl font-[600] mx-auto text-[#40128b]">
-                                            Share
-                                        </div>
-                                        <div class="text-md font-semibold text-gray-800 text-center">
-                                            Share your profile represented as an NFT with other users.
-                                        </div>
-                                    </div>
+                                <div class="text-2xl font-[600] mx-auto text-[#40128b] mt-4">
+                                    Connect
+                                </div>
+                                <div class="text-md font-semibold text-gray-400 text-center">
+                                    Make new friends and connections while maintaining control of your personal data
                                 </div>
                             </div>
-                            <div class="w-1/2 h-[100%] z-20 hover:shadow overflow-hidden rounded-[1.1rem] flex items-center justify-center bg-gray-400 hover:bg-gradient-to-r hover:from-[#40128B] hover:via-[#a46fff] hover:to-[#5804ff] p-[2px]">
-                                <div  style="background-color: #7074A8;" class="w-full  items-center justify-center h-[100%] rounded-[0.9rem] flex flex-row">
-                                    <div class="flex flex-col space-y-4 items-center justify-center ">
-                                        <div class="w-20 h-20 flex justify-center items-center rounded-full bg-gray-200">
-                                            <div><svg-icon name="upload" class="icon cursor-pointer" color="#020202"></svg-icon></div>
-                                        </div>
-                                        <div class="text-2xl font-[600] mx-auto text-[#40128b]">
-                                            Influence
-                                        </div>
-                                        <div class="text-md font-semibold text-gray-800 text-center px-2">
-                                            Create posts and make comments in the network to engage freely and securly with AlphaConnect
-                                        </div>
-                                    </div>
+                            <div class="flex flex-col items-center justify-center w-64 ">
+                                <div class="w-20 h-20 flex justify-center items-center rounded-full bg-gray-200">
+                                    <span class="material-symbols-outlined text-[40px] text-[#40128b]">
+                                        private_connectivity
+                                    </span>
+                                </div>
+                                <div class="text-2xl font-[600] mx-auto text-[#40128b] mt-4">
+                                    Influence
+                                </div>
+                                <div class="text-md font-semibold text-gray-400 text-center">
+                                       hold an account with less of the Web2 social media platform's security vulnerabilities
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
                 <div id="why" class="h-[60%] relative ">
                     <div class="flex flex-col bg-gray-300 h-[100%] px-8 justify-center items-center space-y-6 max-md:space-y-3">
@@ -178,56 +148,12 @@
                         </div>
                     </div>
                 </div>
-
-                <footer id="contact" class="bottom-0 font-poppin bg-sky-950 text-white " style="background-color: #0D1042">
-                    <div class="p-20">
-                      <span class="text-3xl flex">
-                        <hr class="w-10 bg-black mr-3">
-                        AlphaChain
-                        <hr class="w-10 bg-black ml-3">
-                      </span>
-                      <div class="pt-10 grid grid-cols-3 gap-10">
-                        <div class="">
-                          <span class="text-xl">Follow us on:</span> 
-                          <div class="flex pt-4">
-                            <button class="w-10 h-10 ml-6">
-                                <svg-icon name="instagram"  height="h-10" width="w-10" class="icon" color="#ffffff"></svg-icon>
-                            </button>
-                            <button class="w-10 h-10 ml-6">
-                                <svg-icon name="facebook"  height="h-10" width="w-10" class="icon" color="#ffffff"></svg-icon>
-                            </button>
-                            <button class="w-10 h-10 ml-6">
-                                <svg-icon name="twitter"  height="h-10" width="w-10" class="icon" color="#ffffff"></svg-icon>
-                            </button>
-                            <button class="w-10 h-10 ml-6">
-                                <svg-icon name="linkln"  height="h-10" width="w-10" class="icon" color="#ffffff"></svg-icon>
-                            </button>
-                          </div>
-                        </div>
-                        <div class="grid gap-y-2 text-xl">
-                          <span>Faucet</span>
-                          <span>dApps</span>
-                          <span>Wallet</span>
-                          <span>Explorer</span>
-                        </div>
-                        <div class="">
-                          <span class="text-4xl font-semibold">
-                            Join Our Community
-                          </span>
-                          <br>
-                          <div class="grid gap-y-4">
-                            <button class="bg-sky-700 w-1/2 text-xl rounded-lg p-2">Join Discord</button>
-                            <button class="bg-sky-700 w-2/3 text-xl rounded-lg p-2">Add AlphaChain Network</button>
-                          </div>
-                        </div>
-                      </div>
+                <div class="bottom-0 h-[40%] relative">
+                    <div class="absolute top-0 left-0 h-[100%] w-[100%] flex bg-cover object-fit-cover bg-size-contain ">
+                        <img width="100%" class="h-[100%] absolute" src="/src/assets/images/landing/patternpad2.svg" alt="">
+                        <footerView class="z-20 w-[100%] "/>
                     </div>
-                    <div class="mx-auto pb-4 text-center">
-                      <p class="bottom-0">AlphaConnect.<br>
-                        Developed and maintained by eGA-RIDC, Copyright © 2024 eGA-RIDC
-                      </p>
-                    </div>
-                  </footer>
+                </div>
             </div>
         </div>
     </div>

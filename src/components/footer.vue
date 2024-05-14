@@ -16,6 +16,7 @@ import { RouterLink } from 'vue-router';
         <div class="pt-4">
           <ul class="c-links flex ">
             <li class="pr-2">
+                <i class="fa facebook-f text-white c-exact-icon p-3 bg-opacity-50 " aria-hidden="true"></i>
               <a href=""><font-awesome-icon :icon="['fab', 'facebook-f']" class="text-white c-exact-icon p-3 bg-opacity-50 bg-alphachain"
                   size="1x" /></a>
             </li>
@@ -57,7 +58,7 @@ import { RouterLink } from 'vue-router';
               py-2
               rounded-md
               drop-shadow-md
-              text-black
+              text-white
               mt-3">Join Discord</button>
           <button class="
            bg-btnAmber
@@ -65,19 +66,19 @@ import { RouterLink } from 'vue-router';
               py-2
               rounded-md
               drop-shadow-md
-              text-black
+              text-white
               mt-3
               ml-2
               flex
               items-center
               "><img src="../assets/alpha-icon.svg" alt="alpha-icon">
-            Add Alphachain Network</button>
+                Alphachain Network</button>
 
         </div>
       </div>
     </div>
     <div class="text-[#D8D8D8] text-center  pb-4 italic bg-alphachain self-center w-full">
-      Developed and maintained by eGA-RIDC, Copyright © 2023 eGA-RIDC
+      Developed and maintained by eGA-RIDC, Copyright © 2024 eGA-RIDC
     </div>
   </div>
 
@@ -139,7 +140,7 @@ span {
   line-height: normal;
 }
 .c-links a :hover {
-    color: #FFA140;
+    color: #FFE79B;
 }
 .c-join-our-community {
   color: #FFF;
