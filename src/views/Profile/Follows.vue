@@ -79,7 +79,7 @@ const follows = ref([
         id: 'following'
     },
     {
-        name: "Business Cards",
+        name: "Cards",
         id: 'cards'
     },
 ])

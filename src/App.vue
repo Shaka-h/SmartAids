@@ -10,8 +10,7 @@ const store = useAlphaConnectStore()
       <router-view />
     </v-main>
   </v-app>
-
-  <div v-if="store.isLoading" class="relative">
+  <div v-if="store.isLoading" class="relative"> 
     <div class="absolute bottom-3 right-6 text-white">
       <div class="loading-bar ">Loading</div>
     </div>

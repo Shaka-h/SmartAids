@@ -1,4 +1,5 @@
 <template>
+    --{{ myProfile[0]?.profileContract }}==
     <div v-if="profileContract != 0x0000000000000000000000000000000000000000" class="row h-full p-4" >
         <div class="col-md-10 pr-10 md:w-full detail" style=""> 
             <div class="h-1/2 rounded-lg" style="background-color: #40128B42">
@@ -31,34 +32,24 @@ import { onMounted, ref, computed } from 'vue';
 import {getSignerContract} from '../../scripts/ContractUtils';
 import { useRoute } from 'vue-router';
 import ProfileForm from '../../views/Profile/ProfileForm.vue'
+import { useAlphaConnectStore } from "@/store/index.js";
+import {storeToRefs} from "pinia";
 
+const alphaConnectStore = useAlphaConnectStore();
 let {nftProfileFactory_contract} = getSignerContract();
 const router = useRoute()
 const profile = ref()
 const profileContract = ref()
 const makeAPost = ref(false)
+const { getStoreItem } = storeToRefs(alphaConnectStore)
 
-const fetchData = async () => {
-    const responseData = []; // Array to store response data
-
-    try {
-        const response = await fetch(`http://127.0.0.1:8080/ipfs/${profile.value[3]}`);
-        const data = await response.json();
-        responseData.push(data); // Push data to responseData array
-        console.log('Data for', router?.params?.wallet, ':', data);
-        // Handle data as needed
-    } catch (error) {
-        console.error('Error fetching data from', router?.params?.wallet, ':', error);
-        // Handle error
-    }
-    return responseData; // Return the array of response data
-};
+const myProfile = computed(() => {
+  return getStoreItem.value("myProfile")
+})
 
 onMounted(async () => {
-    const getprofileContract = await nftProfileFactory_contract.profileByAddressOwner(router?.params?.wallet)
-    profileContract.value = await getprofileContract?.ProfileContract
-    console.log(profileContract.value, "profileContract");
-
+    await alphaConnectStore.loadMyProfile(router?.params?.wallet);
+    
 });
 
 </script>

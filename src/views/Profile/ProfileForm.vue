@@ -138,60 +138,14 @@ const formFields = ref([
     },
 ]);
 
-
 const CreateProfile = async (formValues) => {
-    console.log(formValues);
-    console.log(formValues.photo[0].attachmentPath)
-    const profileCID = await addMetadataFile(
-        {
-            "name": formValues.name,
-            "fullName": formValues.fullName,
-            "photoCID": formValues.photo[0].attachmentPath,
-            "organisation": formValues.institution,
-            "bibliography": formValues.bibliography,
-            "skills": formValues.skills,
-            "contacts": formValues.links
-        }
-
-    );
-    console.log('Item created successfully with metadata. CID:', profileCID);
-
-    try {
-        const deployedContractAddress = await nftProfileFactory_contract.deployNFTProfileContract(
-            socialMedia,
-            formValues.name,
-            profileCID
-        );
-        console.log(deployedContractAddress); // Log the deployed contract address
-
-        // wait() function allows to wait for transaction to be completed
-        let receipt = await deployedContractAddress.wait()
-
-        console.log(receipt);
-
-        // not decodeFunctionData
-        // let decodedData = new ethers.utils.Interface(nftFactory_ABI).decodeFunctionResult('deployNFTContract', encodedData)
-        // encodedData is found in receipt
-
-        // Ensure that deployedContractAddress is not null or undefined before routing
-        if (receipt?.events[0]?.args?.ProfileContract) {
-            window.location.reload()
-        } else {
-            console.error('Error creating profile: Deployed contract address not returned.');
-        }
-
-    } catch (error) {
-        console.error('Error creating collection:', error);
-    }
-}
-
-// const CreateProfile = async (formValues) => {
-//   try {
-//     await alphaConnectStore.createProfile(formValues);
-//   } catch (error) {
-//     console.error('Error creating profile:', error);
-//   }
-// };
+  try {
+    await alphaConnectStore.createProfile(formValues);
+    window.location.reload();
+  } catch (error) {
+    console.error('Error creating profile:', error);
+  }
+};
 
 watch(() => props.selectedProfile, (value) => {
     if (value && value?.length){
