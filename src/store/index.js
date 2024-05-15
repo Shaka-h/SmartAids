@@ -35,7 +35,8 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                 news: [],
                 allNews: [],
                 sharedCards: [],
-                shareMyCardState: 'idle'
+                shareMyCardState: 'idle',
+                myPosts: []
 
             }
         }
@@ -623,7 +624,63 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
             } finally {
                 store.isLoading = false;
             }
-        }
+        },
+
+
+        async loadMyPosts(myAddress) {
+
+            const store = this;
+
+            try {
+                store.isLoading = true;
+
+                const getMyPosts = await socialMedia_contract.fetchMyPostsCreated()
+
+                console.log(getMyPosts, "gvdgvdtyefyvgy");
+
+                this.loadMyProfileContract(myAddress)
+
+                const myProfileContractAddress = store.state['myProfileContract'].address
+                let nftMyProfile_contract = new ethers.Contract(myProfileContractAddress, nftMyProfile_ABI, signer);
+
+                const promises = getMyPosts.map(async (post) => {
+                    let postUrl = await nftMyProfile_contract.getPostsURIById(parseInt(post.PostId._hex));
+                    console.log(postUrl, "postUrl");
+                    const responseData = await fetchToken(postUrl);
+                    console.log(responseData, "responseData");
+
+                    let timestamp = parseInt(post);
+                    let readableDate = new Date(timestamp * 1000).toLocaleString();
+
+                    if (typeof post === 'object') {
+                        return {
+                            ...post,
+                            hex: parseInt(post._hex),
+                            timestamp: readableDate,
+                            postUrl: postUrl,
+                            postData: responseData
+                        };
+                    }
+                    else {
+                        return post;
+                    }
+                });
+
+                const listItem = await Promise.all(promises);
+
+                // Update store state with fetched profiles
+                store.state['myPosts'] = listItem;
+
+            } catch (error) {
+                console.error('Error loading myPosts:', error);
+                // Handle error
+                notifyError('Error loading myPosts: ' + error.message);
+            } finally {
+                store.isLoading = false;
+            }
+
+        },
+
 
 
     },

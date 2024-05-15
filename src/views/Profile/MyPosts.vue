@@ -29,75 +29,26 @@
   </template>
   
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import SvgIcon from "@/components/shared/SvgIcon.vue";
-import {getSignerContract} from '../../scripts/ContractUtils';
+import { useAlphaConnectStore } from "@/store/index.js";
+import {storeToRefs} from "pinia";
 import { useRoute } from 'vue-router';
-import {nftMyProfile_ABI} from '@/scripts/ContractConstants'
-import {ethers} from 'ethers';
 
-let {signer, nftProfileFactory_contract, socialMedia_contract} = getSignerContract();
+const alphaConnectStore = useAlphaConnectStore();
 const router = useRoute()
 
 // Define posts as a reactive reference
-const posts = ref([]);
-const postDetails = ref();
-const profileContract = ref()
 const props = defineProps(['profileContract'])
-const listItem = ref()
-const nftMyProfile_contract = ref()
+const { getStoreItem } = storeToRefs(alphaConnectStore)
 
-const fetchToken = async (tokenURI) => {
-  try {
-    const response = await fetch(`http://127.0.0.1:8080/ipfs/${tokenURI}`);
-    const data = await response.json();
-    console.log('Data for', tokenURI, ':', data);
-    return data
-
-    // Handle data as needed
-  } catch (error) {
-    console.error('Error fetching data from', router?.params?.tokenId, ':', error);
-    // Handle error
-  }
-
-
-};
+const listItem = computed(() => {
+  return getStoreItem.value("myPosts")
+})
 
 onMounted( async () => {
-  const getMyPosts = await socialMedia_contract.fetchMyPostsCreated()
-  posts.value = getMyPosts
-  console.log(posts.value, "posts");
+  await alphaConnectStore.loadMyPosts(router?.params?.wallet);
 
-  nftMyProfile_contract.value = new ethers.Contract(props?.profileContract, nftMyProfile_ABI, signer);  
-  console.log(nftMyProfile_contract.value, "jamaniii")
-
-  const promises = posts.value.map(async (post) => {
-    let postUrl = await nftMyProfile_contract.value.getPostsURIById(parseInt(post.PostId._hex));
-    console.log(postUrl, "postUrl"); 
-    const responseData = await fetchToken(postUrl);
-    console.log(responseData, "responseData");
-
-    let timestamp = parseInt(post);
-    let readableDate = new Date(timestamp * 1000).toLocaleString();
-
-    if (typeof post === 'object') {
-      return { 
-        ...post, 
-        hex: parseInt(post._hex),
-        timestamp: readableDate,
-        postUrl: postUrl,
-        postData: responseData
-      };
-    } 
-    else {
-      return post;
-    }
-  });
-
-  listItem.value = await Promise.all(promises);
-  console.log(listItem.value, "list");
-
-  posts.value = listItem;
 })
   </script>
   
