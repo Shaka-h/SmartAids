@@ -50,21 +50,6 @@ const profile = ref()
 
 
 
-const fetchToken = async (tokenURI) => {
-  try {
-    const response = await fetch(`http://127.0.0.1:8080/ipfs/${tokenURI}`);
-    const data = await response.json();
-    console.log('Data for', tokenURI, ':', data);
-    return data
-
-    // Handle data as needed
-  } catch (error) {
-    console.error('Error fetching data from', router?.params?.tokenId, ':', error);
-    // Handle error
-  }
-
-};
-
 watch(() => props.selectedPost, (value) => {
     if (value){
         console.log(parseInt(value?.PostId), "props.selectedPost");
@@ -80,39 +65,5 @@ onMounted( async () => {
     await getAllCommentsMadeTocomment()
     console.log(comments.value, "come 2");
 
-//   const getAllCommentsMadeTocomment = await socialMedia_contract.getAllCommentsMadeToPost(postId.value)
-//   comments.value = getAllCommentsMadeTocomment
-//   console.log(props.selectedPost, "commentsyeleuwiiiiiiiiiiiiiiiiiiiiiiiii");
-
-//   const promises = comments.value.map(async (comment) => {
-//     let commentUrl = await nftMyProfile_contract.value.getcommentsURIById(parseInt(comment.commentId._hex));
-//     console.log(commentUrl, "commentUrl"); 
-//     const responseData = await fetchToken(commentUrl);
-//     console.log(responseData, "responseData");
-//     const image = await fetchToken(profile.value.profileUrl)
-
-//     let timestamp = parseInt(comment);
-//     let readableDate = new Date(timestamp * 1000).toLocaleString();
-
-//     if (typeof comment === 'object') {
-//       return { 
-//         ...comment, 
-//         hex: parseInt(comment._hex),
-//         timestamp: readableDate,
-//         commentUrl: commentUrl,
-//         commentData: responseData,
-//         owner: profile.value?.username,
-//         image: image?.photoCID
-//       };
-//     } 
-//     else {
-//       return comment;
-//     }
-//   });
-
-//   listItem.value = await Promise.all(promises);
-//   console.log(listItem.value, "list");
-
-//   comments.value = listItem;
 })
 </script>

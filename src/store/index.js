@@ -36,7 +36,8 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                 allNews: [],
                 sharedCards: [],
                 shareMyCardState: 'idle',
-                myPosts: []
+                myPosts: [],
+                myProfileDetails: []
 
             }
         }
@@ -680,6 +681,49 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
             }
 
         },
+
+        async myProfileDetails(myAddress) {
+            const store = this;
+
+            try {
+                store.isLoading = true;
+
+                // Fetch profile data from the blockchain network
+                const profile = await nftProfileFactory_contract.profileByAddressOwner(myAddress);
+
+                // Extract the token URL from profileData
+                const tokenUrl = profile[3];
+
+                // Fetch additional profile details from the token URL using fetchData function
+                const profileDetails = await fetchData(tokenUrl);
+
+                // Process profile data
+                const processedProfiles = profileDetails.map(input => ({
+                    photo: input.photoCID,
+                    name: input.name,
+                    fullName: input.fullName,
+                    institution: input.organisation,
+                    links: input.contacts,
+                    bibliography: input.bibliography,
+                    skills: input.skills,
+                }));
+
+
+
+                // Update store state with fetched profiles
+                store.state['myProfileDetails'] = processedProfiles;
+
+                // Log fetched profiles
+                // console.log('Fetched profiles:', store.state.myProfile);
+
+            } catch (error) {
+                console.error('Error loading profiles:', error);
+                // Handle error
+                notifyError('Error loading profiles: ' + error.message);
+            } finally {
+                store.isLoading = false;
+            }
+        }
 
 
 

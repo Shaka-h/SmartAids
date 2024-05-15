@@ -11,7 +11,7 @@
         <div v-if="profileDetails" class="flex flex-col mt-8 mx-8"> 
             <div class="flex"> 
                 <div class="">
-                    <img :src="`http://127.0.0.1:8080/ipfs/${profileDetails[0]?.photoCID}`" class="rounded-full h-64 w-64"></img>
+                    <img :src="`http://127.0.0.1:8080/ipfs/${profileDetails[0]?.photo}`" class="rounded-full h-64 w-64"></img>
                 </div>
                 <div class="grow flex flex-col w-1/3 space-x-4 p-4 justify-center items-center"> 
                     <div> 
@@ -44,58 +44,24 @@
 import { onMounted, ref, computed } from 'vue';
 import ProfileForm from '../../views/Profile/ProfileForm.vue'
 import ShareProfile from './ShareProfile.vue';
-import {getSignerContract} from '../../scripts/ContractUtils';
 import { useRoute } from 'vue-router';
 import SvgIcon from "@/components/shared/SvgIcon.vue";
+import { useAlphaConnectStore } from "@/store/index.js";
+import {storeToRefs} from "pinia";
 
-let {nftProfileFactory_contract} = getSignerContract();
+const alphaConnectStore = useAlphaConnectStore();
 const router = useRoute()
 const profile = ref()
 const profileForm = ref(null)
-const profileDetails = ref()
 const makeAPost = ref(false)
+const { getStoreItem } = storeToRefs(alphaConnectStore)
 
-const fetchData = async () => {
-    const responseData = []; // Array to store response data
-
-    try {
-        const response = await fetch(`http://127.0.0.1:8080/ipfs/${profile.value[3]}`);
-        const data = await response.json();
-        responseData.push(data); // Push data to responseData array
-        console.log('Data for', router?.params?.wallet, ':', data);
-        // Handle data as needed
-    } catch (error) {
-        console.error('Error fetching data from', router?.params?.wallet, ':', error);
-        // Handle error
-    }
-    return responseData; // Return the array of response data
-};
+const profileDetails = computed(() => {
+  return getStoreItem.value("myProfileDetails")
+})
 
 onMounted(async () => {
-    profile.value = await nftProfileFactory_contract.profileByAddressOwner(router?.params?.wallet);
-    console.log(profile.value, "market");
-
-    await fetchData().then((responseData) => {
-        console.log('All response data:', responseData);
-        profileDetails.value = responseData
-    });
-
-    console.log(profileDetails.value, "looookkkkk");
-
-
-    profileForm.value = profileDetails.value.map(input => {
-        return {
-            photo: input.photoCID,
-            name: input.name,
-            fullName: input.fullName,
-            institution : input.organisation,
-            links: input.contacts,
-            bibliography : input.bibliography,
-            skills : input.skills,
-        }
-    })
-
-    console.log(profileForm.value, "formmmmmm");
+    await alphaConnectStore.myProfileDetails(router?.params?.wallet);
 });
 
 </script>
