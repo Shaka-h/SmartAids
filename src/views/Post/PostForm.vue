@@ -83,8 +83,8 @@ const myProfileContract = computed(() => {
 
 const Post = async (formValues) => {
 
-  await alphaConnectStore.Post(formValues, router?.params?.wallet, myProfileContract);
-  await alphaConnectStore.Post({ ...formValues, contractAddress: router.param.wallet });
+  // await alphaConnectStore.Post(formValues, router?.params?.wallet, myProfileContract);
+  await alphaConnectStore.Post({ ...formValues, myProfileContract, router.param.wallet });
 
   // window.location.reload();
 }

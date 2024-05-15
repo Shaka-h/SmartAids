@@ -1,6 +1,5 @@
 <template>
-    --{{ myProfile}}==
-        <div v-if="myProfile.length" class="row h-full p-4" >
+        <div v-if="myProfile" class="row h-full p-4" >
             <div class="col-md-10 pr-10 md:w-full detail" style=""> 
                 <div class="h-1/2 rounded-lg" style="background-color: #40128B42">
                     <Details />
@@ -15,7 +14,7 @@
             </div>  
         </div>
     
-       <div v-if="!myProfile.length " class="flex justify-center h-1/3 items-center">
+       <div v-if="!myProfile" class="flex justify-center h-1/3 items-center">
         <div class="px-4  cursor-pointer ">
             <ProfileForm @closeDialog="makeAPost=false" :open-dialog="makeAPost"  ></ProfileForm>
         </div>
