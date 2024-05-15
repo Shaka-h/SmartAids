@@ -3,9 +3,12 @@ import {getSignerContract} from '@/scripts/ContractUtils.js';
 import { defineStore } from "pinia";
 import addMetadataFile from "@/scripts/IPFSJSON.js";
 import {socialMedia} from "@/scripts/ContractConstants.js";
-import fetchData from "@/scripts/fetchToken";
+import fetchData from "@/scripts/fetchData";
+import fetchToken from "@/scripts/fetchToken";
+import {ethers} from 'ethers';
+import { nftMyProfile_ABI } from '@/scripts/ContractConstants'
 
-let {nftProfileFactory_contract, socialMedia_contract} = getSignerContract();
+let {nftProfileFactory_contract, socialMedia_contract, signer} = getSignerContract();
 
 export const useAlphaConnectStore = defineStore('alphaConnectStore', {
     state: () => {
@@ -23,7 +26,11 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                 myFollowing: [], 
                 myCards: [],
                 followProfile: 'idle',
-                createPostState: 'idle'
+                createPostState: 'idle',
+                myProfileContract: null,
+                allPosts: [],
+                postComments: [],
+                post: []
             }
         }
     },
@@ -266,6 +273,7 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
         async Post(postData, myAddress, nftMyProfile_contract) {
             const store = this;
 
+            console.log(nftMyProfile_contract, "comeon and go");
             try {
                 store.createPostState = 'pending'; // Set state to pending while profile creation is in progress
 
@@ -320,6 +328,162 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                 store.isLoading = false;
             }
         },
+
+        async loadMyProfileContract (address) {
+
+            const store = this;
+    
+            try {
+                store.isLoading = true;
+
+                const getprofileContract = await nftProfileFactory_contract.profileByAddressOwner(address)
+            
+                const profileContract = await getprofileContract?.ProfileContract 
+            
+                const nftMyProfile_contract = new ethers.Contract(profileContract, nftMyProfile_ABI, signer);    
+            
+                // Update store state with fetched profiles
+                store.state['myProfileContract'] = nftMyProfile_contract;
+
+            } catch (error) {
+                console.error('Error loading myProfileContract:', error);
+                // Handle error
+                notifyError('Error loading myProfileContract: ' + error.message);
+            } finally {
+                store.isLoading = false;
+            }
+    
+        }, 
+
+        async loadAllPosts (address) {
+
+            const store = this;
+    
+            try {
+                const getMyPosts = await socialMedia_contract.fetchAllPostsCreated()
+
+            const promises = getMyPosts.map(async (post) => {
+    
+                let nftMyProfile_contract = new ethers.Contract(post?.profileContract, nftMyProfile_ABI, signer);  
+            
+                let profile = await nftProfileFactory_contract.profileByAddressOwner(post?.creator);
+            
+            
+                let postUrl = await nftMyProfile_contract.getPostsURIById(parseInt(post.PostId._hex));
+                const responseData = await fetchToken(postUrl);
+                const image = await fetchToken(profile.profileUrl)
+                const like = await socialMedia_contract.likedBy(address, parseInt(post.PostId._hex))
+                const unlike = await socialMedia_contract.unLikedBy(address, parseInt(post.PostId._hex))
+            
+                let timestamp = parseInt(post);
+                let readableDate = new Date(timestamp * 1000).toLocaleString();
+            
+                if (typeof post === 'object') {
+                  return { 
+                    ...post, 
+                    hex: parseInt(post._hex),
+                    timestamp: readableDate,
+                    postUrl: postUrl,
+                    postData: responseData,
+                    owner: profile?.username,
+                    image: image?.photoCID,
+                    liked: like,
+                    unliked: unlike
+                  };
+                } 
+                else {
+                  return post;
+                }
+              });
+
+              const listItem = await Promise.all(promises);
+  
+            //   postComments.value = listItem.value[0]
+  
+            //   posts.value = listItem;    
+            
+                // Update store state with fetched profiles
+                store.state['allPosts'] = listItem;
+
+            } catch (error) {
+                console.error('Error loading myProfileContract:', error);
+                // Handle error
+                notifyError('Error loading myProfileContract: ' + error.message);
+            } finally {
+                store.isLoading = false;
+            }            
+
+        },
+
+        async loadPost (postId) {
+
+            const store = this;
+    
+            try {
+                const getMyPosts = await socialMedia_contract.idPost(postId)
+
+                console.log(getMyPosts, "jjdjjjjjjjj");
+                // Update store state with fetched profiles
+                store.state['post'] = getMyPosts;
+
+            } catch (error) {
+                console.error('Error loading post:', error);
+                // Handle error
+                notifyError('Error loading post: ' + error.message);
+            } finally {
+                store.isLoading = false;
+            }            
+
+        },
+
+        async loadPostsComments (PostId) {
+
+            const store = this;
+
+            const post = await this.loadPost(PostId)
+
+            const postId = store.state['post'][0]
+
+            console.log(parseInt(postId), "hdftyfgyaerfg");
+    
+            try {
+                
+                const comm = await socialMedia_contract.getAllCommentsMadeToPost(parseInt(postId))
+  
+                console.log(comm);
+  
+                const commentTxt = comm.map(async (comment) => {
+                    let commentsUrl = await fetchToken(comment.commentUrl)
+                    let commentor = await nftProfileFactory_contract.profileByAddressOwner(comment?.commentor);
+                    let image = await fetchToken(commentor?.profileUrl)
+                    let timestamp = parseInt(comment?.time);
+                    let readableDate = new Date(timestamp * 1000).toLocaleString();
+                    if (typeof comment === 'object') {
+                        return { 
+                            ...comment,
+                            timestamp: readableDate,
+                            commentTxt: commentsUrl,
+                            commentorName: commentor?.username,
+                            commentorImage: image?.photoCID
+                        };
+                    } 
+                    else {
+                        return comment;
+                    }
+                });
+                const comments = await Promise.all(commentTxt);
+                // Update store state with fetched profiles
+                store.state['postComments'] = comments;
+
+            } catch (error) {
+                console.error('Error loading myProfileContract:', error);
+                // Handle error
+                notifyError('Error loading myProfileContract: ' + error.message);
+            } finally {
+                store.isLoading = false;
+            }            
+
+        }
 
     },
 });

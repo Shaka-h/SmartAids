@@ -1,5 +1,5 @@
 <template>
-    <div class=""> 
+    <div class="">
       <CommentForm :selected-post="selectedPost" :open-dialog="showCard" @close-dialog="showCard = false;"></CommentForm>
 
         <div v-if="listItem?.length">
@@ -84,7 +84,7 @@
 
   
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import SvgIcon from "@/components/shared/SvgIcon.vue";
 import {getSignerContract} from '../../scripts/ContractUtils';
 import { useRoute } from 'vue-router';
@@ -92,9 +92,12 @@ import {nftMyProfile_ABI} from '@/scripts/ContractConstants'
 import {ethers} from 'ethers';
 import CommentForm from "@/views/Post/Comments/CommentForm.vue"
 import CommentList from "@/views/Post/Comments/CommentList.vue"
+import { useAlphaConnectStore } from "@/store/index.js";
+import {storeToRefs} from "pinia";
 
 let {signer, nftProfileFactory_contract, socialMedia_contract} = getSignerContract();
 const router = useRoute()
+const alphaConnectStore = useAlphaConnectStore();
 
 // Define posts as a reactive reference
 const posts = ref([]);
@@ -103,10 +106,17 @@ const showCard = ref(false)
 const selectedPost = ref()
 const postComments = ref()
 const props = defineProps(['profileContract'])
-const listItem = ref()
 const nftMyProfile_contract = ref()
 const profile = ref()
-const comments = ref([]);
+const { getStoreItem } = storeToRefs(alphaConnectStore)
+
+const listItem = computed(() => {
+  return getStoreItem.value("allPosts")
+})
+
+const comments = computed(() => {
+  return getStoreItem.value("postComments")
+})
 
 const commentPost = (post) => {
   showCard.value = true
@@ -145,91 +155,13 @@ const unLikePost = async (post) => {
   }
 };
 
-const fetchToken = async (tokenURI) => {
-  try {
-    const response = await fetch(`http://127.0.0.1:8080/ipfs/${tokenURI}`);
-    const data = await response.json();
-    return data
-
-    // Handle data as needed
-  } catch (error) {
-    console.error('Error fetching data from', router?.params?.tokenId, ':', error);
-    // Handle error
-  }
-
-};
 
 onMounted( async () => {
-  const getMyPosts = await socialMedia_contract.fetchAllPostsCreated()
-  posts.value = getMyPosts
+  
+  await alphaConnectStore.loadAllPosts(router?.params?.wallet);
 
-  // nftMyProfile_contract.value = new ethers.Contract(posts.value[0]?.profileContract, nftMyProfile_ABI, signer);  
+  await alphaConnectStore.loadPostsComments(1);
 
-  // profile.value = await nftProfileFactory_contract.profileByAddressOwner(posts.value[0]?.profileContract);
-
-  const promises = posts.value.map(async (post) => {
-    
-    let nftMyProfile_contract = new ethers.Contract(post?.profileContract, nftMyProfile_ABI, signer);  
-
-    let profile = await nftProfileFactory_contract.profileByAddressOwner(post?.creator);
-
-
-    let postUrl = await nftMyProfile_contract.getPostsURIById(parseInt(post.PostId._hex));
-    const responseData = await fetchToken(postUrl);
-    const image = await fetchToken(profile.profileUrl)
-    const like = await socialMedia_contract.likedBy(router?.params?.wallet, parseInt(post.PostId._hex))
-    const unlike = await socialMedia_contract.unLikedBy(router?.params?.wallet, parseInt(post.PostId._hex))
-
-    let timestamp = parseInt(post);
-    let readableDate = new Date(timestamp * 1000).toLocaleString();
-
-    if (typeof post === 'object') {
-      return { 
-        ...post, 
-        hex: parseInt(post._hex),
-        timestamp: readableDate,
-        postUrl: postUrl,
-        postData: responseData,
-        owner: profile?.username,
-        image: image?.photoCID,
-        liked: like,
-        unliked: unlike
-      };
-    } 
-    else {
-      return post;
-    }
-  });
-
-  listItem.value = await Promise.all(promises);
-  postComments.value = listItem.value[0]
-  posts.value = listItem;
-
-
-  const comm = await socialMedia_contract.getAllCommentsMadeToPost(postComments.value?.PostId)
-  console.log(comments.value);
-  const commentTxt = comm.map(async (comment) => {
-    let commentsUrl = await fetchToken(comment.commentUrl)
-    let commentor = await nftProfileFactory_contract.profileByAddressOwner(comment?.commentor);
-    let image = await fetchToken(commentor?.profileUrl)
-    let timestamp = parseInt(comment?.time);
-    let readableDate = new Date(timestamp * 1000).toLocaleString();
-
-    if (typeof comment === 'object') {
-      return { 
-        ...comment,
-        timestamp: readableDate,
-        commentTxt: commentsUrl,
-        commentorName: commentor?.username,
-        commentorImage: image?.photoCID
-      };
-    } 
-    else {
-      return comment;
-    }
-  });
-
-  comments.value = await Promise.all(commentTxt);
-  console.log(listItem.value, "commmm");
+  
 })
 </script>
