@@ -170,8 +170,15 @@
                                  to facilitate the widespread adoption of blockchain technology 
                                 <br> in Tanzania<br>
                                 <div class="flex text-blue-400 justify-space-evenly mt-4"> 
-                                    <span class="cursor-pointer hover:border-b-2"><span class="text-gray-800 mr-2">Frist </span>Join Network</span>
-                                    <a href="https://faucet.all.co.tz/" class="cursor-pointer hover:border-b-2"><span class="text-gray-800 mr-2">Then </span>Get AlphaCoin</a>
+                                    <span class="cursor-pointer hover:border-b-2">
+                                        
+                                        Add Wallet
+                                    </span>
+                                    <span class="cursor-pointer hover:border-b-2">
+                                        
+                                        Join Network
+                                    </span>
+                                    <a href="https://faucet.all.co.tz/" class="cursor-pointer hover:border-b-2">Get AlphaCoin</a>
                                 </div>
                                </div>
                             </div>

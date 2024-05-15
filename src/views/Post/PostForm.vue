@@ -48,16 +48,20 @@ import addMetadataFile  from '@/scripts/IPFSJSON'
 import {getSignerContract} from '../../scripts/ContractUtils';
 import { useRoute } from 'vue-router';
 import {ethers} from 'ethers';
+import { useAlphaConnectStore } from "@/store/index.js";
+import {storeToRefs} from "pinia";
 
 const props = defineProps(["openDialog", "selectedData"]);
 const emits = defineEmits(["closeDialog"]);
 const router = useRoute()
+const alphaConnectStore = useAlphaConnectStore();
 
 const dialog = ref(false);
 const nftMyProfile_contract = ref()
 const profileContract = ref()
 const close = ref(false)
 let {signer, nftProfileFactory_contract, socialMedia_contract} = getSignerContract();
+const { getStoreItem } = storeToRefs(alphaConnectStore)
 
 const formFields = ref([
   {
@@ -80,64 +84,68 @@ const formFields = ref([
 
 
 const Post = async (formValues) => {
-  console.log(formValues);
-  console.log(formValues.image[0].attachmentPath)
-  const postCID = await addMetadataFile(
-      {
-          "post": formValues.image[0].attachmentPath,
-          "description": formValues.description,
-      }
+  // console.log(formValues);
+  // console.log(formValues.image[0].attachmentPath)
+  // const postCID = await addMetadataFile(
+  //     {
+  //         "post": formValues.image[0].attachmentPath,
+  //         "description": formValues.description,
+  //     }
       
-  );
-  console.log('Item created successfully with metadata. CID:', postCID);
+  // );
+  // console.log('Item created successfully with metadata. CID:', postCID);
 
-  try {
-      const createPost = await nftMyProfile_contract.value.createPost(
-        postCID
-      );
-      console.log(createPost); // Log the deployed contract address
+  // try {
+  //     const createPost = await nftMyProfile_contract.value.createPost(
+  //       postCID
+  //     );
+  //     console.log(createPost); // Log the deployed contract address
 
-      // wait() function allows to wait for transaction to be completed
-      let receipt = await createPost.wait()  
+  //     // wait() function allows to wait for transaction to be completed
+  //     let receipt = await createPost.wait()  
 
-      console.log(receipt);
+  //     console.log(receipt);
 
-      const tokenIdBigNumber = receipt?.events[3].args.profileId;
+  //     const tokenIdBigNumber = receipt?.events[3].args.profileId;
 
-      // Convert BigNumber to JavaScript number
-      const postId = tokenIdBigNumber.toNumber();
+  //     // Convert BigNumber to JavaScript number
+  //     const postId = tokenIdBigNumber.toNumber();
 
-      console.log(postId);
+  //     console.log(postId);
 
-      // // not decodeFunctionData
-      // // let decodedData = new ethers.utils.Interface(nftFactory_ABI).decodeFunctionResult('deployNFTContract', encodedData)
-      // // encodedData is found in receipt
+  //     // // not decodeFunctionData
+  //     // // let decodedData = new ethers.utils.Interface(nftFactory_ABI).decodeFunctionResult('deployNFTContract', encodedData)
+  //     // // encodedData is found in receipt
 
-      if (postId) {
-            const publishPost = await socialMedia_contract.createPost(
-              profileContract.value,
-              postId,
-            )
+  //     if (postId) {
+  //           const publishPost = await socialMedia_contract.createPost(
+  //             profileContract.value,
+  //             postId,
+  //           )
 
-            console.log(publishPost);
-            let publishedPost = await publishPost.wait()
-            console.log(publishedPost?.events[1].args.PostId);
+  //           console.log(publishPost);
+  //           let publishedPost = await publishPost.wait()
+  //           console.log(publishedPost?.events[1].args.PostId);
 
-            const PostIdBigNumber = publishedPost?.events[1].args.PostId
-            const PostId = PostIdBigNumber.toNumber()
+  //           const PostIdBigNumber = publishedPost?.events[1].args.PostId
+  //           const PostId = PostIdBigNumber.toNumber()
 
-            if (PostId) {
-                window.location.reload();
-            } else {
-                console.error('Error creating Item on market');
-            }
-        } else {
-            console.error('Error creating token for post');
-        }
+  //           if (PostId) {
+  //               window.location.reload();
+  //           } else {
+  //               console.error('Error creating Item on market');
+  //           }
+  //       } else {
+  //           console.error('Error creating token for post');
+  //       }
 
-  } catch (error) {
-      console.error('Error creating collection:', error);
-  }
+  // } catch (error) {
+  //     console.error('Error creating collection:', error);
+  // }
+
+  await alphaConnectStore.Post(formValues, router?.params?.wallet, nftMyProfile_contract.value);
+
+  window.location.reload();
 }
 
 onMounted( async () => {

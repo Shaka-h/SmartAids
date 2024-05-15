@@ -1,25 +1,25 @@
 <template>
-    --{{ myProfile[0]?.profileContract }}==
-    <div v-if="profileContract != 0x0000000000000000000000000000000000000000" class="row h-full p-4" >
-        <div class="col-md-10 pr-10 md:w-full detail" style=""> 
-            <div class="h-1/2 rounded-lg" style="background-color: #40128B42">
-                <Details />
+    --{{ myProfile}}==
+        <div v-if="myProfile.length" class="row h-full p-4" >
+            <div class="col-md-10 pr-10 md:w-full detail" style=""> 
+                <div class="h-1/2 rounded-lg" style="background-color: #40128B42">
+                    <Details />
+                </div>
+                <div v-if="myProfile.length" class="mt-8 h-1/2">
+                    <MyPosts :profile-contract="myProfile[0]?.profileContract"/>
+                </div>
             </div>
-            <div class="mt-8 h-1/2">
-                <MyPosts :profile-contract="profileContract"/>
-            </div>
+    
+            <div class="col-md-2 border-l-2 follow">
+                <Follows />
+            </div>  
         </div>
-
-        <div class="col-md-2 border-l-2 follow">
-            <Follows />
-        </div>  
-    </div>
-
-   <div v-if="profileContract == 0x0000000000000000000000000000000000000000" class="flex justify-center h-1/3 items-center">
-    <div class="px-4  cursor-pointer ">
-        <ProfileForm @closeDialog="makeAPost=false" :open-dialog="makeAPost"  ></ProfileForm>
-    </div>
-   </div>
+    
+       <div v-if="!myProfile.length " class="flex justify-center h-1/3 items-center">
+        <div class="px-4  cursor-pointer ">
+            <ProfileForm @closeDialog="makeAPost=false" :open-dialog="makeAPost"  ></ProfileForm>
+        </div>
+       </div>
 
    
 </template>
@@ -43,9 +43,19 @@ const profileContract = ref()
 const makeAPost = ref(false)
 const { getStoreItem } = storeToRefs(alphaConnectStore)
 
+// const myProfile = computed(() => {
+//   return getStoreItem.value("myProfile").map(profile => {
+//     return {
+//         ...profile,
+//         profileContract: `${profile[0]?.profileContract}`
+//     }
+//   })
+// })
 const myProfile = computed(() => {
   return getStoreItem.value("myProfile")
 })
+
+
 
 onMounted(async () => {
     await alphaConnectStore.loadMyProfile(router?.params?.wallet);

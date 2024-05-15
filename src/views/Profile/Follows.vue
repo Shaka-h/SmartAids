@@ -55,11 +55,15 @@ import SvgIcon from "@/components/shared/SvgIcon.vue";
 import BusinessCard from "@/views/Profile/BusinessCard.vue"
 import {getSignerContract} from '../../scripts/ContractUtils';
 import { useRoute } from 'vue-router';
+import { useAlphaConnectStore } from "@/store/index.js";
+import {storeToRefs} from "pinia";
 
+const alphaConnectStore = useAlphaConnectStore();
 let {nftProfileFactory_contract} = getSignerContract();
 const router = useRoute();
 const activeTab = ref("all")
 const showCard = ref(false)
+const { getStoreItem } = storeToRefs(alphaConnectStore)
 
 const viewProfile = () => {
   showCard.value = true
@@ -84,67 +88,41 @@ const follows = ref([
     },
 ])
 
-const allDeployedNFTCollections = ref()
-const allfollowers = ref()
-const allfollowing = ref()
-const businessCards = ref()
+const allDeployedNFTCollections = computed(() => {
+  return getStoreItem.value("allProfiles")
+})
+
+const allfollowers = computed(() => {
+  return getStoreItem.value("myFollowers")
+})
+
+const allfollowing = computed(() => {
+  return getStoreItem.value("myFollowing")
+})
+
+const businessCards = computed(() => {
+  return getStoreItem.value("myCards")
+})
+
 
 const follow = async (profile) => {
-    console.log(profile?.ProfileContract);
-    const follow = await nftProfileFactory_contract.followProfile(profile?.ProfileContract)
-    let receipt = await follow.wait() 
-    console.log(receipt); 
-    activeTab.value = 'following'
+    // console.log(profile?.ProfileContract);
+    // const follow = await nftProfileFactory_contract.followProfile(profile?.ProfileContract)
+    // let receipt = await follow.wait() 
+    // console.log(receipt); 
+    // activeTab.value = 'following'
+
+    await alphaConnectStore.followProfile(profile);
 }
 
 onMounted(async () => {
-    const getAllDeployedNFTCollections = await nftProfileFactory_contract.getAllDeployedNFTCollections()
-    allDeployedNFTCollections.value = await getAllDeployedNFTCollections
-    console.log(allDeployedNFTCollections.value, "allDeployedNFTCollections");
+    await alphaConnectStore.loadAllProfile();
 
-    const getAllfollowers = await nftProfileFactory_contract.getAllfollowers(router?.params?.wallet)
-    allfollowers.value = await getAllfollowers
-    console.log(allfollowers.value, "allfollowers");
+    await alphaConnectStore.loadMyFollowers(router?.params?.wallet);
 
-    const promises = allfollowers.value.map(async (follow) => {
-        const result = [];
-        const followName = await nftProfileFactory_contract.profileByAddressOwner(follow);
-        result.push(followName);
-        console.log(followName, "trial");
-        return result;
-    });
+    await alphaConnectStore.loadMyFollowing(router?.params?.wallet);
 
-    allfollowers.value = await Promise.all(promises);
-
-    
-    const getAllfollowing = await nftProfileFactory_contract.getAllfollowing(router?.params?.wallet)
-    allfollowing.value = await getAllfollowing
-    console.log(allfollowing.value, "allfollowing");
-
-    const getAllfollowingpromises = allfollowing.value.map(async (follow) => {
-        const result = [];
-        const followName = await nftProfileFactory_contract.profileByAddressOwner(follow);
-        result.push(followName);
-        console.log(followName, "trial");
-        return result;
-    });
-
-    allfollowing.value = await Promise.all(getAllfollowingpromises);
-
-
-    const getMyBusinessCards = await nftProfileFactory_contract.getMybusinessCard()
-    businessCards.value = await getMyBusinessCards
-    console.log(businessCards.value, "businessCards");
-
-    const getMyBusinessCardspromises = businessCards.value.map(async (follow) => {
-        const result = [];
-        const card = await nftProfileFactory_contract.profileByAddressOwner(follow);
-        result.push(card);
-        console.log(card, "card");
-        return result;
-    });
-
-    businessCards.value = await Promise.all(getMyBusinessCardspromises);
+    await alphaConnectStore.loadMyCards();
 
 
 });
