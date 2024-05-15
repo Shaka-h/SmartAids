@@ -106,13 +106,7 @@ const businessCards = computed(() => {
 
 
 const follow = async (profile) => {
-    // console.log(profile?.ProfileContract);
-    // const follow = await nftProfileFactory_contract.followProfile(profile?.ProfileContract)
-    // let receipt = await follow.wait() 
-    // console.log(receipt); 
-    // activeTab.value = 'following'
-
-    await alphaConnectStore.followProfile(profile);
+   await alphaConnectStore.followProfile(profile);
 }
 
 onMounted(async () => {

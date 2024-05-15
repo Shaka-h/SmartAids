@@ -42,9 +42,11 @@ import {getSignerContract} from '../../scripts/ContractUtils';
 let {signer, nftProfileFactory_contract, socialMedia_contract} = getSignerContract();
 import addMetadataFile  from '@/scripts/IPFSJSON'
 import { notifyError } from '@/services/notificationService';
+import { useAlphaConnectStore } from "@/store/index.js";
 
 const props = defineProps(["openDialog", "selectedData"]);
 const emits = defineEmits(["closeDialog"]);
+const alphaConnectStore = useAlphaConnectStore();
 
 const dialog = ref(false);
 
@@ -78,45 +80,10 @@ const formFields = ref([
 
 
 const createNews = async (formValues) => {
-  console.log(formValues);
-  let photo = ref()
-  if (formValues?.photo[0]?.attachmentPath){
-    photo.value = formValues.photo[0].attachmentPath
-  }
-  else {
-    photo.value = null
-  }
-  const newsCID = await addMetadataFile(
-      {
-          "photo": photo.value,
-          "title": formValues?.title,
-          "description": formValues?.description,
-      }
-      
-  );
-  console.log('News created successfully with metadata. CID:', newsCID);
-
-  try {
-    const createNews = await socialMedia_contract.createNews(
-      newsCID
-    )
-
-    console.log(createNews);
-    let createdNews = await createNews.wait()
-    console.log(createdNews?.events[0].args.NewsId);
-
-    if (createdNews?.events[0].args.NewsId) {
-        window.location.reload();
-    } else {
-        console.error('Error creating Item on market');
-    }
-
-  } catch (error) {
-      console.error('Error creating news:', error);
-      notifyError("Only the admin can post news")
-  }
+  await alphaConnectStore.PostNews(formValues);
 }
+
 onMounted( async () => {
-  
+
 })
 </script>

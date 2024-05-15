@@ -1,5 +1,5 @@
 <template>
-    <div class=""> 
+    <div class="">
         <div>
             <div class="font text-2xl">NEWS</div>
             <div class="p-2 flex justify-end mx-8 cursor-pointer">
@@ -39,14 +39,18 @@
 <script setup>
 import NewsForm from '@/views/News/NewsForm.vue';
 import { useRouter } from 'vue-router';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import SvgIcon from "@/components/shared/SvgIcon.vue";
 import {getSignerContract} from '../../scripts/ContractUtils';
+import { useAlphaConnectStore } from "@/store/index.js";
+import {storeToRefs} from "pinia";
 
+const alphaConnectStore = useAlphaConnectStore();
 let {socialMedia_contract} = getSignerContract();
 const selectedNews = ref()
 const makeAnews = ref(false)
 const router = useRouter()
+const { getStoreItem } = storeToRefs(alphaConnectStore)
 
 const viewNews = (newsId) => {
   router.push(`/news/${newsId}`)
@@ -70,51 +74,14 @@ const deleteNews = async (newsId) => {
 // Define newss as a reactive reference
 const news = ref([]);
 const props = defineProps(['profileContract'])
-const newsList = ref()
 
-
-
-const fetchToken = async (tokenURI) => {
-  try {
-    const response = await fetch(`http://127.0.0.1:8080/ipfs/${tokenURI}`);
-    const data = await response.json();
-    return data
-
-    // Handle data as needed
-  } catch (error) {
-    console.error('Error fetching data from', router?.params?.tokenId, ':', error);
-    // Handle error
-  }
-
-};
+const newsList = computed(() => {
+  return getStoreItem.value("allNews")
+})
 
 onMounted( async () => {
-  const fetchAllNewsCreated = await socialMedia_contract.fetchAllNewsCreated()
-  news.value = fetchAllNewsCreated
 
-  console.log(news.value);
-
-  const promises = news.value.map(async (news) => {
-    const responseData = await fetchToken(news?.newsUrl);
-  
-    let timestamp = parseInt(news?.time);
-    let readableDate = new Date(timestamp * 1000).toLocaleString();
-
-    if (typeof news === 'object') {
-      return { 
-        ...news, 
-        hex: parseInt(news._hex),
-        timestamp: readableDate,
-        newsUrl: news?.newsUrl,
-        newsData: responseData,
-      };
-    } 
-    else {
-      return news;
-    }
-  });
-
-  newsList.value = await Promise.all(promises);
+  await alphaConnectStore.loadAllNews();
  
 })
 </script>

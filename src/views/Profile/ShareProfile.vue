@@ -41,12 +41,13 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import {getSignerContract} from '../../scripts/ContractUtils';
+import { useAlphaConnectStore } from "@/store/index.js";
+import {storeToRefs} from "pinia";
 
 const props = defineProps(["openDialog", "selectedData"]);
 const emits = defineEmits(["closeDialog"]);
-let {nftProfileFactory_contract} = getSignerContract();
-const allDeployedNFTCollections = ref()
+const alphaConnectStore = useAlphaConnectStore();
+const { getStoreItem } = storeToRefs(alphaConnectStore)
 
 const dialog = ref(false);
 const search = ref("")
@@ -62,6 +63,10 @@ const formFields = [
     },
 ];
 
+const allDeployedNFTCollections = computed(() => {
+  return getStoreItem.value("allProfiles")
+})
+
 const filteredData = computed(() => {
     return allDeployedNFTCollections.value.filter(item => {
         return item[2].toLowerCase().includes(search.value.toLowerCase());
@@ -69,15 +74,12 @@ const filteredData = computed(() => {
 });
 
 const shareProfile = async (profile) => {
-  const shareMyCard = await nftProfileFactory_contract.shareCard(profile?.ProfileContract)
-  const result = await shareMyCard.wait();
-  console.log(result);
+  await alphaConnectStore.shareProfile(profile);
+
 }
 
 onMounted(async () => {
-    const getAllDeployedNFTCollections = await nftProfileFactory_contract.getAllDeployedNFTCollections()
-    allDeployedNFTCollections.value = await getAllDeployedNFTCollections
-    console.log(allDeployedNFTCollections.value, "allDeployedNFTCollections");
+  await alphaConnectStore.loadAllProfile();
 
 });
 </script>

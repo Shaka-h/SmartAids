@@ -118,17 +118,17 @@
     link: `/${walletAddressConnected.value}/profile`,
     icon: 'links',
     permissions: ['']
+  }, 
+  {
+    name: "Discussions",
+    link: `/${walletAddressConnected.value}/setting`,
+    icon: 'category',
+    permissions: ['']
   },
   {
     name: "Notifications",
     link: `/${walletAddressConnected.value}/notifications`,
     icon: 'notification',
-    permissions: ['']
-  },
-  {
-    name: "Setting",
-    link: `/${walletAddressConnected.value}/setting`,
-    icon: 'category',
     permissions: ['']
   },
 ])
