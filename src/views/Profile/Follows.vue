@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col p-4 h-full rounded-lg" style="background-color: #40128B42">
-        <BusinessCard :open-dialog="showCard" @close-dialog="showCard = false;"></BusinessCard>
+        <BusinessCard :open-dialog="showCard" :selected-card="selectedCard"  @close-dialog="showCard = false; "></BusinessCard>
 
         <div class="flex">
             <template v-for="(tab, index) of follows" :key="index">
@@ -33,16 +33,14 @@
                 </div>
             </div>
             <div v-if="activeTab === 'cards'">
-                <div @click="viewProfile()" v-for="(card, index) of businessCards" :key="index" class="bg-gradient border rounded-lg py-2 px-4 w-full cursor-pointer mb-2 flex justify-between"> 
+                <div @click="viewProfile(card)" v-for="(card, index) of businessCards" :key="index" class="bg-gradient border rounded-lg py-2 px-4 w-full cursor-pointer mb-2 flex justify-between"> 
                     <div>{{ card[0][2] }}</div>
                     <div class="cursor-pointer hover:bg-white p-1 rounded-lg">
                         <svg-icon :name="'download3'" class="icon cursor-pointer" color="#020202"></svg-icon>
                     </div>
                 </div>
             </div>
-            <!-- <div class="p-2 mt-8 mx-8 cursor-pointer">
-                <Post @closeDialog="makeAPost=false" :open-dialog="makeAPost"  ></Post>
-            </div> -->
+             
         </div>
     
     </div>
@@ -63,10 +61,13 @@ let {nftProfileFactory_contract} = getSignerContract();
 const router = useRoute();
 const activeTab = ref("all")
 const showCard = ref(false)
+const selectedCard = ref();
 const { getStoreItem } = storeToRefs(alphaConnectStore)
 
-const viewProfile = () => {
+const viewProfile = async (card) => {
   showCard.value = true
+  console.log(card[0]?.owner, "xxxxxxxxxxxxxxxxx");
+  selectedCard.value = await alphaConnectStore.loadProfile(card[0]?.owner);
 };
 
 const follows = ref([

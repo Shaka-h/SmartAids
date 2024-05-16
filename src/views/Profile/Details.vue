@@ -51,7 +51,6 @@ import {storeToRefs} from "pinia";
 
 const alphaConnectStore = useAlphaConnectStore();
 const router = useRoute()
-const profile = ref()
 const profileForm = ref(null)
 const makeAPost = ref(false)
 const { getStoreItem } = storeToRefs(alphaConnectStore)

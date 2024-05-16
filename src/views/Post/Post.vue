@@ -88,10 +88,7 @@ import { ref, onMounted, computed } from 'vue';
 import SvgIcon from "@/components/shared/SvgIcon.vue";
 import {getSignerContract} from '../../scripts/ContractUtils';
 import { useRoute } from 'vue-router';
-import {nftMyProfile_ABI} from '@/scripts/ContractConstants'
-import {ethers} from 'ethers';
 import CommentForm from "@/views/Post/Comments/CommentForm.vue"
-import CommentList from "@/views/Post/Comments/CommentList.vue"
 import { useAlphaConnectStore } from "@/store/index.js";
 import {storeToRefs} from "pinia";
 

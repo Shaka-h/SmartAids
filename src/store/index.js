@@ -37,7 +37,9 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                 sharedCards: [],
                 shareMyCardState: 'idle',
                 myPosts: [],
-                myProfileDetails: []
+                myProfileDetails: [],
+                profileDetails: [],
+                postCommented: 'idle'
 
             }
         }
@@ -51,6 +53,7 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
 
 
     actions: {
+
         async createProfile(profileData) {
             const store = this;
 
@@ -723,7 +726,95 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
             } finally {
                 store.isLoading = false;
             }
-        }
+        },
+
+        async loadProfile(address) {
+            const store = this;
+
+            try {
+                store.isLoading = true;
+
+                // Fetch profile data from the blockchain network
+                const profileData = await nftProfileFactory_contract.profileByAddressOwner(address);
+
+                // Extract the token URL from profileData
+                const tokenUrl = profileData[3];
+
+                // Fetch additional profile details from the token URL using fetchData function
+                const profileDetails = await fetchData(tokenUrl);
+
+                // Process profile data
+                const processedProfiles = profileDetails.map(profile => ({
+                    ...profile,
+                    photo: profile.photoCID,
+                    name: profile.name,
+                    fullName: profile.fullName,
+                    institution: profile.organisation,
+                    links: profile.contacts,
+                    bibliography: profile.bibliography,
+                    skills: profile.skills,
+                    profileContract: profileData[1]
+                }));
+
+                // Update store state with fetched profiles
+                store.state['profileDetails'] = processedProfiles;
+
+                // Log fetched profiles
+                // console.log('Fetched profiles:', store.state.myProfile);
+
+            } catch (error) {
+                console.error('Error loading profileDetails:', error);
+                // Handle error
+                notifyError('Error loading profileDetails: ' + error.message);
+            } finally {
+                store.isLoading = false;
+            }
+        },
+
+        async commentPost(commentData, post) {
+
+            const store = this;
+
+            try {
+
+                const commentCID = await addMetadataFile(
+                    {
+                        "comment": commentData.description,
+                    }
+
+                );
+                console.log('Comment created successfully with metadata. CID:', commentCID);
+
+                const publishComment = await socialMedia_contract.commentPost(
+                    post,
+                    commentCID,
+                )
+
+                store.isLoading = true;
+
+                console.log(publishComment);
+                let publishedComment = await publishComment.wait()
+                console.log(publishedComment);
+
+                
+                if (publishedComment?.events[0].args.commentID) {
+                    store.postCommented = 'success'; // Set state to success after successful profile creation
+                    notifySuccess("Comment sent successfully!");
+                }
+                else {
+                    store.postCommented = 'error'; // Set state to error if contract address is not returned
+                    notifyError('Error creating post: Deployed contract address not returned.');
+                }
+
+            } catch (error) {
+                console.error('Error loading myProfileContract:', error);
+                // Handle error
+                notifyError('Error loading myProfileContract: ' + error.message);
+            } finally {
+                store.isLoading = false;
+            }
+
+        },
 
 
 

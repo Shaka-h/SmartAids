@@ -18,8 +18,7 @@
           ></svg-icon>
         </button>
       </div>
-
-
+{{ profileDetails }}
       <div class="p-4 space-x-4">
         <div  class="flex justify-between items-center p-2 text-gray-500"> 
           <div @click="downloadCard()" class="rounded-lg p-2 bg-primary cursor-pointer">Download</div>
@@ -59,19 +58,21 @@
 
 <script setup>
 import SvgIcon from "@/components/shared/SvgIcon.vue";
-import { onMounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import ProfileForm from '../../views/Profile/ProfileForm.vue'
 import ShareProfile from './ShareProfile.vue';
 import {getSignerContract} from '../../scripts/ContractUtils';
 import { useRoute } from 'vue-router';
+import { useAlphaConnectStore } from "@/store/index.js";
+import {storeToRefs} from "pinia";
 
-let {nftProfileFactory_contract} = getSignerContract();
+const alphaConnectStore = useAlphaConnectStore();
 const router = useRoute()
 const profile = ref()
-const profileDetails = ref()
 const dialog = ref(false)
+const { getStoreItem } = storeToRefs(alphaConnectStore)
 
-const props = defineProps(['openDialog'])
+const props = defineProps(['openDialog', 'selectedCard'])
 const emits = defineEmits(['closeDialog'])
 
 const openLink = (link) => {
@@ -102,32 +103,9 @@ const closeDialog = () => {
   emits('closeDialog')
 }
 
-const fetchData = async () => {
-  const responseData = []; // Array to store response data
-
-  try {
-      const response = await fetch(`http://127.0.0.1:8080/ipfs/${profile.value[3]}`);
-      const data = await response.json();
-      responseData.push(data); // Push data to responseData array
-      console.log('Data for', router?.params?.wallet, ':', data);
-      // Handle data as needed
-  } catch (error) {
-      console.error('Error fetching data from', router?.params?.wallet, ':', error);
-      // Handle error
-  }
-  return responseData; // Return the array of response data
-};
-
-
-onMounted(async () => {
-  profile.value = await nftProfileFactory_contract.profileByAddressOwner(router?.params?.wallet);
-  console.log(profile.value, "market");
-
-  await fetchData().then((responseData) => {
-      console.log('All response data:', responseData);
-      profileDetails.value = responseData
-  });
-});
+const profileDetails = computed(() => {
+  return getStoreItem.value("profileDetails")
+})
 
 </script>
 
