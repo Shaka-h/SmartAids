@@ -102,25 +102,25 @@
     return getStoreItem.value("myProfile")
   })
 
-  const navigationLinks = ref([
-   {
+const navigationLinks = ref([
+  {
     name: "Posts",
     link: `/${walletAddressConnected.value}/posts`,
-    icon: 'testimonials',
-    permissions: ['']
+    icon: "testimonials",
+    permissions: [""],
   },
   {
     name: "News",
     link: `/${walletAddressConnected.value}/news`,
-    icon: 'news',
-    permissions: ['']
+    icon: "news",
+    permissions: [""],
   },
   {
     name: "Profile",
     link: `/${walletAddressConnected.value}/profile`,
-    icon: 'links',
-    permissions: ['']
-  }, 
+    icon: "links",
+    permissions: [""],
+  },
   {
     name: "Discussions",
     link: `/${walletAddressConnected.value}/setting`,
@@ -148,70 +148,89 @@
   {
     name: "Notifications",
     link: `/${walletAddressConnected.value}/notifications`,
-    icon: 'notification',
-    permissions: ['']
+    icon: "notification",
+    permissions: [""],
   },
-])
+]);
 
-const makeAPost = ref(false)
+const makeAPost = ref(false);
 const closeDialog = () => {
-    emits("closeDialog");
-  };
+  emits("closeDialog");
+};
 
-  const postSomething = () => {
-    makeAPost.value = true;
+const postSomething = () => {
+  makeAPost.value = true;
 };
 
 
 onMounted(async () => {
     await alphaConnectStore.loadMyProfile(route?.params?.wallet);
 });
+</script>
 
-  </script>
-  
-  
-  <style scoped lang="scss">
-  
-  .inactive {
-    color: #0D1042;
-  }
-  .inactive:hover {
-    color: #257ae4
-  }
-  
-  .name{
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    font-size: 25px;
-  }
+<style scoped lang="scss">
+.inactive {
+  color: #0d1042;
+}
+.inactive:hover {
+  color: #257ae4;
+}
 
-  .sideBack {
-    background: rgb(187,132,147);
-    background: radial-gradient(circle, rgba(187,132,147,1) 43%, rgba(219,175,160,1) 69%, rgba(146,144,195,1) 78%);
-  }
+.name {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  font-size: 25px;
+}
 
-  .css-selector {
-    background: linear-gradient(270deg, #bb8493, #535c91, #9290c3);
-    background-size: 600% 600%;
+.sideBack {
+  background: rgb(187, 132, 147);
+  background: radial-gradient(
+    circle,
+    rgba(187, 132, 147, 1) 43%,
+    rgba(219, 175, 160, 1) 69%,
+    rgba(146, 144, 195, 1) 78%
+  );
+}
 
-    -webkit-animation: AnimationName 39s ease infinite;
-    -moz-animation: AnimationName 39s ease infinite;
-    animation: AnimationName 39s ease infinite;
+.css-selector {
+  background: linear-gradient(270deg, #bb8493, #535c91, #9290c3);
+  background-size: 600% 600%;
+
+  -webkit-animation: AnimationName 39s ease infinite;
+  -moz-animation: AnimationName 39s ease infinite;
+  animation: AnimationName 39s ease infinite;
 }
 
 @-webkit-keyframes AnimationName {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 @-moz-keyframes AnimationName {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 @keyframes AnimationName {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
-  </style>
-  
+</style>
