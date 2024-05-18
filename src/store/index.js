@@ -433,7 +433,6 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
             try {
                 const getMyPosts = await socialMedia_contract.idPost(postId)
 
-                console.log(getMyPosts, "jjdjjjjjjjj");
                 // Update store state with fetched profiles
                 store.state['post'] = getMyPosts;
 

@@ -1,20 +1,20 @@
-<template>
+<template> 
     <div class="p-3 css-selector  flex-col font-bold hidden sm:flex" style="width: 280px; ">
   
       <div class="capitalize name border-b pt-2 pb-3 text-center mb-2 font-bold " style="color: #0D1042; " >
         AlphaConnect
       </div>
-      <div class="flex space-x-4 mt-4 items-center" v-if="profileContract != 0x0000000000000000000000000000000000000000"> 
+      <div class="flex space-x-4 mt-4 items-center" v-if="myProfile?.length"> 
   <!--      <button type="button" class="border hover:font-bold btn border-white px-2 mr-3 text-white rounded-md" @click="toggleLanguage">{{ buttonText }}</button>-->
-        <div v-if="!profile" class="w-10 h-10 border rounded-full flex items-center justify-center shadow-lg bg-white">
+        <div v-if="!myProfile[0]?.profileContract" class="w-10 h-10 border rounded-full flex items-center justify-center shadow-lg bg-white">
           <img src="@/assets/images/profile.png"  alt="Profile picture">
         </div>
 
-        <div v-if="profile" class="rounded-md shadow intro-x ">
-          <img :src="`http://127.0.0.1:8080/ipfs/${profileImage[0]?.photoCID}`" class="w-10 h-10 rounded-full" alt="Profile picture"/>
+        <div v-if="myProfile[0]?.profileContract" class="rounded-md shadow intro-x ">
+          <img :src="`http://127.0.0.1:8080/ipfs/${myProfile[0]?.photoCID}`" class="w-10 h-10 rounded-full" alt="Profile picture"/>
         </div>
 
-        <span class="mr-2">{{profileName}}</span>
+        <span class="mr-2">{{myProfile[0].name}}</span>
       </div>
   
       <div class="overflow-y-scroll mt-8 h-full space-y-4">
@@ -67,7 +67,7 @@
             </template>
           </template>
         </template>
-        <div v-if="profileContract != 0x0000000000000000000000000000000000000000" class="p-2 mt-8 mx-8 cursor-pointer">
+        <div v-if="myProfile?.length" class="p-2 mt-8 mx-8 cursor-pointer">
           <Post @closeDialog="makeAPost=false" :open-dialog="makeAPost"  ></Post>
         </div>
 
@@ -83,22 +83,24 @@
   import Post from '../../views/Post/PostForm.vue'
   import SvgIcon from "@/components/shared/SvgIcon.vue";
   import {useRoute} from "vue-router";
-  import {onMounted, ref} from "vue";
+  import {onMounted, ref, computed} from "vue";
   import {walletAddressConnected} from "@/scripts/ContractConstants";
-  import {getSignerContract} from '../../scripts/ContractUtils';
+  import { useAlphaConnectStore } from "@/store/index.js";
+  import {storeToRefs} from "pinia";
 
+  const alphaConnectStore = useAlphaConnectStore();
   const route = useRoute()
   const hoveredLink = ref(null)
   const childHoveredLink = ref(null)
-  let {nftProfileFactory_contract} = getSignerContract();
-  const profileContract = ref()
-  const profileName = ref()
-  const profileImage = ref()
-  const profile = ref()
+  const { getStoreItem } = storeToRefs(alphaConnectStore)
 
   const isActive = (link) => {
     return route.fullPath.includes(link)
   }
+
+  const myProfile = computed(() => {
+    return getStoreItem.value("myProfile")
+  })
 
   const navigationLinks = ref([
    {
@@ -122,7 +124,25 @@
   {
     name: "Discussions",
     link: `/${walletAddressConnected.value}/setting`,
+    icon: 'discussion',
+    permissions: ['']
+  },
+  {
+    name: "Q&A",
+    link: `/${walletAddressConnected.value}/setting`,
     icon: 'category',
+    permissions: ['']
+  },
+  {
+    name: "Tutorials",
+    link: `/${walletAddressConnected.value}/setting`,
+    icon: 'data',
+    permissions: ['']
+  },
+  {
+    name: "Presentations",
+    link: `/${walletAddressConnected.value}/setting`,
+    icon: 'presentation',
     permissions: ['']
   },
   {
@@ -142,31 +162,9 @@ const closeDialog = () => {
     makeAPost.value = true;
 };
 
-const fetchData = async () => {
-    const responseData = []; // Array to store response data
-
-    try {
-        const response = await fetch(`http://127.0.0.1:8080/ipfs/${profile.value}`);
-        const data = await response.json();
-        responseData.push(data); // Push data to responseData array
-        // Handle data as needed
-    } catch (error) {
-        console.error('Error fetching data from', error);
-        // Handle error
-    }
-    return responseData; // Return the array of response data
-};
 
 onMounted(async () => {
-    const getprofileContract = await nftProfileFactory_contract.profileByAddressOwner(route?.params?.wallet)
-    profileContract.value = await getprofileContract?.ProfileContract
-    profileName.value = await getprofileContract?.username
-    profile.value = await getprofileContract?.profileUrl
-
-    await fetchData().then((responseData) => {
-        profileImage.value = responseData
-    });
-
+    await alphaConnectStore.loadMyProfile(route?.params?.wallet);
 });
 
   </script>
