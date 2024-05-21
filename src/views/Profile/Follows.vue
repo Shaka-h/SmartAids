@@ -55,6 +55,7 @@ import {getSignerContract} from '../../scripts/ContractUtils';
 import { useRoute } from 'vue-router';
 import { useAlphaConnectStore } from "@/store/index.js";
 import {storeToRefs} from "pinia";
+import {walletAddressConnected, walletConnected} from "@/scripts/ContractConstants";
 
 const alphaConnectStore = useAlphaConnectStore();
 let {nftProfileFactory_contract} = getSignerContract();
@@ -113,9 +114,9 @@ const follow = async (profile) => {
 onMounted(async () => {
     await alphaConnectStore.loadAllProfile();
 
-    await alphaConnectStore.loadMyFollowers(router?.params?.wallet);
+    await alphaConnectStore.loadMyFollowers(alphaConnectStore.getConnectedAddress());
 
-    await alphaConnectStore.loadMyFollowing(router?.params?.wallet);
+    await alphaConnectStore.loadMyFollowing(alphaConnectStore.getConnectedAddress());
 
     await alphaConnectStore.loadMyCards();
 

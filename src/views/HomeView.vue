@@ -245,8 +245,9 @@
 import SvgIcon from "@/components/shared/SvgIcon.vue";
 import { useRouter } from 'vue-router';
 import { ref } from 'vue'; // Import ref from Vue
-import {walletAddressConnected} from "@/scripts/ContractConstants";
+import {walletAddressConnected, walletConnected} from "@/scripts/ContractConstants";
 import footerView from "@/components/footer.vue"
+
 const router = useRouter();
 
 const scrollToSection = (sectionId) => {
@@ -278,54 +279,55 @@ function scrollToTop() {
 const connect = () => {
       // Check if MetaMask is installed
       if (typeof window.ethereum !== 'undefined') {
-    const provider = window.ethereum;
+        const provider = window.ethereum;
 
     // Function to switch to the desired network
-        const switchToNetwork = async () => {
-            try {
-                await provider.request({
-                    method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: '0xAA36A7' }] // 11155111 in hexadecimal
-                });
-                console.log('Successfully switched to chain 11155111');
-            } catch (switchError) {
-                if (switchError.code === 4902) {
-                    // This error code indicates that the chain has not been added to MetaMask
-                    try {
-                        await provider.request({
-                            method: 'wallet_addEthereumChain',
-                            params: [{
-                                chainId: '0xAA36A7',
-                                chainName: 'Sepolia test network',
-                                rpcUrls: ['https://sepolia.infura.io/v3/'],
-                                nativeCurrency: {
-                                    name: 'SepoliaETH',
-                                    symbol: 'SepoliaETH',
-                                    decimals: 18
-                                },
-                                blockExplorerUrls: ['https://sepolia.etherscan.io']
-                            }]
-                        });
-                    } catch (addError) {
-                        console.error('Failed to add network:', addError);
-                    }
-                } else {
-                    console.error('Failed to switch network:', switchError);
-                }
-            }
-        };
+        // const switchToNetwork = async () => {
+        //     try {
+        //         await provider.request({
+        //             method: 'wallet_switchEthereumChain',
+        //             params: [{ chainId: '0xAA36A7' }] // 11155111 in hexadecimal
+        //         });
+        //         console.log('Successfully switched to chain 11155111');
+        //     } catch (switchError) {
+        //         if (switchError.code === 4902) {
+        //             // This error code indicates that the chain has not been added to MetaMask
+        //             try {
+        //                 await provider.request({
+        //                     method: 'wallet_addEthereumChain',
+        //                     params: [{
+        //                         chainId: '0xAA36A7',
+        //                         chainName: 'Sepolia test network',
+        //                         rpcUrls: ['https://sepolia.infura.io/v3/'],
+        //                         nativeCurrency: {
+        //                             name: 'SepoliaETH',
+        //                             symbol: 'SepoliaETH',
+        //                             decimals: 18
+        //                         },
+        //                         blockExplorerUrls: ['https://sepolia.etherscan.io']
+        //                     }]
+        //                 });
+        //             } catch (addError) {
+        //                 console.error('Failed to add network:', addError);
+        //             }
+        //         } else {
+        //             console.error('Failed to switch network:', switchError);
+        //         }
+        //     }
+        // };
 
         provider.request({ method: 'eth_requestAccounts' })
             .then((accounts) => {
                 walletAddressConnected.value = accounts[0];
                 console.log('Connected with account:', walletAddressConnected.value);
+                router.push("/posts"); // Access the value of wallet using .value
 
                 // Attempt to switch to the desired network
-                switchToNetwork().then(() => {
-                    router.push(`/${walletAddressConnected.value}/posts`); // Access the value of wallet using .value
-                }).catch((error) => {
-                    console.error('Error switching network:', error);
-                });
+                // switchToNetwork().then(() => {
+                //     router.push(`/${walletAddressConnected.value}/posts`); // Access the value of wallet using .value
+                // }).catch((error) => {
+                //     console.error('Error switching network:', error);
+                // });
             })
             .catch((error) => {
                 console.error('Error connecting to wallet:', error);

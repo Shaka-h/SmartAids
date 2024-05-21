@@ -39,7 +39,8 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                 myPosts: [],
                 myProfileDetails: [],
                 profileDetails: [],
-                postCommented: 'idle'
+                postCommented: 'idle',
+                createdPosts: []
 
             }
         }
@@ -285,7 +286,9 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
             const store = this;
 
             console.log(postData, "comeon and go");
+            console.log(postData?.profileContract?.address, "comeon and go");
             try {
+
                 store.createPostState = 'pending'; // Set state to pending while profile creation is in progress
 
                 const postCID = await addMetadataFile(
@@ -295,47 +298,45 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                     }
 
                 );
+                const nftMyProfile_contract = new ethers.Contract(postData?.profileContract?.address, nftMyProfile_ABI, signer);
 
-                const createPost = await postData.myProfileContract.createPost(
+                const createPost = await nftMyProfile_contract.createPost(
                     postCID
                 );
-
+                console.log(createPost); // Log the deployed contract address
                 store.isLoading = true;
-                let storedResponse = await createPost.wait();
+                // wait() function allows to wait for transaction to be completed
+                let receipt = await createPost.wait()
 
+                console.log(receipt);
 
-                const postId = parseInt(storedResponse?.events[3].args.profileId);
+                const tokenIdBigNumber = receipt?.events[3].args.profileId;
 
+                // Convert BigNumber to JavaScript number
+                const postId = tokenIdBigNumber.toNumber();
 
-                if (storedResponse?.events[3].args.profileId) {
+                console.log(postId);
 
-                    const getprofileContract = await nftProfileFactory_contract.profileByAddressOwner(postData?.connectedAddress)
-                    const profileContract = await getprofileContract?.ProfileContract
+                // // not decodeFunctionData
+                // // let decodedData = new ethers.utils.Interface(nftFactory_ABI).decodeFunctionResult('deployNFTContract', encodedData)
+                // // encodedData is found in receipt
 
-                    const publishPost = await socialMedia_contract.createPost(
-                        profileContract,
-                        postId,
-                    )
+                if (postId) {
+                    store.createPostState = 'success'; // Set state to success after successful profile creation
+                    notifySuccess("Added post successfully!");
 
-                    let publishedPost = await publishPost.wait()
-
-                    const publishPostId = publishedPost?.events[1].args.PostId
-
-                    if (publishPostId) {
-                        store.createProfileState = 'success'; // Set state to success after successful profile creation
-                        notifySuccess("Added post successfully!");
-
-                        // Push the storedResponse to the profiles array
-                        store.profiles.push(storedResponse);
-                    } else {
-                        store.createProfileState = 'error'; // Set state to error if contract address is not returned
-                        notifyError('Error creating post: Deployed contract address not returned.');
-                    }
+                    // Push the storedResponse to the profiles array
+                    // store.createdPosts.push(storedResponse);
+                } else {
+                    store.createPostState = 'error'; // Set state to error if contract address is not returned
+                    notifyError('Error creating post: Deployed contract address not returned.');
                 }
+
             } catch (error) {
-                store.createProfileState = 'error'; // Set state to error if an error occurs during profile creation
+                store.createPostState = 'error'; // Set state to error if an error occurs during profile creation
                 notifyError('Error creating post: ' + error.message);
-            } finally {
+            }
+            finally {
                 store.isLoading = false;
             }
         },
@@ -369,60 +370,63 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
         async loadAllPosts(address) {
 
             const store = this;
+            const getMyPosts = await socialMedia_contract.fetchAllPostsCreated()
+            console.log(getMyPosts, "help is givenfghjkldbfhberifbrbfgrbgibserhifgbbrshtbgfh");
 
-            try {
-                const getMyPosts = await socialMedia_contract.fetchAllPostsCreated()
+            // try {
+            //     const getMyPosts = await socialMedia_contract.fetchAllPostsCreated()
+            //     console.log(getMyPosts, "help is givenfghjkldbfhberifbrbfgrbgibserhifgbbrshtbgfh");
 
-                const promises = getMyPosts.map(async (post) => {
+                // const promises = getMyPosts.map(async (post) => {
 
-                    let nftMyProfile_contract = new ethers.Contract(post?.profileContract, nftMyProfile_ABI, signer);
+                //     let nftMyProfile_contract = new ethers.Contract(post?.profileContract, nftMyProfile_ABI, signer);
 
-                    let profile = await nftProfileFactory_contract.profileByAddressOwner(post?.creator);
+                //     let profile = await nftProfileFactory_contract.profileByAddressOwner(post?.creator);
 
 
-                    let postUrl = await nftMyProfile_contract.getPostsURIById(parseInt(post.PostId._hex));
-                    const responseData = await fetchToken(postUrl);
-                    const image = await fetchToken(profile.profileUrl)
-                    const like = await socialMedia_contract.likedBy(address, parseInt(post.PostId._hex))
-                    const unlike = await socialMedia_contract.unLikedBy(address, parseInt(post.PostId._hex))
+                //     let postUrl = await nftMyProfile_contract.getPostsURIById(parseInt(post.PostId._hex));
+                //     const responseData = await fetchToken(postUrl);
+                //     const image = await fetchToken(profile.profileUrl)
+                //     const like = await socialMedia_contract.likedBy(address, parseInt(post.PostId._hex))
+                //     const unlike = await socialMedia_contract.unLikedBy(address, parseInt(post.PostId._hex))
 
-                    let timestamp = parseInt(post);
-                    let readableDate = new Date(timestamp * 1000).toLocaleString();
+                //     let timestamp = parseInt(post);
+                //     let readableDate = new Date(timestamp * 1000).toLocaleString();
 
-                    if (typeof post === 'object') {
-                        return {
-                            ...post,
-                            hex: parseInt(post._hex),
-                            timestamp: readableDate,
-                            postUrl: postUrl,
-                            postData: responseData,
-                            owner: profile?.username,
-                            image: image?.photoCID,
-                            liked: like,
-                            unliked: unlike
-                        };
-                    }
-                    else {
-                        return post;
-                    }
-                });
+                //     if (typeof post === 'object') {
+                //         return {
+                //             ...post,
+                //             hex: parseInt(post._hex),
+                //             timestamp: readableDate,
+                //             postUrl: postUrl,
+                //             postData: responseData,
+                //             owner: profile?.username,
+                //             image: image?.photoCID,
+                //             liked: like,
+                //             unliked: unlike
+                //         };
+                //     }
+                //     else {
+                //         return post;
+                //     }
+                // });
 
-                const listItem = await Promise.all(promises);
+                // const listItem = await Promise.all(promises);
 
-                //   postComments.value = listItem.value[0]
+                // //   postComments.value = listItem.value[0]
 
-                //   posts.value = listItem;    
+                // //   posts.value = listItem;    
 
-                // Update store state with fetched profiles
-                store.state['allPosts'] = listItem;
+                // // Update store state with fetched profiles
+                // store.state['allPosts'] = listItem;
 
-            } catch (error) {
-                console.error('Error loading myProfileContract:', error);
-                // Handle error
-                notifyError('Error loading myProfileContract: ' + error.message);
-            } finally {
-                store.isLoading = false;
-            }
+            // } catch (error) {
+            //     console.error('Error loading myProfileContract:', error);
+            //     // Handle error
+            //     notifyError('Error loading myProfileContract: ' + error.message);
+            // } finally {
+            //     store.isLoading = false;
+            // }
 
         },
 
@@ -559,6 +563,7 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
 
             try {
                 const fetchAllNewsCreated = await socialMedia_contract.fetchAllNewsCreated()
+                console.log(fetchAllNewsCreated, "fjknjdantguigtjbfdjjgburbseugbuitfbui");
 
                 const promises = fetchAllNewsCreated.map(async (news) => {
                     const responseData = await fetchToken(news?.newsUrl);
@@ -795,7 +800,7 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                 let publishedComment = await publishComment.wait()
                 console.log(publishedComment);
 
-                
+
                 if (publishedComment?.events[0].args.commentID) {
                     store.postCommented = 'success'; // Set state to success after successful profile creation
                     notifySuccess("Comment sent successfully!");
@@ -815,7 +820,12 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
 
         },
 
-
+        async getConnectedAddress() {
+            const provider= await window.ethereum.request({ method: 'eth_requestAccounts' })
+            console.log(provider[0], "provider");
+            return provider[0]        
+        }
+        
 
     },
 });

@@ -16,7 +16,7 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/:wallet', // Dynamic segment for wallet address
+      path: '/', // Dynamic segment for wallet address
       name: 'landing',
       component: Connected,
       children: [

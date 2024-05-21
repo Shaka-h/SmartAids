@@ -105,49 +105,49 @@
 const navigationLinks = ref([
   {
     name: "Posts",
-    link: `/${walletAddressConnected.value}/posts`,
+    link: "/posts",
     icon: "testimonials",
     permissions: [""],
   },
   {
     name: "News",
-    link: `/${walletAddressConnected.value}/news`,
+    link: "/news",
     icon: "news",
     permissions: [""],
   },
   {
     name: "Profile",
-    link: `/${walletAddressConnected.value}/profile`,
+    link: "/profile",
     icon: "links",
     permissions: [""],
   },
   {
     name: "Discussions",
-    link: `/${walletAddressConnected.value}/setting`,
+    link: "/setting",
     icon: 'discussion',
     permissions: ['']
   },
   {
     name: "Q&A",
-    link: `/${walletAddressConnected.value}/setting`,
+    link: "/setting",
     icon: 'category',
     permissions: ['']
   },
   {
     name: "Tutorials",
-    link: `/${walletAddressConnected.value}/setting`,
+    link: "/setting",
     icon: 'data',
     permissions: ['']
   },
   {
     name: "Presentations",
-    link: `/${walletAddressConnected.value}/setting`,
+    link: "/setting",
     icon: 'presentation',
     permissions: ['']
   },
   {
     name: "Notifications",
-    link: `/${walletAddressConnected.value}/notifications`,
+    link: "/notifications",
     icon: "notification",
     permissions: [""],
   },
@@ -164,7 +164,7 @@ const postSomething = () => {
 
 
 onMounted(async () => {
-    await alphaConnectStore.loadMyProfile(route?.params?.wallet);
+    await alphaConnectStore.loadMyProfile(alphaConnectStore.getConnectedAddress());
 });
 </script>
 

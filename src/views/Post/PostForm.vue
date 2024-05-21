@@ -1,4 +1,4 @@
-<template>{{ myProfileContract }}
+<template>
   <v-dialog max-width="60%">
       <template v-slot:activator="{ props: activatorProps }">
         <v-btn
@@ -46,6 +46,7 @@ import { ref , onMounted, computed} from 'vue';
 import { useRoute } from 'vue-router';
 import { useAlphaConnectStore } from "@/store/index.js";
 import {storeToRefs} from "pinia";
+import {walletAddressConnected, walletConnected} from "@/scripts/ContractConstants";
 
 const props = defineProps(["openDialog", "selectedData"]);
 const emits = defineEmits(["closeDialog"]);
@@ -84,12 +85,12 @@ const myProfileContract = computed(() => {
 const Post = async (formValues) => {
 
   // await alphaConnectStore.Post(formValues, router?.params?.wallet, myProfileContract);
-  await alphaConnectStore.Post({ ...formValues, profileContract: myProfileContract.value, connectedAddress:router?.params?.wallet });
+  await alphaConnectStore.Post({ ...formValues, profileContract: myProfileContract.value, connectedAddress:alphaConnectStore.getConnectedAddress() });
 
-  // window.location.reload();
+  window.location.reload();
 }
 
 onMounted( async () => {
-    await alphaConnectStore.loadMyProfileContract(router?.params?.wallet); //hii ndo ina loaf myProfileContract
+    await alphaConnectStore.loadMyProfileContract(alphaConnectStore.getConnectedAddress()); //hii ndo ina loaf myProfileContract
 })
 </script>

@@ -48,6 +48,7 @@ import { useRoute } from 'vue-router';
 import SvgIcon from "@/components/shared/SvgIcon.vue";
 import { useAlphaConnectStore } from "@/store/index.js";
 import {storeToRefs} from "pinia";
+import {walletAddressConnected, walletConnected} from "@/scripts/ContractConstants";
 
 const alphaConnectStore = useAlphaConnectStore();
 const router = useRoute()
@@ -60,7 +61,7 @@ const profileDetails = computed(() => {
 })
 
 onMounted(async () => {
-    await alphaConnectStore.myProfileDetails(router?.params?.wallet);
+    await alphaConnectStore.myProfileDetails(alphaConnectStore.getConnectedAddress());
 });
 
 </script>

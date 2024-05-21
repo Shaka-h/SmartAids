@@ -5,7 +5,8 @@ export const walletAddressConnected = ref("");
 
 export const ipfsGateway = 'http://127.0.0.1:8080/ipfs'
 
-export const socialMedia = "0x8aFa68f231B99A650B28694ed8B79A3A0a7e8DDB"
+export const socialMedia = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+// export const socialMedia = "0x8aFa68f231B99A650B28694ed8B79A3A0a7e8DDB"
 export const socialMedia_ABI = [
 	{
 		"inputs": [],
@@ -34,84 +35,9 @@ export const socialMedia_ABI = [
 		"type": "error"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "postID",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "commentUrl",
-				"type": "string"
-			}
-		],
-		"name": "commentPost",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "newsUrl",
-				"type": "string"
-			}
-		],
-		"name": "createNews",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "profileContract",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "createPost",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "newsId",
-				"type": "uint256"
-			}
-		],
-		"name": "deleteNews",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "grantRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
+		"inputs": [],
+		"name": "ReentrancyGuardReentrantCall",
+		"type": "error"
 	},
 	{
 		"anonymous": false,
@@ -381,83 +307,60 @@ export const socialMedia_ABI = [
 		"type": "event"
 	},
 	{
+		"inputs": [],
+		"name": "DEFAULT_ADMIN_ROLE",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "postID",
+				"name": "",
 				"type": "uint256"
 			}
 		],
-		"name": "likePost",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
+		"name": "PostComment",
+		"outputs": [
 			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
+				"internalType": "address",
+				"name": "profileContract",
+				"type": "address"
 			},
 			{
 				"internalType": "address",
-				"name": "callerConfirmation",
+				"name": "commentor",
 				"type": "address"
-			}
-		],
-		"name": "renounceRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
 			},
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "revokeRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "postID",
+				"name": "PostID",
 				"type": "uint256"
-			}
-		],
-		"name": "unLikePost",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
+			},
 			{
 				"internalType": "uint256",
-				"name": "newsId",
+				"name": "commentID",
 				"type": "uint256"
 			},
 			{
 				"internalType": "string",
-				"name": "updatedUrl",
+				"name": "commentUrl",
 				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
 			}
 		],
-		"name": "updateNews",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -471,6 +374,24 @@ export const socialMedia_ABI = [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "postID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "commentUrl",
+				"type": "string"
+			}
+		],
+		"name": "commentPost",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -523,16 +444,47 @@ export const socialMedia_ABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "DEFAULT_ADMIN_ROLE",
-		"outputs": [
+		"inputs": [
 			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
+				"internalType": "string",
+				"name": "newsUrl",
+				"type": "string"
 			}
 		],
-		"stateMutability": "view",
+		"name": "createNews",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "profileContract",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "createPost",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "newsId",
+				"type": "uint256"
+			}
+		],
+		"name": "deleteNews",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -560,6 +512,11 @@ export const socialMedia_ABI = [
 						"internalType": "uint256",
 						"name": "time",
 						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "publish",
+						"type": "bool"
 					}
 				],
 				"internalType": "struct AlphaConnect.News[]",
@@ -787,6 +744,46 @@ export const socialMedia_ABI = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "getAllPublishedNews",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "NewsId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "newsUrl",
+						"type": "string"
+					},
+					{
+						"internalType": "address",
+						"name": "creator",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "time",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "publish",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct AlphaConnect.News[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -837,6 +834,24 @@ export const socialMedia_ABI = [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "grantRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -936,6 +951,11 @@ export const socialMedia_ABI = [
 				"internalType": "uint256",
 				"name": "time",
 				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "publish",
+				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
@@ -998,6 +1018,19 @@ export const socialMedia_ABI = [
 	{
 		"inputs": [
 			{
+				"internalType": "uint256",
+				"name": "postID",
+				"type": "uint256"
+			}
+		],
+		"name": "likePost",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "address",
 				"name": "",
 				"type": "address"
@@ -1022,45 +1055,37 @@ export const socialMedia_ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "PostComment",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "profileContract",
-				"type": "address"
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
 			},
 			{
 				"internalType": "address",
-				"name": "commentor",
+				"name": "callerConfirmation",
 				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "PostID",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "commentID",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "commentUrl",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "time",
-				"type": "uint256"
 			}
 		],
-		"stateMutability": "view",
+		"name": "renounceRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "revokeRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -1080,6 +1105,19 @@ export const socialMedia_ABI = [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "postID",
+				"type": "uint256"
+			}
+		],
+		"name": "unLikePost",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -1105,10 +1143,29 @@ export const socialMedia_ABI = [
 		],
 		"stateMutability": "view",
 		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "newsId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "updatedUrl",
+				"type": "string"
+			}
+		],
+		"name": "updateNews",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	}
 ]
 
-export const profileFactory_Address = "0xCdE1eBE8E1e46B6e908CbD8B971F4D4536802F79"
+export const profileFactory_Address = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+// export const profileFactory_Address = "0xCdE1eBE8E1e46B6e908CbD8B971F4D4536802F79"
 export const profileFactory_ABI = [
 	{
 		"anonymous": false,
@@ -2308,3 +2365,4 @@ export const nftMyProfile_ABI = [
 		"type": "receive"
 	}
 ]
+

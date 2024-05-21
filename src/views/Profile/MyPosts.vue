@@ -34,6 +34,7 @@ import SvgIcon from "@/components/shared/SvgIcon.vue";
 import { useAlphaConnectStore } from "@/store/index.js";
 import {storeToRefs} from "pinia";
 import { useRoute } from 'vue-router';
+import {walletAddressConnected, walletConnected} from "@/scripts/ContractConstants";
 
 const alphaConnectStore = useAlphaConnectStore();
 const router = useRoute()
@@ -47,7 +48,7 @@ const listItem = computed(() => {
 })
 
 onMounted( async () => {
-  await alphaConnectStore.loadMyPosts(router?.params?.wallet);
+  await alphaConnectStore.loadMyPosts(alphaConnectStore.getConnectedAddress());
 
 })
   </script>

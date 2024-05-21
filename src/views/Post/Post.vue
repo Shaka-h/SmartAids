@@ -91,6 +91,7 @@ import { useRoute } from 'vue-router';
 import CommentForm from "@/views/Post/Comments/CommentForm.vue"
 import { useAlphaConnectStore } from "@/store/index.js";
 import {storeToRefs} from "pinia";
+import {walletAddressConnected, walletConnected} from "@/scripts/ContractConstants";
 
 let {signer, nftProfileFactory_contract, socialMedia_contract} = getSignerContract();
 const router = useRoute()
@@ -155,10 +156,10 @@ const unLikePost = async (post) => {
 
 onMounted( async () => {
   
-  await alphaConnectStore.loadAllPosts(router?.params?.wallet);
+  await alphaConnectStore.loadAllPosts(await alphaConnectStore.getConnectedAddress());
 
-  await alphaConnectStore.loadPostsComments(1);
+  // await alphaConnectStore.loadPostsComments(1);
 
-  
+  console.log(await alphaConnectStore.getConnectedAddress(), "wallet connected");
 })
 </script>
