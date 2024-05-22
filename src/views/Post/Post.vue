@@ -158,7 +158,7 @@ onMounted( async () => {
   
   await alphaConnectStore.loadAllPosts(await alphaConnectStore.getConnectedAddress());
 
-  // await alphaConnectStore.loadPostsComments(1);
+  await alphaConnectStore.loadPostsComments(1);
 
   console.log(await alphaConnectStore.getConnectedAddress(), "wallet connected");
 })

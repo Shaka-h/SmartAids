@@ -123,25 +123,25 @@ const navigationLinks = ref([
   },
   {
     name: "Discussions",
-    link: "/setting",
+    link: "/discussion",
     icon: 'discussion',
     permissions: ['']
   },
   {
     name: "Q&A",
-    link: "/setting",
+    link: "/qna",
     icon: 'category',
     permissions: ['']
   },
   {
     name: "Tutorials",
-    link: "/setting",
+    link: "/tutorial",
     icon: 'data',
     permissions: ['']
   },
   {
     name: "Presentations",
-    link: "/setting",
+    link: "/presentation",
     icon: 'presentation',
     permissions: ['']
   },

@@ -373,60 +373,60 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
             const getMyPosts = await socialMedia_contract.fetchAllPostsCreated()
             console.log(getMyPosts, "help is givenfghjkldbfhberifbrbfgrbgibserhifgbbrshtbgfh");
 
-            // try {
-            //     const getMyPosts = await socialMedia_contract.fetchAllPostsCreated()
-            //     console.log(getMyPosts, "help is givenfghjkldbfhberifbrbfgrbgibserhifgbbrshtbgfh");
+            try {
+                const getMyPosts = await socialMedia_contract.fetchAllPostsCreated()
+                console.log(getMyPosts, "help is givenfghjkldbfhberifbrbfgrbgibserhifgbbrshtbgfh");
 
-                // const promises = getMyPosts.map(async (post) => {
+                const promises = getMyPosts.map(async (post) => {
 
-                //     let nftMyProfile_contract = new ethers.Contract(post?.profileContract, nftMyProfile_ABI, signer);
+                    let nftMyProfile_contract = new ethers.Contract(post?.profileContract, nftMyProfile_ABI, signer);
 
-                //     let profile = await nftProfileFactory_contract.profileByAddressOwner(post?.creator);
+                    let profile = await nftProfileFactory_contract.profileByAddressOwner(post?.creator);
 
 
-                //     let postUrl = await nftMyProfile_contract.getPostsURIById(parseInt(post.PostId._hex));
-                //     const responseData = await fetchToken(postUrl);
-                //     const image = await fetchToken(profile.profileUrl)
-                //     const like = await socialMedia_contract.likedBy(address, parseInt(post.PostId._hex))
-                //     const unlike = await socialMedia_contract.unLikedBy(address, parseInt(post.PostId._hex))
+                    let postUrl = await nftMyProfile_contract.getPostsURIById(parseInt(post.PostId._hex));
+                    const responseData = await fetchToken(postUrl);
+                    const image = await fetchToken(profile.profileUrl)
+                    const like = await socialMedia_contract.likedBy(address, parseInt(post.PostId._hex))
+                    const unlike = await socialMedia_contract.unLikedBy(address, parseInt(post.PostId._hex))
 
-                //     let timestamp = parseInt(post);
-                //     let readableDate = new Date(timestamp * 1000).toLocaleString();
+                    let timestamp = parseInt(post);
+                    let readableDate = new Date(timestamp * 1000).toLocaleString();
 
-                //     if (typeof post === 'object') {
-                //         return {
-                //             ...post,
-                //             hex: parseInt(post._hex),
-                //             timestamp: readableDate,
-                //             postUrl: postUrl,
-                //             postData: responseData,
-                //             owner: profile?.username,
-                //             image: image?.photoCID,
-                //             liked: like,
-                //             unliked: unlike
-                //         };
-                //     }
-                //     else {
-                //         return post;
-                //     }
-                // });
+                    if (typeof post === 'object') {
+                        return {
+                            ...post,
+                            hex: parseInt(post._hex),
+                            timestamp: readableDate,
+                            postUrl: postUrl,
+                            postData: responseData,
+                            owner: profile?.username,
+                            image: image?.photoCID,
+                            liked: like,
+                            unliked: unlike
+                        };
+                    }
+                    else {
+                        return post;
+                    }
+                });
 
-                // const listItem = await Promise.all(promises);
+                const listItem = await Promise.all(promises);
 
-                // //   postComments.value = listItem.value[0]
+                //   postComments.value = listItem.value[0]
 
-                // //   posts.value = listItem;    
+                //   posts.value = listItem;    
 
-                // // Update store state with fetched profiles
-                // store.state['allPosts'] = listItem;
+                // Update store state with fetched profiles
+                store.state['allPosts'] = listItem;
 
-            // } catch (error) {
-            //     console.error('Error loading myProfileContract:', error);
-            //     // Handle error
-            //     notifyError('Error loading myProfileContract: ' + error.message);
-            // } finally {
-            //     store.isLoading = false;
-            // }
+            } catch (error) {
+                console.error('Error loading myProfileContract:', error);
+                // Handle error
+                notifyError('Error loading myProfileContract: ' + error.message);
+            } finally {
+                store.isLoading = false;
+            }
 
         },
 
@@ -636,48 +636,48 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
 
 
         async loadMyPosts(myAddress) {
-
+            console.log(myAddress, "kimnanan");
             const store = this;
 
             try {
                 store.isLoading = true;
 
-                const getMyPosts = await socialMedia_contract.fetchMyPostsCreated()
+                const getMyPosts = await socialMedia_contract?.fetchMyPostsCreated()
 
                 console.log(getMyPosts, "gvdgvdtyefyvgy");
 
-                this.loadMyProfileContract(myAddress)
+            //     this.loadMyProfileContract(myAddress)
 
-                const myProfileContractAddress = store.state['myProfileContract'].address
-                let nftMyProfile_contract = new ethers.Contract(myProfileContractAddress, nftMyProfile_ABI, signer);
+            //     const myProfileContractAddress = store.state['myProfileContract'].address
+            //     let nftMyProfile_contract = new ethers.Contract(myProfileContractAddress, nftMyProfile_ABI, signer);
 
-                const promises = getMyPosts.map(async (post) => {
-                    let postUrl = await nftMyProfile_contract.getPostsURIById(parseInt(post.PostId._hex));
-                    console.log(postUrl, "postUrl");
-                    const responseData = await fetchToken(postUrl);
-                    console.log(responseData, "responseData");
+            //     const promises = getMyPosts.map(async (post) => {
+            //         let postUrl = await nftMyProfile_contract.getPostsURIById(parseInt(post.PostId._hex));
+            //         console.log(postUrl, "postUrl");
+            //         const responseData = await fetchToken(postUrl);
+            //         console.log(responseData, "responseData");
 
-                    let timestamp = parseInt(post);
-                    let readableDate = new Date(timestamp * 1000).toLocaleString();
+            //         let timestamp = parseInt(post);
+            //         let readableDate = new Date(timestamp * 1000).toLocaleString();
 
-                    if (typeof post === 'object') {
-                        return {
-                            ...post,
-                            hex: parseInt(post._hex),
-                            timestamp: readableDate,
-                            postUrl: postUrl,
-                            postData: responseData
-                        };
-                    }
-                    else {
-                        return post;
-                    }
-                });
+            //         if (typeof post === 'object') {
+            //             return {
+            //                 ...post,
+            //                 hex: parseInt(post._hex),
+            //                 timestamp: readableDate,
+            //                 postUrl: postUrl,
+            //                 postData: responseData
+            //             };
+            //         }
+            //         else {
+            //             return post;
+            //         }
+            //     });
 
-                const listItem = await Promise.all(promises);
+            //     const listItem = await Promise.all(promises);
 
-                // Update store state with fetched profiles
-                store.state['myPosts'] = listItem;
+            //     // Update store state with fetched profiles
+            //     store.state['myPosts'] = listItem;
 
             } catch (error) {
                 console.error('Error loading myPosts:', error);

@@ -48,7 +48,9 @@ const listItem = computed(() => {
 })
 
 onMounted( async () => {
-  await alphaConnectStore.loadMyPosts(alphaConnectStore.getConnectedAddress());
+  const connectedAddress = await alphaConnectStore.getConnectedAddress()
+  const posts = await alphaConnectStore.loadMyPosts(connectedAddress);
+  console.log(posts, "hallleellll");
 
 })
   </script>

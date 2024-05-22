@@ -46,6 +46,26 @@ const router = createRouter({
           component: Setting
         },
         {
+          path: 'discussion',
+          name: 'discussion',
+          component: Setting
+        },
+        {
+          path: 'qna',
+          name: 'qna',
+          component: Setting
+        },
+        {
+          path: 'tutorial',
+          name: 'tutorial',
+          component: Setting
+        },
+        {
+          path: 'presentation',
+          name: 'presentation',
+          component: Setting
+        },
+        {
           path: 'notifications',
           name: 'notifications',
           component: Setting

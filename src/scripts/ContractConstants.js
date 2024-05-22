@@ -5,8 +5,8 @@ export const walletAddressConnected = ref("");
 
 export const ipfsGateway = 'http://127.0.0.1:8080/ipfs'
 
-export const socialMedia = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
-// export const socialMedia = "0x8aFa68f231B99A650B28694ed8B79A3A0a7e8DDB"
+// export const socialMedia = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+export const socialMedia = "0x8aFa68f231B99A650B28694ed8B79A3A0a7e8DDB"
 export const socialMedia_ABI = [
 	{
 		"inputs": [],
@@ -1164,8 +1164,8 @@ export const socialMedia_ABI = [
 	}
 ]
 
-export const profileFactory_Address = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
-// export const profileFactory_Address = "0xCdE1eBE8E1e46B6e908CbD8B971F4D4536802F79"
+// export const profileFactory_Address = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+export const profileFactory_Address = "0xCdE1eBE8E1e46B6e908CbD8B971F4D4536802F79"
 export const profileFactory_ABI = [
 	{
 		"anonymous": false,

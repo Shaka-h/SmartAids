@@ -18,7 +18,6 @@
           ></svg-icon>
         </button>
       </div>
-{{ profileDetails }}
       <div class="p-4 space-x-4">
         <div  class="flex justify-between items-center p-2 text-gray-500"> 
           <div @click="downloadCard()" class="rounded-lg p-2 bg-primary cursor-pointer">Download</div>
