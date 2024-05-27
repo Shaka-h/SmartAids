@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full">
+    <div class="w-full container1">
         <div class="w-full flex flex-col items-center transition-width duration-300 ease-in-out mx-auto ">
             <!-- bg-gradient-to-br from-[#40128B] via-[#401290] to-[#40129F] -->
             
@@ -18,12 +18,12 @@
                                         <div class="text-4xl font-mono text-white w-24"><img width="100%" src="/src/assets/images/eGAlogo.png" alt=""></div>
                                     </div>
                                     <div class="flex flex-row space-x-10">
-                                        <div @click="scrollToSection('home')" class="cursor-pointer hover:border-b-2">Home</div>
+                                        <div @click="scrollTo('home')" class="cursor-pointer hover:border-b-2">Home</div>
                                         <!-- <div @click="scrollToSection('services')" class="cursor-pointer hover:border-b-2">Features</div> -->
-                                        <div @click="scrollToSection('how')" class="cursor-pointer hover:border-b-2">How it works</div>
-                                        <div @click="scrollToSection('why')" class="cursor-pointer hover:border-b-2">Why us</div>
-                                        <div @click="scrollToSection('about')" class="cursor-pointer hover:border-b-2">About</div>
-                                        <div @click="scrollToSection('contact')" class="cursor-pointer hover:border-b-2">Contacts</div>
+                                        <div @click="scrollTo('services')" class="cursor-pointer hover:border-b-2">How it works</div>
+                                        <div @click="scrollTo('why')" class="cursor-pointer hover:border-b-2">Why us</div>
+                                        <div @click="scrollTo('about')" class="cursor-pointer hover:border-b-2">About</div>
+                                        <div @click="scrollTo('contact')" class="cursor-pointer hover:border-b-2">Contacts</div>
                                     </div>
             
                                     <button @click="connect()" class="border border-black h-fit px-4 py-2 text-xl rounded  my-auto text-white font-sans font-medium hover:bg-[#0369A1] bg-[#0369A1] transition-colors duration-150 ease-in-out">Connect</button>
@@ -36,7 +36,34 @@
                         </div>
                         </div>
                         <div class="right">
-                          <div class="moon"></div>
+                          <div class="moon">
+                            <!-- <img class="w-full h-full object-cover shrink-0 grow-0" src="@/assets/images/SOCIAL-MEDIA.jpg" alt="haha"> -->
+                            <div class="absolute w-full h-full flex flex-row bg-green-500">
+                                <v-carousel
+                                    height="100%"
+                                    :show-arrows="false"
+                                    interval="5000"
+                                    cycle
+                                    hide-delimiter-background
+                                >
+                                    <v-carousel-item
+                                    v-for="(image, i) in images"
+                                    :key="i"
+                                    >
+                                    <v-sheet
+                                        height="100%"
+                                    >
+                                        <div class="d-flex  fill-height justify-center align-center">
+                                            <img class="h-full w-full object-cover shrink-0 grow-0" :src="image.src" alt="the image">
+                                        </div>
+                                    </v-sheet>
+                                    </v-carousel-item>
+                                </v-carousel>
+                                <!--
+                                    <img class="h-full w-full object-cover shrink-0 grow-0" v-for="image in images" :key="image.src" :src="image.src" :alt="image.alt"/>
+                                -->
+                            </div>
+                          </div>
                         </div>
                       </div>
                     <!-- <div class="w-[50%] flex flex-col font-sans px-4 justify-center ">
@@ -171,11 +198,9 @@
                                 <br> in Tanzania<br>
                                 <div class="flex text-blue-400 justify-space-evenly mt-4"> 
                                     <span class="cursor-pointer hover:border-b-2">
-                                        
                                         Add Wallet
                                     </span>
                                     <span class="cursor-pointer hover:border-b-2">
-                                        
                                         Join Network
                                     </span>
                                     <a href="https://faucet.all.co.tz/" class="cursor-pointer hover:border-b-2">Get AlphaCoin</a>
@@ -261,19 +286,13 @@ const scrollToSection = (sectionId) => {
 };
 
 
-function handleScroll() {
-    // Check if the user has scrolled down or if the scroll button should be shown
-    this.scrolledDown = window.scrollY > 100;
-    this.showScrollButton = this.scrolledDown || window.scrollY < 100;
-}
+function scrollTo(id) {
+      const element = document.getElementById(id);
 
-function scrollToTop() {
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-}
-
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
 
 // Define connect function to navigate to the specified route
 const connect = () => {
@@ -355,6 +374,21 @@ const connect = () => {
 
 
 };
+
+const images = [
+    {
+        src:"/src/assets/images/SOCIAL-MEDIA.jpg",
+        alt:"image 1"
+    },
+    {
+        src:"/src/assets/images/SOCIAL-MEDIA.jpg",
+        alt:"image 1"
+    },
+    {
+        src:"/src/assets/images/SOCIAL-MEDIA.jpg",
+        alt:"image 1"
+    },
+]
 
 </script>
 
@@ -454,15 +488,13 @@ const connect = () => {
     transform:skew(5deg);
   }
     
-  .moon {
-    background-image: url(/src/assets/images/SOCIAL-MEDIA.jpg);
-    background-position:center center;
-    background-size:cover;
-  }
-
   h2{ 
     font-size: 2rem;
   }
 
+  .container1{
+    scroll-behavior: smooth;
+    transition: all 800ms ease-in-out;
+  }
 </style>
-    <!-- bg-gradient-to-br from-[#40128B] via-[#401290] to-[#40129F] -->
+<!-- bg-gradient-to-br from-[#40128B] via-[#401290] to-[#40129F] -->
