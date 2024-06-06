@@ -1,10 +1,10 @@
 <template>
-        <div v-if="myProfile" class="row h-full p-4" >
+        <div v-if="myProfile.length" class="row h-full p-4" >
             <div class="col-md-10 pr-10 md:w-full detail" style=""> 
                 <div class="h-1/2 rounded-lg" style="background-color: #40128B42">
                     <Details />
                 </div>
-                <div v-if="myProfile.length" class="mt-8 h-1/2">
+                <div class="mt-8 h-1/2">
                     <MyPosts :profile-contract="myProfile[0]?.profileContract"/>
                 </div>
             </div>
@@ -14,7 +14,7 @@
             </div>  
         </div>
     
-       <div v-if="!myProfile" class="flex justify-center h-1/3 items-center">
+       <div v-if="!myProfile.length" class="flex justify-center h-1/3 items-center">
         <div class="px-4  cursor-pointer ">
             <ProfileForm @closeDialog="makeAPost=false" :open-dialog="makeAPost"  ></ProfileForm>
         </div>
@@ -33,13 +33,8 @@ import { useRoute } from 'vue-router';
 import ProfileForm from '../../views/Profile/ProfileForm.vue'
 import { useAlphaConnectStore } from "@/store/index.js";
 import {storeToRefs} from "pinia";
-import {walletAddressConnected, walletConnected} from "@/scripts/ContractConstants";
 
 const alphaConnectStore = useAlphaConnectStore();
-let {nftProfileFactory_contract} = getSignerContract();
-const router = useRoute()
-const profile = ref()
-const profileContract = ref()
 const makeAPost = ref(false)
 const { getStoreItem } = storeToRefs(alphaConnectStore)
 

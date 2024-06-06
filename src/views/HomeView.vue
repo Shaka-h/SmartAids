@@ -247,6 +247,7 @@ import { useRouter } from 'vue-router';
 import { ref } from 'vue'; // Import ref from Vue
 import {walletAddressConnected, walletConnected} from "@/scripts/ContractConstants";
 import footerView from "@/components/footer.vue"
+import { notifyError } from "@/services/notificationService";
 
 const router = useRouter();
 
@@ -348,9 +349,11 @@ const connect = () => {
             // MetaMask is connected
         } else {
             console.error('MetaMask is not connected to the Ethereum network.');
+            notifyError('MetaMask is not connected to the Ethereum network')
         }
     } else {
-        console.error('MetaMask not detected. Please install MetaMask to connect your wallet.');
+        // console.error('MetaMask not detected. Please install MetaMask to connect your wallet.');
+        notifyError('MetaMask not detected. Please install MetaMask to connect your wallet.');
     }
 
 
