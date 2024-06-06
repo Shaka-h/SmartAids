@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full">
+    <div class="w-full container1">
         <div class="w-full flex flex-col items-center transition-width duration-300 ease-in-out mx-auto ">
             <!-- bg-gradient-to-br from-[#40128B] via-[#401290] to-[#40129F] -->
             
@@ -18,12 +18,12 @@
                                         <div class="text-4xl font-mono text-white w-24"><img width="100%" src="/src/assets/images/eGAlogo.png" alt=""></div>
                                     </div>
                                     <div class="flex flex-row space-x-10">
-                                        <div @click="scrollToSection('home')" class="cursor-pointer hover:border-b-2">Home</div>
+                                        <div @click="scrollTo('home')" class="cursor-pointer hover:border-b-2">Home</div>
                                         <!-- <div @click="scrollToSection('services')" class="cursor-pointer hover:border-b-2">Features</div> -->
-                                        <div @click="scrollToSection('how')" class="cursor-pointer hover:border-b-2">How it works</div>
-                                        <div @click="scrollToSection('why')" class="cursor-pointer hover:border-b-2">Why us</div>
-                                        <div @click="scrollToSection('about')" class="cursor-pointer hover:border-b-2">About</div>
-                                        <div @click="scrollToSection('contact')" class="cursor-pointer hover:border-b-2">Contacts</div>
+                                        <div @click="scrollTo('services')" class="cursor-pointer hover:border-b-2">How it works</div>
+                                        <div @click="scrollTo('why')" class="cursor-pointer hover:border-b-2">Why us</div>
+                                        <div @click="scrollTo('about')" class="cursor-pointer hover:border-b-2">About</div>
+                                        <div @click="scrollTo('contact')" class="cursor-pointer hover:border-b-2">Contacts</div>
                                     </div>
             
                                     <button @click="connect()" class="border border-black h-fit px-4 py-2 text-xl rounded  my-auto text-white font-sans font-medium hover:bg-[#0369A1] bg-[#0369A1] transition-colors duration-150 ease-in-out">Connect</button>
@@ -36,7 +36,34 @@
                         </div>
                         </div>
                         <div class="right">
-                          <div class="moon"></div>
+                          <div class="moon">
+                            <!-- <img class="w-full h-full object-cover shrink-0 grow-0" src="@/assets/images/SOCIAL-MEDIA.jpg" alt="haha"> -->
+                            <div class="absolute w-full h-full flex flex-row bg-green-500">
+                                <v-carousel
+                                    height="100%"
+                                    :show-arrows="false"
+                                    interval="5000"
+                                    cycle
+                                    hide-delimiter-background
+                                >
+                                    <v-carousel-item
+                                    v-for="(image, i) in images"
+                                    :key="i"
+                                    >
+                                    <v-sheet
+                                        height="100%"
+                                    >
+                                        <div class="d-flex  fill-height justify-center align-center">
+                                            <img class="h-full w-full object-cover shrink-0 grow-0" :src="image.src" alt="the image">
+                                        </div>
+                                    </v-sheet>
+                                    </v-carousel-item>
+                                </v-carousel>
+                                <!--
+                                    <img class="h-full w-full object-cover shrink-0 grow-0" v-for="image in images" :key="image.src" :src="image.src" :alt="image.alt"/>
+                                -->
+                            </div>
+                          </div>
                         </div>
                       </div>
                     <!-- <div class="w-[50%] flex flex-col font-sans px-4 justify-center ">
@@ -64,38 +91,41 @@
                             <!-- <div class="text-4xl font-bold mx-auto text-[#40128b]">
                                 How AlphaConnect Works
                             </div> -->
-                            <h2 class="fancy" style="--w: 20vw;--c: #40128b;--b:4px;--g: 40px">How AlphaConnect Works</h2>
+                            <h2 class="fancy" style="--w: 20vw;--c: #40128b;--b:4px;--g: 40px"> <div class="text-3xl">How AlphaConnect Works</div> </h2>
                         </div>
                         <div class="flex font-sans text-2xl text-gray-600 font-medium items-center mt-32 justify-center text-center">
                             Step-by-step guide on how users can join and start using AlphaConnect.
                         </div> 
 
                         <div class="flex flex-row space-x-8 mt-8 w-4/5 h-[80%] relative justify-center py-1 transition-all duration-600 ease-in">   
-                            <div class="w-1/2 h-[100%] z-20 hover:shadow overflow-hidden rounded-[1.1rem] flex items-center justify-center hover:bg-gradient-to-r hover:from-[#40128B] hover:via-[#a46fff] hover:to-[#5804ff] p-[2px]">
-                                <div style="background-color: #957692;" class="w-full  items-center justify-center h-[100%] rounded-[0.9rem] flex flex-row">
+                            <!-- hover:bg-gradient-to-r hover:from-[#40128B] hover:via-[#a46fff] hover:to-[#5804ff] -->
+                            <div class="w-1/2 h-[100%] z-20 overflow-hidden rounded-[0.5rem] flex items-center justify-center border-[1px] shadow-lg  p-[2px]">
+                                <div class="w-full  items-center justify-center h-[100%] rounded-[0.9rem] flex flex-row">
                                     <div class="flex flex-col space-y-4 items-center justify-center ">
                                         <div class="w-20 h-20 flex justify-center items-center rounded-full bg-gray-200">
-                                            <div class="w-20 h-20 flex justify-center items-center rounded-full bg-gray-200">
-                                                <div><svg-icon name="connect" class="icon cursor-pointer" color="#020202"></svg-icon></div>
+                                            <div class="w-20 h-20 flex justify-center items-center rounded-full bg-[#40128b6c]">
+                                                <div><svg-icon name="connect" class="icon cursor-pointer" color="#000000"></svg-icon></div>
                                             </div>
                                         </div>
-                                        <div class="text-2xl font-[600] mx-auto text-[#fff]">
+                                        <div class="text-2xl font-[600] mx-auto text-[#40128b]">
                                             Connect
                                         </div>
                                         <div class="text-md font-semibold text-gray-800 text-center">
                                             Start by connecting your wallet into the Alphachain network<br>
-                                            <span @click="scrollToSection('contact')" class="text-blue-300 hover:border-b-2 cursor-pointer">Setup Network</span> 
+                                            <span @click="scrollToSection('contact')" class="text-blue-600 hover:border-b-2 cursor-pointer">Setup Network</span> 
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="w-1/2 h-[100%] z-20 hover:shadow overflow-hidden rounded-[1.1rem] flex items-center justify-center bg-gray-400 hover:bg-gradient-to-r hover:from-[#40128B] hover:via-[#a46fff] hover:to-[#5804ff] p-[2px]">
-                                <div style="background-color: #4477CE;" class="w-full  items-center justify-center h-[100%] rounded-[0.9rem] flex flex-row">
+                            <div class="w-1/2 h-[100%] z-20 overflow-hidden rounded-[0.5rem] flex items-center justify-center border-[1px] shadow-lg  p-[2px]">
+                                <div class="w-full  items-center justify-center h-[100%] rounded-[0.9rem] flex flex-row">
                                     <div class="flex flex-col space-y-4 items-center justify-center ">
                                         <div class="w-20 h-20 flex justify-center items-center rounded-full bg-gray-200">
-                                            <div><svg-icon name="createProfile" class="icon cursor-pointer" color="#020202"></svg-icon></div>
+                                            <div class="w-20 h-20 flex justify-center items-center rounded-full bg-[#40128b6c]">
+                                                <div><svg-icon name="createProfile" class="icon cursor-pointer" color="#000000"></svg-icon></div>
+                                            </div>
                                         </div>
-                                        <div class="text-2xl font-[600] mx-auto text-[#fff]">
+                                        <div class="text-2xl font-[600] mx-auto text-[#40128b]">
                                             Create Profile
                                         </div>
                                         <div class="text-md font-semibold text-gray-800  text-center">
@@ -103,32 +133,35 @@
                                         </div>
                                     </div>
                                 </div>
-                          </div>
-                            <div class="w-1/2 h-[100%] z-20 hover:shadow overflow-hidden rounded-[1.1rem] flex items-center justify-center bg-gray-400 hover:bg-gradient-to-r hover:from-[#40128B] hover:via-[#a46fff] hover:to-[#5804ff] p-[2px]">
-                                <div style="background-color: #E19898;" class="bg-gray-30 w-full  items-center justify-center h-[100%] rounded-[0.9rem] flex flex-row">
+                            </div>
+                            <div class="w-1/2 h-[100%] z-20 overflow-hidden rounded-[0.5rem] flex items-center justify-center border-[1px] shadow-lg  p-[2px]">
+                                <div class="w-full  items-center justify-center h-[100%] rounded-[0.9rem] flex flex-row">
                                     <div class="flex flex-col space-y-4 items-center justify-center ">
                                         <div class="w-20 h-20 flex justify-center items-center rounded-full bg-gray-200">
-                                            <div><svg-icon name="share" class="icon cursor-pointer" color="#020202"></svg-icon></div>
+                                            <div class="w-20 h-20 flex justify-center items-center rounded-full bg-[#40128b6c]">
+                                                <div><svg-icon name="share" class="icon cursor-pointer" color="#000000"></svg-icon></div>
+                                            </div>
                                         </div>
                                         <div class="text-2xl font-[600] mx-auto text-[#40128b]">
                                             Share
                                         </div>
-                                        <div class="text-md font-semibold text-gray-800 text-center">
-                                            Share your profile represented as an NFT with other users.
-                                        </div>
+                                        <div class="text-md font-semibold text-gray-800  text-center">
+                                            Share your profile represented as an NFT with other users.                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="w-1/2 h-[100%] z-20 hover:shadow overflow-hidden rounded-[1.1rem] flex items-center justify-center bg-gray-400 hover:bg-gradient-to-r hover:from-[#40128B] hover:via-[#a46fff] hover:to-[#5804ff] p-[2px]">
-                                <div  style="background-color: #7074A8;" class="w-full  items-center justify-center h-[100%] rounded-[0.9rem] flex flex-row">
+                            <div class="w-1/2 h-[100%] z-20 overflow-hidden rounded-[0.5rem] flex items-center justify-center border-[1px] shadow-lg  p-[2px]">
+                                <div class="w-full  items-center justify-center h-[100%] rounded-[0.9rem] flex flex-row">
                                     <div class="flex flex-col space-y-4 items-center justify-center ">
                                         <div class="w-20 h-20 flex justify-center items-center rounded-full bg-gray-200">
-                                            <div><svg-icon name="upload" class="icon cursor-pointer" color="#020202"></svg-icon></div>
+                                            <div class="w-20 h-20 flex justify-center items-center rounded-full bg-[#40128b6c]">
+                                                <div><svg-icon name="upload" class="icon cursor-pointer" color="#000000"></svg-icon></div>
+                                            </div>
                                         </div>
                                         <div class="text-2xl font-[600] mx-auto text-[#40128b]">
                                             Influence
                                         </div>
-                                        <div class="text-md font-semibold text-gray-800 text-center px-2">
+                                        <div class="text-md font-semibold text-gray-800  text-center">
                                             Create posts and make comments in the network to engage freely and securly with AlphaConnect
                                         </div>
                                     </div>
@@ -171,11 +204,9 @@
                                 <br> in Tanzania<br>
                                 <div class="flex text-blue-400 justify-space-evenly mt-4"> 
                                     <span class="cursor-pointer hover:border-b-2">
-                                        
                                         Add Wallet
                                     </span>
                                     <span class="cursor-pointer hover:border-b-2">
-                                        
                                         Join Network
                                     </span>
                                     <a href="https://faucet.all.co.tz/" class="cursor-pointer hover:border-b-2">Get AlphaCoin</a>
@@ -262,19 +293,13 @@ const scrollToSection = (sectionId) => {
 };
 
 
-function handleScroll() {
-    // Check if the user has scrolled down or if the scroll button should be shown
-    this.scrolledDown = window.scrollY > 100;
-    this.showScrollButton = this.scrolledDown || window.scrollY < 100;
-}
+function scrollTo(id) {
+      const element = document.getElementById(id);
 
-function scrollToTop() {
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-}
-
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
 
 // Define connect function to navigate to the specified route
 const connect = () => {
@@ -358,6 +383,21 @@ const connect = () => {
 
 
 };
+
+const images = [
+    {
+        src:"/src/assets/images/SOCIAL-MEDIA.jpg",
+        alt:"image 1"
+    },
+    {
+        src:"/src/assets/images/SOCIAL-MEDIA.jpg",
+        alt:"image 1"
+    },
+    {
+        src:"/src/assets/images/SOCIAL-MEDIA.jpg",
+        alt:"image 1"
+    },
+]
 
 </script>
 
@@ -457,15 +497,13 @@ const connect = () => {
     transform:skew(5deg);
   }
     
-  .moon {
-    background-image: url(/src/assets/images/SOCIAL-MEDIA.jpg);
-    background-position:center center;
-    background-size:cover;
-  }
-
   h2{ 
     font-size: 2rem;
   }
 
+  .container1{
+    scroll-behavior: smooth;
+    transition: all 800ms ease-in-out;
+  }
 </style>
-    <!-- bg-gradient-to-br from-[#40128B] via-[#401290] to-[#40129F] -->
+<!-- bg-gradient-to-br from-[#40128B] via-[#401290] to-[#40129F] -->
