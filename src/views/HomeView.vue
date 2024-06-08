@@ -294,12 +294,12 @@ const scrollToSection = (sectionId) => {
 
 
 function scrollTo(id) {
-      const element = document.getElementById(id);
+    const element = document.getElementById(id);
 
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
+    if (element) {
+    element.scrollIntoView({ behavior: 'smooth' });
     }
+}
 
 // Define connect function to navigate to the specified route
 const connect = () => {

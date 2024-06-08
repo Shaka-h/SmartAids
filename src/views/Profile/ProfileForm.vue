@@ -39,12 +39,9 @@
 import { onMounted, ref, watch } from 'vue';
 import DynamicFormMain from "@/components/shared/forms/DynamicFormMain.vue";
 import {getSignerContract} from '@/scripts/ContractUtils';
-import {socialMedia } from '@/scripts/ContractConstants'
-import addMetadataFile  from '@/scripts/IPFSJSON'
 import {patchFormFields} from "@/interfaces/global.interface";
 import { useAlphaConnectStore } from "@/store/index.js";
 
-let {nftProfileFactory_contract} = getSignerContract();
 const alphaConnectStore = useAlphaConnectStore();
 const props = defineProps(["openDialog", "selectedProfile"]);
 const emits = defineEmits(["closeDialog"]);
@@ -141,7 +138,7 @@ const formFields = ref([
 const CreateProfile = async (formValues) => {
   try {
     await alphaConnectStore.createProfile(formValues);
-    window.location.reload();
+    await alphaConnectStore.loadMyProfile(alphaConnectStore.getConnectedAddress());
   } catch (error) {
     console.error('Error creating profile:', error);
   }

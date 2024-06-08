@@ -79,17 +79,18 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
 
                 store.isLoading = true;
                 let storedResponse = await deployedContractAddress.wait();
+                console.log(storedResponse, "lol");
 
-                if (storedResponse?.events[0]?.args?.ProfileContract) {
-                    store.createProfileState = 'success'; // Set state to success after successful profile creation
-                    notifySuccess("Added profile successfully!");
+                // if (storedResponse?.events[0]?.args?.ProfileContract) {
+                //     store.createProfileState = 'success'; // Set state to success after successful profile creation
+                //     notifySuccess("Added profile successfully!");
 
-                    // Push the storedResponse to the profiles array
-                    store.profiles.push(storedResponse);
-                } else {
-                    store.createProfileState = 'error'; // Set state to error if contract address is not returned
-                    notifyError('Error creating profile: Deployed contract address not returned.');
-                }
+                //     // Push the storedResponse to the profiles array
+                //     store.profiles.push(storedResponse);
+                // } else {
+                //     store.createProfileState = 'error'; // Set state to error if contract address is not returned
+                //     notifyError('Error creating profile: Deployed contract address not returned.');
+                // }
             } catch (error) {
                 store.createProfileState = 'error'; // Set state to error if an error occurs during profile creation
                 notifyError('Error creating profile: ' + error.message);
@@ -308,7 +309,7 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                 // wait() function allows to wait for transaction to be completed
                 let receipt = await createPost.wait()
 
-                console.log(receipt);
+                console.log(receipt, "IMYSM");
 
                 const tokenIdBigNumber = receipt?.events[3].args.profileId;
 
@@ -317,11 +318,32 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
 
                 console.log(postId);
 
+                
+
+
+                const publishPost = await socialMedia_contract.createPost(
+                    postData?.profileContract?.address,
+                    postId,
+                )
+
+                store.isLoading = true;
+
+                console.log(publishPost);
+                let publishedPost = await publishPost.wait()
+                console.log(publishedPost);
+
+
+                
+                console.log(publishedPost?.events[1].args.PostId);
+
+                const publishedPostIdBigNumber = publishedPost?.events[1].args.PostId
+                const publishedPostId = publishedPostIdBigNumber.toNumber()
+
                 // // not decodeFunctionData
                 // // let decodedData = new ethers.utils.Interface(nftFactory_ABI).decodeFunctionResult('deployNFTContract', encodedData)
                 // // encodedData is found in receipt
 
-                if (postId) {
+                if (publishedPostId) {
                     store.createPostState = 'success'; // Set state to success after successful profile creation
                     notifySuccess("Added post successfully!");
 
@@ -370,12 +392,9 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
         async loadAllPosts(address) {
 
             const store = this;
-            const getMyPosts = await socialMedia_contract.fetchAllPostsCreated()
-            console.log(getMyPosts, "help is givenfghjkldbfhberifbrbfgrbgibserhifgbbrshtbgfh");
 
             try {
                 const getMyPosts = await socialMedia_contract.fetchAllPostsCreated()
-                console.log(getMyPosts, "help is givenfghjkldbfhberifbrbfgrbgibserhifgbbrshtbgfh");
 
                 const promises = getMyPosts.map(async (post) => {
 
@@ -458,7 +477,7 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
 
             const postId = store.state['post'][0]
 
-            console.log(parseInt(postId), "hdftyfgyaerfg");
+            console.log(parseInt(postId));
 
             try {
 
@@ -563,7 +582,7 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
 
             try {
                 const fetchAllNewsCreated = await socialMedia_contract.fetchAllNewsCreated()
-                console.log(fetchAllNewsCreated, "fjknjdantguigtjbfdjjgburbseugbuitfbui");
+                console.log(fetchAllNewsCreated, "fjknjdanttfbui");
 
                 const promises = fetchAllNewsCreated.map(async (news) => {
                     const responseData = await fetchToken(news?.newsUrl);
@@ -587,9 +606,7 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
 
                 const listItem = await Promise.all(promises);
 
-                //   postComments.value = listItem.value[0]
-
-                //   posts.value = listItem;    
+                console.log("u gotta");
 
                 // Update store state with fetched profiles
                 store.state['allNews'] = listItem;
@@ -646,38 +663,41 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
 
                 console.log(getMyPosts, "gvdgvdtyefyvgy");
 
-            //     this.loadMyProfileContract(myAddress)
+                // const getPosts = await getprofileByAddressContract("0x94099942864EA81cCF197E9D71ac53310b1468D8")
+                // console.log("0x94099942864EA81cCF197E9D71ac53310b1468D80x94099942864EA81cCF197E9D71ac53310b1468D8");
 
-            //     const myProfileContractAddress = store.state['myProfileContract'].address
-            //     let nftMyProfile_contract = new ethers.Contract(myProfileContractAddress, nftMyProfile_ABI, signer);
+                this.loadMyProfileContract(myAddress)
 
-            //     const promises = getMyPosts.map(async (post) => {
-            //         let postUrl = await nftMyProfile_contract.getPostsURIById(parseInt(post.PostId._hex));
-            //         console.log(postUrl, "postUrl");
-            //         const responseData = await fetchToken(postUrl);
-            //         console.log(responseData, "responseData");
+                const myProfileContractAddress = store.state['myProfileContract'].address
+                let nftMyProfile_contract = new ethers.Contract(myProfileContractAddress, nftMyProfile_ABI, signer);
 
-            //         let timestamp = parseInt(post);
-            //         let readableDate = new Date(timestamp * 1000).toLocaleString();
+                const promises = getMyPosts.map(async (post) => {
+                    let postUrl = await nftMyProfile_contract.getPostsURIById(parseInt(post.PostId._hex));
+                    console.log(postUrl, "postUrl");
+                    const responseData = await fetchToken(postUrl);
+                    console.log(responseData, "responseData");
 
-            //         if (typeof post === 'object') {
-            //             return {
-            //                 ...post,
-            //                 hex: parseInt(post._hex),
-            //                 timestamp: readableDate,
-            //                 postUrl: postUrl,
-            //                 postData: responseData
-            //             };
-            //         }
-            //         else {
-            //             return post;
-            //         }
-            //     });
+                    let timestamp = parseInt(post);
+                    let readableDate = new Date(timestamp * 1000).toLocaleString();
 
-            //     const listItem = await Promise.all(promises);
+                    if (typeof post === 'object') {
+                        return {
+                            ...post,
+                            hex: parseInt(post._hex),
+                            timestamp: readableDate,
+                            postUrl: postUrl,
+                            postData: responseData
+                        };
+                    }
+                    else {
+                        return post;
+                    }
+                });
 
-            //     // Update store state with fetched profiles
-            //     store.state['myPosts'] = listItem;
+                const listItem = await Promise.all(promises);
+
+                // Update store state with fetched profiles
+                store.state['myPosts'] = listItem;
 
             } catch (error) {
                 console.error('Error loading myPosts:', error);

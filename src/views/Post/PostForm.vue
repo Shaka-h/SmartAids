@@ -87,7 +87,9 @@ const Post = async (formValues) => {
   // await alphaConnectStore.Post(formValues, router?.params?.wallet, myProfileContract);
   await alphaConnectStore.Post({ ...formValues, profileContract: myProfileContract.value, connectedAddress:alphaConnectStore.getConnectedAddress() });
 
-  window.location.reload();
+  // window.location.reload();
+  await alphaConnectStore.loadAllPosts(await alphaConnectStore.getConnectedAddress());
+
 }
 
 onMounted( async () => {
