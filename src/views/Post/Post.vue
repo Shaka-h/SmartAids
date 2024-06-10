@@ -24,7 +24,7 @@
               </div>
               <div v-html="post.postData.description" class=""></div>
               <img :src="`http://127.0.0.1:8080/ipfs/${post.postData.post}`" class="rounded-lg h-64 "></img>
-              <div class="flex space-x-4 m-4">
+              <div  class="flex space-x-4 m-4">
                 <div @click="commentPost(post)" class="flex space-x-2">
                   <div><svg-icon :name="'comment'" class="icon cursor-pointer" color="#020202"></svg-icon></div>
                   <div>{{ post?.comment }}</div>
@@ -140,8 +140,6 @@ const likePost = async (post) => {
     let like = await likePost.wait()
     console.log(like);
 
-    window.location.reload();
-
   } catch (error) {
     console.error('Error creating collection:', error);
   }
@@ -155,8 +153,6 @@ const unLikePost = async (post) => {
 
     let like = await unLikePost.wait()
     console.log(like);
-
-    window.location.reload();
 
   } catch (error) {
     console.error('Error creating collection:', error);
@@ -180,6 +176,11 @@ onMounted(async () => {
 
   socialMedia_contract.on("commentMade", async () => {
     await alphaConnectStore.loadPostsComments(1);
+    await alphaConnectStore.loadAllPosts(await alphaConnectStore.getConnectedAddress());
+  })
+
+  socialMedia_contract.on("PostLiked", async () => {
+    await alphaConnectStore.loadAllPosts(await alphaConnectStore.getConnectedAddress());
   })
 
 })

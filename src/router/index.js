@@ -4,6 +4,12 @@ import Connected from '@/views/Connected.vue'
 import Profile from '@/views/Profile/Profile.vue'
 import Post from '@/views/Post/Post.vue'
 import Setting from '@/views/Setting.vue'
+import Discussion from '@/views/Discussion/Discussion.vue'
+import DiscussionDetails from '@/views/Discussion/DiscussionDetails.vue'
+import QnA from '@/views/QnA/QnA.vue'
+import QnADetails from '@/views/QnA/QnADetails.vue'
+import Tutorial from '@/views/Tutorial/Tutorial.vue'
+import TutorialDetails from '@/views/Tutorial/TutorialDetails.vue'
 import news from '@/views/News/news.vue'
 import NewsDetails from '@/views/News/newsDetails.vue'
 
@@ -48,17 +54,32 @@ const router = createRouter({
         {
           path: 'discussion',
           name: 'discussion',
-          component: Setting
+          component: Discussion
+        },
+        {
+          path: '/discussion/:discussionId',
+          name: 'discussionDetail',
+          component: DiscussionDetails 
         },
         {
           path: 'qna',
           name: 'qna',
-          component: Setting
+          component: QnA
+        },
+        {
+          path: '/qna/:qnaId',
+          name: 'qnaDetail',
+          component: QnADetails 
         },
         {
           path: 'tutorial',
           name: 'tutorial',
-          component: Setting
+          component: Tutorial
+        },
+        {
+          path: '/tutorial/:tutorialId',
+          name: 'tutorialDetail',
+          component: TutorialDetails 
         },
         {
           path: 'presentation',

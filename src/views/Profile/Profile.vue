@@ -53,8 +53,7 @@ const myProfile = computed(() => {
 
 
 onMounted(async () => {
-    await alphaConnectStore.loadMyProfile(alphaConnectStore.getConnectedAddress());
-    
+    await alphaConnectStore.loadMyProfile(alphaConnectStore.getConnectedAddress()); 
 });
 
 </script>
