@@ -22,5 +22,4 @@ async function getMetadata(cid) {
     }
 }
 
-
 export default getMetadata;
