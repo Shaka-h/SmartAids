@@ -247,6 +247,7 @@
                           <span>dApps</span>
                           <span>Wallet</span>
                           <span>Explorer</span>
+                          <div @click="scrollTo('home')" class="cursor-pointer">Back to top</div>
                         </div>
                         <div class="">
                           <span class="text-4xl font-semibold">
