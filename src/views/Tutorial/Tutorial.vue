@@ -107,8 +107,7 @@ onBeforeMount(async () => {
 
   await alphaConnectStore.loadAllPosts(await alphaConnectStore.getConnectedAddress());
 
-  await alphaConnectStore.loadPostsComments(1);
-
+ 
   console.log(await alphaConnectStore.getConnectedAddress(), "wallet connected");
 
 })
@@ -119,8 +118,7 @@ onMounted(async () => {
   })
 
   socialMedia_contract.on("commentMade", async () => {
-    await alphaConnectStore.loadPostsComments(1);
-    await alphaConnectStore.loadAllPosts(await alphaConnectStore.getConnectedAddress());
+     await alphaConnectStore.loadAllPosts(await alphaConnectStore.getConnectedAddress());
   })
 
   socialMedia_contract.on("PostLiked", async () => {

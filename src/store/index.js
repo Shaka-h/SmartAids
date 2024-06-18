@@ -40,7 +40,9 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                 myProfileDetails: [],
                 profileDetails: [],
                 postCommented: 'idle',
-                createdPosts: []
+                createdPosts: [],
+                createdDiscussions: [],
+                createdDiscussionsState: 'idle'
 
             }
         }
@@ -431,10 +433,7 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                 });
 
                 const listItem = await Promise.all(promises);
-
-                //   postComments.value = listItem.value[0]
-
-                //   posts.value = listItem;    
+  
 
                 // Update store state with fetched profiles
                 store.state['allPosts'] = listItem;
@@ -477,7 +476,7 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
 
             const postId = store.state['post'][0]
 
-            console.log(parseInt(postId));
+            console.log(parseInt(PostId), "hamming awqa");
 
             try {
 
@@ -604,12 +603,12 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                     }
                 });
 
-                const listItem = await Promise.all(promises);
+                const listNews = await Promise.all(promises);
 
-                console.log("u gotta");
+                console.log(listNews, "u gotta");
 
                 // Update store state with fetched profiles
-                store.state['allNews'] = listItem;
+                store.state['allNews'] = listNews;
 
             } catch (error) {
                 console.error('Error loading allNews:', error);
@@ -844,8 +843,87 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
             const provider= await window.ethereum.request({ method: 'eth_requestAccounts' })
             console.log(provider[0], "provider");
             return provider[0]        
-        }
+        },
         
+        async createDiscussion(discussionData) {
+            const store = this;
+
+            console.log(discussionData, "comeon and go");
+            console.log(discussionData?.profileContract?.address, "comeon and go");
+            try {
+
+                store.createdDiscussionsState = 'pending'; // Set state to pending while profile creation is in progress
+
+                const postCID = await addMetadataFile(
+                    {
+                        "name": discussionData.name,
+                        "description": discussionData.description,
+                    }
+
+                );
+                const nftMyProfile_contract = new ethers.Contract(discussionData?.profileContract?.address, nftMyProfile_ABI, signer);
+
+                const createPost = await nftMyProfile_contract.createDiscussion(
+                    postCID
+                );
+                console.log(createPost); // Log the deployed contract address
+                store.isLoading = true;
+                // wait() function allows to wait for transaction to be completed
+                let receipt = await createPost.wait()
+
+                console.log(receipt, "IMYSM");
+
+                const tokenIdBigNumber = receipt?.events[3].args.profileId;
+
+                // Convert BigNumber to JavaScript number
+                const postId = tokenIdBigNumber.toNumber();
+
+                console.log(postId);
+
+                
+
+
+                const publishPost = await socialMedia_contract.createPost(
+                    discussionData?.profileContract?.address,
+                    postId,
+                )
+
+                store.isLoading = true;
+
+                console.log(publishPost);
+                let publishedPost = await publishPost.wait()
+                console.log(publishedPost);
+
+
+                
+                console.log(publishedPost?.events[1].args.PostId);
+
+                const publishedPostIdBigNumber = publishedPost?.events[1].args.PostId
+                const publishedPostId = publishedPostIdBigNumber.toNumber()
+
+                // // not decodeFunctionData
+                // // let decodedData = new ethers.utils.Interface(nftFactory_ABI).decodeFunctionResult('deployNFTContract', encodedData)
+                // // encodedData is found in receipt
+
+                if (publishedPostId) {
+                    store.createPostState = 'success'; // Set state to success after successful profile creation
+                    notifySuccess("Added post successfully!");
+
+                    // Push the storedResponse to the profiles array
+                    // store.createdPosts.push(storedResponse);
+                } else {
+                    store.createPostState = 'error'; // Set state to error if contract address is not returned
+                    notifyError('Error creating post: Deployed contract address not returned.');
+                }
+
+            } catch (error) {
+                store.createPostState = 'error'; // Set state to error if an error occurs during profile creation
+                notifyError('Error creating post: ' + error.message);
+            }
+            finally {
+                store.isLoading = false;
+            }
+        },
 
     },
 });

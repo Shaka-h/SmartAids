@@ -1,4 +1,6 @@
 <template> 
+  <Post @closeDialog="makeAPost=false" :open-dialog="makeAPost"  ></Post>
+
     <div class="p-3 css-selector  flex-col font-bold hidden sm:flex" style="width: 280px; ">
   
       <div class="capitalize name border-b pt-2 pb-3 text-center mb-2 font-bold " style="color: #0D1042; " >
@@ -67,8 +69,9 @@
             </template>
           </template>
         </template>
+
         <div v-if="myProfile?.length" class="p-2 mt-8 mx-8 cursor-pointer">
-          <Post @closeDialog="makeAPost=false" :open-dialog="makeAPost"  ></Post>
+          <div @click="postSomething" class="bg-primary rounded-lg p-1 items-center flex justify-center cursor-pointer">POST</div>
         </div>
 
       </div>
@@ -154,6 +157,7 @@ const navigationLinks = ref([
 ]);
 
 const makeAPost = ref(false);
+
 const closeDialog = () => {
   emits("closeDialog");
 };

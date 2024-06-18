@@ -1,12 +1,19 @@
 <template>
   <div class="">
 
-    <div class="p-2 flex justify-end mx-8 cursor-pointer">
-      <NewsForm @closeDialog="makeAnews = false" :open-dialog="makeAnews" :selected-data="selectedNews"></NewsForm>
+    
+    <div class="border p-3 flex justify-between itenms-center">
+      <div class="flex flex-row space-x-4 items-center">
+        <div><svg-icon :name="'testimonials'" class="icon cursor-pointer" color="#020202"></svg-icon></div>
+        <div class="text-2xl font-bold">NEWS</div>
+      </div>
+      <div class="p-2 flex justify-end mx-8 cursor-pointer">
+        <NewsForm @closeDialog="makeAnews = false" :open-dialog="makeAnews" :selected-data="selectedNews"></NewsForm>
+      </div>
     </div>
-
     <div v-if="newsList?.length">
-      <div class="font text-2xl">NEWS</div>
+      
+
       <div class="p-2 flex justify-end mx-8 cursor-pointer">
         <NewsForm @closeDialog="makeAnews = false" :open-dialog="makeAnews" :selected-data="selectedNews"></NewsForm>
       </div>

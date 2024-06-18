@@ -22,9 +22,9 @@
       <div class="p-5 "> 
           <dynamic-form-main
               :form-fields="formFields"
-              submit-label="Comment"
+              submit-label="Create"
               :showLabels="true"
-              @on-submit="CommentPost"
+              @on-submit="MakeDiscussion"
           ></dynamic-form-main>
       </div>
        
@@ -36,35 +36,82 @@
 
 <script setup>
 import SvgIcon from "@/components/shared/SvgIcon.vue";
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, computed } from 'vue';
 import DynamicFormMain from "@/components/shared/forms/DynamicFormMain.vue";
 import { useAlphaConnectStore } from "@/store/index.js";
+import {storeToRefs} from "pinia";
 
 const alphaConnectStore = useAlphaConnectStore();
 const dialog = ref(false)
+const { getStoreItem } = storeToRefs(alphaConnectStore)
 
 const props = defineProps(['openDialog', 'selectedPost'])
 const emits = defineEmits(['closeDialog'])
 
 const formFields = ref([
-{
-    inputType: "rich-text",
-    name: "description",
-    label: "Start discussion",
-    size: "large",
-    required: false,
-}
+  {
+      inputType: "input",
+      type: "input",
+      name: "name",
+      label: "Topic",
+      size: "large",
+      required: true,
+  },
+  // {
+  //   inputType: "input",
+  //   type: "date",
+  //   label: "startDate",
+  //   label: "Start date",
+  //   size: "medium",
+  //   required: true,
+  // },
+  // {
+  //   inputType: "time",
+  //   name: "startTime",
+  //   label: "Start time",
+  //   size: "medium",
+  //   required: false,
+  // },
+  // {
+  //   inputType: "input",
+  //   type: "date",
+  //   label: "endDate",
+  //   label: "end date",
+  //   size: "medium",
+  //   required: true,
+  // },
+  // {
+  //   inputType: "time",
+  //   name: "endTime",
+  //   label: "end time",
+  //   size: "medium",
+  //   required: false,
+  // },
+  {
+      inputType: "rich-text",
+      name: "description",
+      label: "Discription",
+      size: "large",
+      required: false,
+  }
 ]);       
 
-const CommentPost = async (formValues) => {
-await alphaConnectStore.commentPost(formValues,props?.selectedPost);
+const myProfileContract = computed(() => {
+  return getStoreItem.value("myProfileContract")
+})
+
+const MakeDiscussion = async (formValues) => {
+  await alphaConnectStore.createDiscussion({ ...formValues, profileContract: myProfileContract.value, connectedAddress:alphaConnectStore.getConnectedAddress() });
+
 }
 
 watch(() => props.openDialog, (value) => {
   dialog.value = value
 })
 
-
+onMounted( async () => {
+    await alphaConnectStore.loadMyProfileContract(alphaConnectStore.getConnectedAddress()); //hii ndo ina loaf myProfileContract
+})
 </script>
 
 

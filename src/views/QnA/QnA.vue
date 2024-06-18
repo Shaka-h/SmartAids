@@ -2,7 +2,7 @@
   <div class="">
     <MakeDiscussionForm :selected-post="selectedPost" :open-dialog="showCard" @close-dialog="showCard = false;"></MakeDiscussionForm>
 
-    <div v-if="!listItem?.length">
+    <div v-if="listItem?.length">
       <div class="border p-4 flex justify-between itenms-center">
         <div class="flex flex-row space-x-4 items-center">
           <div><svg-icon name="category" class="icon cursor-pointer" color="#020202"></svg-icon></div>
@@ -107,7 +107,7 @@ onBeforeMount(async () => {
 
   await alphaConnectStore.loadAllPosts(await alphaConnectStore.getConnectedAddress());
 
-  await alphaConnectStore.loadPostsComments(1);
+  // await alphaConnectStore.loadPostsComments(1);
 
   console.log(await alphaConnectStore.getConnectedAddress(), "wallet connected");
 
@@ -119,7 +119,7 @@ onMounted(async () => {
   })
 
   socialMedia_contract.on("commentMade", async () => {
-    await alphaConnectStore.loadPostsComments(1);
+    // await alphaConnectStore.loadPostsComments(1);
     await alphaConnectStore.loadAllPosts(await alphaConnectStore.getConnectedAddress());
   })
 

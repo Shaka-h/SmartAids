@@ -8,15 +8,15 @@
         <div class="flex space-x-4 m-4">
           <div class="flex space-x-2">
             <div><svg-icon :name="'comment'" class="icon cursor-pointer" color="#020202"></svg-icon></div>
-            <div>{{ post[4] }}</div>
+            <div>{{ post[6] }}</div>
           </div>
           <div class="flex space-x-2">
             <div><svg-icon :name="'like'" class="icon cursor-pointer" color="#020202"></svg-icon></div>
-            <div>{{ post[5] }}</div>
+            <div>{{ post[4] }}</div>
           </div>
           <div class="flex space-x-2">
             <div><svg-icon :name="'dislike'" class="icon cursor-pointer" color="#020202"></svg-icon></div>
-            <div>{{ post[6] }}</div>
+            <div>{{ post[5] }}</div>
           </div>
           <div class="flex space-x-2">
             <!-- <div><svg-icon :name="'dislike'" class="icon cursor-pointer" color="#020202"></svg-icon></div> -->

@@ -5,7 +5,7 @@
           class="flex justify-between items-center p-2 text-gray-500"
         >
           <span class="font-bold px-2">
-            <span v-if="title">{{ $t(title) }}</span>
+            <span v-if="title">{{ title }}</span>
           </span>
           <button @click="$emit('closeDialog', true)">
             <svg-icon
@@ -37,10 +37,7 @@
   <script setup>
   import SvgIcon from "@/components/shared/SvgIcon.vue";
   import { onMounted, ref, watch } from 'vue';
-  import {getSignerContract} from '../../../scripts/ContractUtils';
-  import { useRoute } from 'vue-router';
   import DynamicFormMain from "@/components/shared/forms/DynamicFormMain.vue";
-  import addMetadataFile  from '@/scripts/IPFSJSON'
   import { useAlphaConnectStore } from "@/store/index.js";
 
 const alphaConnectStore = useAlphaConnectStore();
@@ -60,7 +57,8 @@ const formFields = ref([
 ]);       
   
 const CommentPost = async (formValues) => {
-  await alphaConnectStore.commentPost(formValues,props?.selectedPost);
+  emits('closeDialog')
+  await alphaConnectStore.commentPost(formValues,props?.selectedPost?.PostId);
 }
 
   watch(() => props.openDialog, (value) => {
