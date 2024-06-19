@@ -2,13 +2,13 @@ import { notifyError, notifySuccess, notifyWarning } from "@/services/notificati
 import { getSignerContract } from '@/scripts/ContractUtils.js';
 import { defineStore } from "pinia";
 import addMetadataFile from "@/scripts/IPFSJSON.js";
-import { socialMedia } from "@/scripts/ContractConstants.js";
+import { socialMedia, discussionContract_Address } from "@/scripts/ContractConstants.js";
 import fetchData from "@/scripts/fetchData";
 import fetchToken from "@/scripts/fetchToken";
 import { ethers } from 'ethers';
 import { nftMyProfile_ABI } from '@/scripts/ContractConstants'
 
-let { nftProfileFactory_contract, socialMedia_contract, signer } = getSignerContract();
+let { nftProfileFactory_contract, socialMedia_contract, discussion_contract, signer } = getSignerContract();
 
 export const useAlphaConnectStore = defineStore('alphaConnectStore', {
     state: () => {
@@ -42,7 +42,8 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                 postCommented: 'idle',
                 createdPosts: [],
                 createdDiscussions: [],
-                createdDiscussionsState: 'idle'
+                createdDiscussionsState: 'idle',
+                allDiscussions: []
 
             }
         }
@@ -73,8 +74,10 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                     "contacts": profileData.links
                 });
 
+                console.log(socialMedia,"kinfinililid", discussionContract_Address);
                 const deployedContractAddress = await nftProfileFactory_contract.deployNFTProfileContract(
                     socialMedia,
+                    discussionContract_Address,
                     profileData.name,
                     profileCID
                 );
@@ -375,7 +378,7 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                 const getprofileContract = await nftProfileFactory_contract.profileByAddressOwner(address)
 
                 const profileContract = await getprofileContract?.ProfileContract
-
+                console.log("jbfhrguikbkbhbi");
                 const nftMyProfile_contract = new ethers.Contract(profileContract, nftMyProfile_ABI, signer);
 
                 // Update store state with fetched profiles
@@ -448,31 +451,29 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
 
         },
 
-        async loadPost(postId) {
+        // async loadPost(postId) {
 
-            const store = this;
+        //     const store = this;
 
-            try {
-                const getMyPosts = await socialMedia_contract.idPost(postId)
+        //     try {
+        //         const getMyPosts = await socialMedia_contract.idPost(postId)
 
-                // Update store state with fetched profiles
-                store.state['post'] = getMyPosts;
+        //         // Update store state with fetched profiles
+        //         store.state['post'] = getMyPosts;
 
-            } catch (error) {
-                console.error('Error loading post:', error);
-                // Handle error
-                notifyError('Error loading post: ' + error.message);
-            } finally {
-                store.isLoading = false;
-            }
+        //     } catch (error) {
+        //         console.error('Error loading post:', error);
+        //         // Handle error
+        //         notifyError('Error loading post: ' + error.message);
+        //     } finally {
+        //         store.isLoading = false;
+        //     }
 
-        },
+        // },
 
         async loadPostsComments(PostId) {
 
             const store = this;
-
-            const post = await this.loadPost(PostId)
 
             const postId = store.state['post'][0]
 
@@ -508,9 +509,9 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                 store.state['postComments'] = comments;
 
             } catch (error) {
-                console.error('Error loading myProfileContract:', error);
+                console.error('Error loading this post comments:', error);
                 // Handle error
-                notifyError('Error loading myProfileContract: ' + error.message);
+                notifyError('Error loading this post comments: ' + error.message);
             } finally {
                 store.isLoading = false;
             }
@@ -854,7 +855,7 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
 
                 store.createdDiscussionsState = 'pending'; // Set state to pending while profile creation is in progress
 
-                const postCID = await addMetadataFile(
+                const discussionCID = await addMetadataFile(
                     {
                         "name": discussionData.name,
                         "description": discussionData.description,
@@ -863,66 +864,123 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                 );
                 const nftMyProfile_contract = new ethers.Contract(discussionData?.profileContract?.address, nftMyProfile_ABI, signer);
 
-                const createPost = await nftMyProfile_contract.createDiscussion(
-                    postCID
+                const creatediscussion = await nftMyProfile_contract.createDiscussion(
+                    discussionCID
                 );
-                console.log(createPost); // Log the deployed contract address
+
                 store.isLoading = true;
+
                 // wait() function allows to wait for transaction to be completed
-                let receipt = await createPost.wait()
+                let receipt = await creatediscussion.wait()
 
-                console.log(receipt, "IMYSM");
+                console.log("ejrheh", receipt, "IMYSM");
 
-                const tokenIdBigNumber = receipt?.events[3].args.profileId;
+                // const tokenIdBigNumber = receipt?.events[3].args.profileId;
 
-                // Convert BigNumber to JavaScript number
-                const postId = tokenIdBigNumber.toNumber();
+                // // Convert BigNumber to JavaScript number
+                // const discussionId = tokenIdBigNumber.toNumber();
 
-                console.log(postId);
+                // console.log(discussionId);
 
                 
+                // const publishDiscussion = await discussion_contract.createDiscussion(
+                //     discussionData?.profileContract?.address,
+                //     discussionId,
+                // )
 
+                // // store.isLoading = true;
 
-                const publishPost = await socialMedia_contract.createPost(
-                    discussionData?.profileContract?.address,
-                    postId,
-                )
-
-                store.isLoading = true;
-
-                console.log(publishPost);
-                let publishedPost = await publishPost.wait()
-                console.log(publishedPost);
+                // // console.log(publishDiscussion);
+                // let publishedDiscussion = await publishDiscussion.wait()
+                // console.log(publishedDiscussion);
 
 
                 
-                console.log(publishedPost?.events[1].args.PostId);
+                // console.log(publishedDiscussion?.events[1].args.discussionId);
 
-                const publishedPostIdBigNumber = publishedPost?.events[1].args.PostId
-                const publishedPostId = publishedPostIdBigNumber.toNumber()
+                // const publishedDiscussionIdBigNumber = publishedDiscussion?.events[1].args.discussionId
+                // const publishedDiscussionId = publishedDiscussionIdBigNumber.toNumber()
 
-                // // not decodeFunctionData
-                // // let decodedData = new ethers.utils.Interface(nftFactory_ABI).decodeFunctionResult('deployNFTContract', encodedData)
-                // // encodedData is found in receipt
+                // // // not decodeFunctionData
+                // // // let decodedData = new ethers.utils.Interface(nftFactory_ABI).decodeFunctionResult('deployNFTContract', encodedData)
+                // // // encodedData is found in receipt
 
-                if (publishedPostId) {
-                    store.createPostState = 'success'; // Set state to success after successful profile creation
-                    notifySuccess("Added post successfully!");
+                // if (publishedDiscussionId) {
+                //     store.creatediscussionState = 'success'; // Set state to success after successful profile creation
+                //     notifySuccess("Added discussion successfully!");
 
-                    // Push the storedResponse to the profiles array
-                    // store.createdPosts.push(storedResponse);
-                } else {
-                    store.createPostState = 'error'; // Set state to error if contract address is not returned
-                    notifyError('Error creating post: Deployed contract address not returned.');
-                }
+                //     // Push the storedResponse to the profiles array
+                //     // store.createddiscussions.push(storedResponse);
+                // } else {
+                //     store.creatediscussionState = 'error'; // Set state to error if contract address is not returned
+                //     notifyError('Error creating discussion: Deployed contract address not returned.');
+                // }
 
             } catch (error) {
-                store.createPostState = 'error'; // Set state to error if an error occurs during profile creation
-                notifyError('Error creating post: ' + error.message);
+                store.creatediscussionState = 'error'; // Set state to error if an error occurs during profile creation
+                notifyError('Error creating discussion: ' + error.message);
             }
             finally {
                 store.isLoading = false;
             }
+        },
+
+        async loadAllDiscussions(address) {
+
+            const store = this;
+
+            try {
+                const getAllDiscussion = await discussion_contract.fetchAllDiscussionsCreated()
+                console.log(getAllDiscussion, "home comming");
+
+                // const promises = getAllDiscussion.map(async (Discussion) => {
+
+                //     let nftMyProfile_contract = new ethers.Contract(Discussion?.profileContract, nftMyProfile_ABI, signer);
+
+                //     let profile = await nftProfileFactory_contract.profileByAddressOwner(Discussion?.creator);
+
+
+                //     let DiscussionUrl = await nftMyProfile_contract.getDiscussionsURIById(parseInt(Discussion.DiscussionId._hex));
+                //     const responseData = await fetchToken(DiscussionUrl);
+                //     const image = await fetchToken(profile.profileUrl)
+                //     const like = await discussion_contract.likedBy(address, parseInt(Discussion.DiscussionId._hex))
+                //     const unlike = await discussion_contract.unLikedBy(address, parseInt(Discussion.DiscussionId._hex))
+
+                //     let timestamp = parseInt(Discussion);
+                //     let readableDate = new Date(timestamp * 1000).toLocaleString();
+
+                //     if (typeof Discussion === 'object') {
+                //         return {
+                //             ...Discussion,
+                //             hex: parseInt(Discussion._hex),
+                //             timestamp: readableDate,
+                //             DiscussionUrl: DiscussionUrl,
+                //             DiscussionData: responseData,
+                //             owner: profile?.username,
+                //             image: image?.photoCID,
+                //             liked: like,
+                //             unliked: unlike
+                //         };
+                //     }
+                //     else {
+                //         return Discussion;
+                //     }
+                // });
+
+                // const listItem = await Promise.all(promises);
+  
+
+                // // Update store state with fetched profiles
+                // store.state['allDiscussions'] = listItem;
+
+            } catch (error) {
+                console.error('Error loading discussions created:', error);
+                // Handle error
+                notifyError('Error loading discussions created: ' + error.message);
+            } finally {
+                store.isLoading = false;
+            }
+
         },
 
     },

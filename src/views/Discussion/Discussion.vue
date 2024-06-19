@@ -1,19 +1,19 @@
 <template>
   <div class="">
     <MakeDiscussionForm :selected-post="selectedPost" :open-dialog="showCard" @close-dialog="showCard = false;"></MakeDiscussionForm>
+    <div class="border p-4 flex justify-between itenms-center">
+      <div class="flex flex-row space-x-4 items-center">
+        <div><svg-icon :name="'comment'" class="icon cursor-pointer" color="#020202"></svg-icon></div>
+        <div class="text-2xl font-bold">DISCUSSIONS</div>
+      </div>
+      <div class="flex cursor-pointer flex-row space-x-4 items-center">
+        <div><svg-icon :name="'add'" class="icon cursor-pointer" color="#020202"></svg-icon></div>
+        <div  @click="MakeDiscussion()" class="">New</div>
+      </div>
+    </div>
 
     <div v-if="listItem?.length">
-      <div class="border p-4 flex justify-between itenms-center">
-        <div class="flex flex-row space-x-4 items-center">
-          <div><svg-icon :name="'comment'" class="icon cursor-pointer" color="#020202"></svg-icon></div>
-          <div class="text-2xl font-bold">DISCUSSIONS</div>
-        </div>
-        <div class="flex cursor-pointer flex-row space-x-4 items-center">
-          <div><svg-icon :name="'add'" class="icon cursor-pointer" color="#020202"></svg-icon></div>
-          <div  @click="MakeDiscussion()" class="">New</div>
-        </div>
-      </div>
-
+      
       <div v-for="(post, index) of posts" :key="index"
         class="border mt-4 flex flex-row space-x-4 cursor-pointer items-center" @click="viewDiscussion(post)">
         <div class="flex flex-col justify-between border-r-4 p-4">
@@ -43,8 +43,8 @@
       </div>
     </div>
 
-    <div v-if="listItem?.length" class="h-full flex items-center justify-center text-center p-2">
-      <span class="font-semibold text-base">NO POSTS AVAILABLE</span>
+    <div v-if="!listItem?.length" class="h-full flex items-center justify-center text-center p-2">
+      <span class="font-semibold text-base">NO DISCUSSION AVAILABLE</span>
     </div>
   </div>
 </template>
@@ -82,7 +82,7 @@ const profile = ref()
 const { getStoreItem } = storeToRefs(alphaConnectStore)
 
 const listItem = computed(() => {
-  return getStoreItem.value("allPosts")
+  return getStoreItem.value("allDiscussions")
 })
 
 const post = ref(
@@ -105,7 +105,7 @@ const viewDiscussion = (discussion) => {
 
 onBeforeMount(async () => {
 
-  await alphaConnectStore.loadAllPosts(await alphaConnectStore.getConnectedAddress());
+  await alphaConnectStore.loadAllDiscussions(await alphaConnectStore.getConnectedAddress());
 
   // await alphaConnectStore.loadPostsComments(1);
 

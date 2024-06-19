@@ -16,20 +16,25 @@ contract MyProfile is ERC721URIStorage {
     
     using Counters for Counters.Counter;
     Counters.Counter private _postIds;
+    Counters.Counter private _discussionIds;
+
 
     string public username;
     string public profileUrl;
-
     address public tweetContractAddress;
+    address public discussionContractAddress;
 
 
     string[] public allProfilePosts;
+    string[] public allProfileDiscussions;
     mapping (uint256 => string) profileURIById;
 
     event postCreated(string profileURI, uint256 profileId, uint256 time);
+    event discussionCreated(string profileURI, uint256 profileId, uint256 time);
 
-    constructor(address _tweetContractAddress, string memory _username, string memory _profileUrl) ERC721("eGa", "eGa") {
+    constructor(address _tweetContractAddress, address _discussionContractAddress, string memory _username, string memory _profileUrl) ERC721("eGa", "eGa") {
         tweetContractAddress = _tweetContractAddress;
+        discussionContractAddress = _discussionContractAddress;
         username = _username;
         profileUrl = _profileUrl;
     }
@@ -55,6 +60,32 @@ contract MyProfile is ERC721URIStorage {
     }
 
     function getPostsURIById (uint256 profileId) external view returns (string memory) {
+        return profileURIById[profileId];
+    }
+
+    // *****************************************************************************************************************
+
+
+      function createDiscussion(string memory discussionURI) public returns (uint) {
+        _discussionIds.increment(); // Increment the profile ID counter
+        uint256 newdiscussionId = _discussionIds.current(); // Get the new profile ID
+
+        _mint(msg.sender, newdiscussionId); // Mint the profile to the caller
+        _setTokenURI(newdiscussionId, discussionURI); // Set the profile URI
+
+        allProfileDiscussions.push(discussionURI); // Add the new discussion ID to the array
+        profileURIById[newdiscussionId] = discussionURI; // Store the profile URI in the mapping
+        setApprovalForAll(discussionContractAddress, true); //grant transaction permission to marketplace
+        emit discussionCreated(discussionURI, newdiscussionId, block.timestamp);
+
+        return newdiscussionId; // Return the new profile ID
+    }
+
+    function getAlldiscussions() external view returns (string[] memory) {
+        return allProfileDiscussions; 
+    }
+
+    function getDiscussionsURIById (uint256 profileId) external view returns (string memory) {
         return profileURIById[profileId];
     }
 }
@@ -90,12 +121,13 @@ contract ProfileFactory {
     event NFTProfileDeployed(
         address indexed owner, 
         address indexed ProfileContract, 
-        string username, string profileUrl, 
+        string username, 
+        string profileUrl, 
         uint256 time
     );
 
-    function deployNFTProfileContract(address _tweetContractAddress, string memory _username, string memory _profileUrl) external returns (address) {
-        MyProfile ProfileContract = new MyProfile(_tweetContractAddress, _username, _profileUrl);
+    function deployNFTProfileContract(address _tweetContractAddress, address _discussionContractAddress, string memory _username, string memory _profileUrl) external returns (address) {
+        MyProfile ProfileContract = new MyProfile(_tweetContractAddress, _discussionContractAddress, _username, _profileUrl);
         MyNFTProfile memory newProfile = MyNFTProfile(msg.sender, address(ProfileContract), _username, _profileUrl, block.timestamp);
         
         profileByAddressContract[address(ProfileContract)] = newProfile;
@@ -107,13 +139,13 @@ contract ProfileFactory {
         return address(ProfileContract);
     }
 
-    function getprofileByAddressContract (address _contractAddress) external view returns (MyNFTProfile memory) {
-        return profileByAddressContract[_contractAddress];
-    }
+    // function getprofileByAddressContract (address _contractAddress) external view returns (MyNFTProfile memory) {
+    //     return profileByAddressContract[_contractAddress];
+    // }
 
-    function getprofileByUsername (string memory _username) external view returns (MyNFTProfile memory) {
-        return profileByUsername[_username];
-    }
+    // function getprofileByUsername (string memory _username) external view returns (MyNFTProfile memory) {
+    //     return profileByUsername[_username];
+    // }
 
     function getAllDeployedNFTCollections() external view returns (MyNFTProfile[] memory) {
         return allNFTProfiles;

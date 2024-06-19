@@ -116,17 +116,12 @@
 
   watch(() => props?.selectedPost, async (value) => {
     await alphaConnectStore.loadPostsComments(value?.PostId);
-    console.log(value, "humming aiiiiiooiiooi");
   })
 
   onBeforeMount(async () => {
   
     await alphaConnectStore.loadAllPosts(await alphaConnectStore.getConnectedAddress());
-  
-    await alphaConnectStore.loadPostsComments(props?.selectedPost?.PostId);
-  
-    console.log(await alphaConnectStore.getConnectedAddress(), "wallet connected");
-  
+    
   })
   
   onMounted(async () => {
@@ -135,7 +130,6 @@
     })
   
     socialMedia_contract.on("commentMade", async () => {
-      await alphaConnectStore.loadPostsComments(props?.selectedPost?.PostId);
       await alphaConnectStore.loadAllPosts(await alphaConnectStore.getConnectedAddress());
     })
   

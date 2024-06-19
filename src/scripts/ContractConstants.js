@@ -1313,6 +1313,11 @@ export const profileFactory_ABI = [
 				"type": "address"
 			},
 			{
+				"internalType": "address",
+				"name": "_discussionContractAddress",
+				"type": "address"
+			},
+			{
 				"internalType": "string",
 				"name": "_username",
 				"type": "string"
@@ -1487,100 +1492,8 @@ export const profileFactory_ABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_contractAddress",
-				"type": "address"
-			}
-		],
-		"name": "getprofileByAddressContract",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "address",
-						"name": "owner",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "ProfileContract",
-						"type": "address"
-					},
-					{
-						"internalType": "string",
-						"name": "username",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "profileUrl",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "time",
-						"type": "uint256"
-					}
-				],
-				"internalType": "struct ProfileFactory.MyNFTProfile",
-				"name": "",
-				"type": "tuple"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [],
 		"name": "getprofileByAddressOwner",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "address",
-						"name": "owner",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "ProfileContract",
-						"type": "address"
-					},
-					{
-						"internalType": "string",
-						"name": "username",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "profileUrl",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "time",
-						"type": "uint256"
-					}
-				],
-				"internalType": "struct ProfileFactory.MyNFTProfile",
-				"name": "",
-				"type": "tuple"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_username",
-				"type": "string"
-			}
-		],
-		"name": "getprofileByUsername",
 		"outputs": [
 			{
 				"components": [
@@ -1741,6 +1654,11 @@ export const nftMyProfile_ABI = [
 			{
 				"internalType": "address",
 				"name": "_tweetContractAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_discussionContractAddress",
 				"type": "address"
 			},
 			{
@@ -1989,12 +1907,56 @@ export const nftMyProfile_ABI = [
 				"type": "uint256"
 			}
 		],
+		"name": "discussionCreated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "profileURI",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "profileId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
+			}
+		],
 		"name": "postCreated",
 		"type": "event"
 	},
 	{
 		"stateMutability": "payable",
 		"type": "fallback"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "allProfileDiscussions",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -2056,6 +2018,25 @@ export const nftMyProfile_ABI = [
 		"inputs": [
 			{
 				"internalType": "string",
+				"name": "discussionURI",
+				"type": "string"
+			}
+		],
+		"name": "createDiscussion",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
 				"name": "postURI",
 				"type": "string"
 			}
@@ -2073,7 +2054,33 @@ export const nftMyProfile_ABI = [
 	},
 	{
 		"inputs": [],
+		"name": "discussionContractAddress",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "getAllPosts",
+		"outputs": [
+			{
+				"internalType": "string[]",
+				"name": "",
+				"type": "string[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getAlldiscussions",
 		"outputs": [
 			{
 				"internalType": "string[]",
@@ -2098,6 +2105,25 @@ export const nftMyProfile_ABI = [
 				"internalType": "address",
 				"name": "",
 				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "profileId",
+				"type": "uint256"
+			}
+		],
+		"name": "getDiscussionsURIById",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
 			}
 		],
 		"stateMutability": "view",
@@ -2365,7 +2391,6 @@ export const nftMyProfile_ABI = [
 		"type": "receive"
 	}
 ]
-
 export const discussionContract_Address = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
 export const DiscussionFactory_ABI = [
 	{

@@ -46,6 +46,7 @@ const { getStoreItem } = storeToRefs(alphaConnectStore)
 //     }
 //   })
 // })
+
 const myProfile = computed(() => {
   return getStoreItem.value("myProfile")
 })

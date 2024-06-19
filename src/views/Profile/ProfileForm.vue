@@ -151,6 +151,5 @@ watch(() => props.selectedProfile, (value) => {
 })
 
 onMounted(() => {
-    console.log(props.selectedProfile, "selectedProfile");
 });
 </script>

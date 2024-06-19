@@ -103,6 +103,7 @@ const myProfileContract = computed(() => {
 const MakeDiscussion = async (formValues) => {
   await alphaConnectStore.createDiscussion({ ...formValues, profileContract: myProfileContract.value, connectedAddress:alphaConnectStore.getConnectedAddress() });
 
+  emits('closeDialog')
 }
 
 watch(() => props.openDialog, (value) => {

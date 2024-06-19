@@ -35,6 +35,9 @@ import { useAlphaConnectStore } from "@/store/index.js";
 import { storeToRefs } from "pinia";
 import { useRoute } from 'vue-router';
 import { walletAddressConnected, walletConnected } from "@/scripts/ContractConstants";
+import { getSignerContract } from '../../scripts/ContractUtils';
+
+let { socialMedia_contract } = getSignerContract();
 
 const alphaConnectStore = useAlphaConnectStore();
 const router = useRoute()
@@ -45,13 +48,6 @@ const { getStoreItem } = storeToRefs(alphaConnectStore)
 
 const listItem = computed(() => {
   return getStoreItem.value("myPosts")
-})
-
-onMounted(async () => {
-  const connectedAddress = await alphaConnectStore.getConnectedAddress()
-  const posts = await alphaConnectStore.loadMyPosts(connectedAddress);
-  console.log(posts, "hallleellll");
-
 })
 
 onBeforeMount(async () => {
