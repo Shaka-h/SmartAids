@@ -36,6 +36,86 @@ export const socialMedia_ABI = [
 		"type": "error"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "postID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "commentUrl",
+				"type": "string"
+			}
+		],
+		"name": "commentPost",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "newsUrl",
+				"type": "string"
+			}
+		],
+		"name": "createNews",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "profileContract",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "createPost",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "newsId",
+				"type": "uint256"
+			}
+		],
+		"name": "deleteNews",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "grantRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -303,60 +383,83 @@ export const socialMedia_ABI = [
 		"type": "event"
 	},
 	{
-		"inputs": [],
-		"name": "DEFAULT_ADMIN_ROLE",
-		"outputs": [
+		"inputs": [
 			{
-				"internalType": "bytes32",
-				"name": "",
-				"type": "bytes32"
+				"internalType": "uint256",
+				"name": "postID",
+				"type": "uint256"
 			}
 		],
-		"stateMutability": "view",
+		"name": "likePost",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "callerConfirmation",
+				"type": "address"
+			}
+		],
+		"name": "renounceRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "role",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "revokeRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "postID",
 				"type": "uint256"
 			}
 		],
-		"name": "PostComment",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "profileContract",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "commentor",
-				"type": "address"
-			},
+		"name": "unLikePost",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "PostID",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "commentID",
+				"name": "newsId",
 				"type": "uint256"
 			},
 			{
 				"internalType": "string",
-				"name": "commentUrl",
+				"name": "updatedUrl",
 				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "time",
-				"type": "uint256"
 			}
 		],
-		"stateMutability": "view",
+		"name": "updateNews",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -370,24 +473,6 @@ export const socialMedia_ABI = [
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "postID",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "commentUrl",
-				"type": "string"
-			}
-		],
-		"name": "commentPost",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -440,47 +525,16 @@ export const socialMedia_ABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [
+		"inputs": [],
+		"name": "DEFAULT_ADMIN_ROLE",
+		"outputs": [
 			{
-				"internalType": "string",
-				"name": "newsUrl",
-				"type": "string"
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
 			}
 		],
-		"name": "createNews",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "profileContract",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "createPost",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "newsId",
-				"type": "uint256"
-			}
-		],
-		"name": "deleteNews",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -805,24 +859,6 @@ export const socialMedia_ABI = [
 				"type": "address"
 			}
 		],
-		"name": "grantRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
 		"name": "hasRole",
 		"outputs": [
 			{
@@ -974,19 +1010,6 @@ export const socialMedia_ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "postID",
-				"type": "uint256"
-			}
-		],
-		"name": "likePost",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
 				"internalType": "address",
 				"name": "",
 				"type": "address"
@@ -1011,37 +1034,45 @@ export const socialMedia_ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "PostComment",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "profileContract",
+				"type": "address"
 			},
 			{
 				"internalType": "address",
-				"name": "callerConfirmation",
+				"name": "commentor",
 				"type": "address"
-			}
-		],
-		"name": "renounceRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "role",
-				"type": "bytes32"
 			},
 			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
+				"internalType": "uint256",
+				"name": "PostID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "commentID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "commentUrl",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
 			}
 		],
-		"name": "revokeRole",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -1066,19 +1097,6 @@ export const socialMedia_ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "postID",
-				"type": "uint256"
-			}
-		],
-		"name": "unLikePost",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
 				"internalType": "address",
 				"name": "",
 				"type": "address"
@@ -1098,24 +1116,6 @@ export const socialMedia_ABI = [
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "newsId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "updatedUrl",
-				"type": "string"
-			}
-		],
-		"name": "updateNews",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]
@@ -1212,6 +1212,11 @@ export const profileFactory_ABI = [
 			{
 				"internalType": "address",
 				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "ProfileContract",
 				"type": "address"
 			},
 			{
@@ -1364,6 +1369,11 @@ export const profileFactory_ABI = [
 						"type": "address"
 					},
 					{
+						"internalType": "address",
+						"name": "ProfileContract",
+						"type": "address"
+					},
+					{
 						"internalType": "string",
 						"name": "username",
 						"type": "string"
@@ -1456,6 +1466,11 @@ export const profileFactory_ABI = [
 						"type": "address"
 					},
 					{
+						"internalType": "address",
+						"name": "ProfileContract",
+						"type": "address"
+					},
+					{
 						"internalType": "string",
 						"name": "username",
 						"type": "string"
@@ -1491,44 +1506,8 @@ export const profileFactory_ABI = [
 						"type": "address"
 					},
 					{
-						"internalType": "string",
-						"name": "username",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "profileUrl",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "time",
-						"type": "uint256"
-					}
-				],
-				"internalType": "struct ProfileFactory.MyNFTProfile",
-				"name": "",
-				"type": "tuple"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_username",
-				"type": "string"
-			}
-		],
-		"name": "getprofileByUsername",
-		"outputs": [
-			{
-				"components": [
-					{
 						"internalType": "address",
-						"name": "owner",
+						"name": "ProfileContract",
 						"type": "address"
 					},
 					{
@@ -1595,6 +1574,11 @@ export const profileFactory_ABI = [
 				"type": "address"
 			},
 			{
+				"internalType": "address",
+				"name": "ProfileContract",
+				"type": "address"
+			},
+			{
 				"internalType": "string",
 				"name": "username",
 				"type": "string"
@@ -1626,6 +1610,11 @@ export const profileFactory_ABI = [
 			{
 				"internalType": "address",
 				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "ProfileContract",
 				"type": "address"
 			},
 			{
@@ -1866,12 +1855,62 @@ export const nftMyProfile_ABI = [
 		"inputs": [
 			{
 				"indexed": false,
+				"internalType": "string",
+				"name": "profileURI",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
+			}
+		],
+		"name": "DiscussionCreated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
 				"internalType": "uint256",
 				"name": "_tokenId",
 				"type": "uint256"
 			}
 		],
 		"name": "MetadataUpdate",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "profileURI",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
+			}
+		],
+		"name": "PostCreated",
 		"type": "event"
 	},
 	{
@@ -1900,60 +1939,6 @@ export const nftMyProfile_ABI = [
 		"type": "event"
 	},
 	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "profileURI",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "profileId",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "time",
-				"type": "uint256"
-			}
-		],
-		"name": "discussionCreated",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "profileURI",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "profileId",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "time",
-				"type": "uint256"
-			}
-		],
-		"name": "postCreated",
-		"type": "event"
-	},
-	{
-		"stateMutability": "payable",
-		"type": "fallback"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -1964,8 +1949,13 @@ export const nftMyProfile_ABI = [
 		"name": "allProfileDiscussions",
 		"outputs": [
 			{
+				"internalType": "enum MyProfile.TokenType",
+				"name": "tokenType",
+				"type": "uint8"
+			},
+			{
 				"internalType": "string",
-				"name": "",
+				"name": "uri",
 				"type": "string"
 			}
 		],
@@ -1983,8 +1973,13 @@ export const nftMyProfile_ABI = [
 		"name": "allProfilePosts",
 		"outputs": [
 			{
+				"internalType": "enum MyProfile.TokenType",
+				"name": "tokenType",
+				"type": "uint8"
+			},
+			{
 				"internalType": "string",
-				"name": "",
+				"name": "uri",
 				"type": "string"
 			}
 		],
@@ -2080,32 +2075,6 @@ export const nftMyProfile_ABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "getAllPosts",
-		"outputs": [
-			{
-				"internalType": "string[]",
-				"name": "",
-				"type": "string[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getAlldiscussions",
-		"outputs": [
-			{
-				"internalType": "string[]",
-				"name": "",
-				"type": "string[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -2128,16 +2097,16 @@ export const nftMyProfile_ABI = [
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "profileId",
+				"name": "tokenId",
 				"type": "uint256"
 			}
 		],
-		"name": "getDiscussionsURIById",
+		"name": "getTokenType",
 		"outputs": [
 			{
-				"internalType": "string",
+				"internalType": "enum MyProfile.TokenType",
 				"name": "",
-				"type": "string"
+				"type": "uint8"
 			}
 		],
 		"stateMutability": "view",
@@ -2147,11 +2116,11 @@ export const nftMyProfile_ABI = [
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "profileId",
+				"name": "tokenId",
 				"type": "uint256"
 			}
 		],
-		"name": "getPostsURIById",
+		"name": "getTokenURIById",
 		"outputs": [
 			{
 				"internalType": "string",
@@ -2213,6 +2182,30 @@ export const nftMyProfile_ABI = [
 				"internalType": "address",
 				"name": "",
 				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "profileTokens",
+		"outputs": [
+			{
+				"internalType": "enum MyProfile.TokenType",
+				"name": "tokenType",
+				"type": "uint8"
+			},
+			{
+				"internalType": "string",
+				"name": "uri",
+				"type": "string"
 			}
 		],
 		"stateMutability": "view",
@@ -2399,10 +2392,6 @@ export const nftMyProfile_ABI = [
 		],
 		"stateMutability": "view",
 		"type": "function"
-	},
-	{
-		"stateMutability": "payable",
-		"type": "receive"
 	}
 ]
 export const discussionGround_Address = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"

@@ -109,44 +109,44 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
             const store = this;
             console.log(address, "hihi");
 
-            // try {
-            //     store.isLoading = true;
+            try {
+                store.isLoading = true;
 
-            //     // Fetch profile data from the blockchain network
-            //     const profileData = await nftProfileFactory_contract.profileByAddressOwner(address);
+                // Fetch profile data from the blockchain network
+                const profileData = await nftProfileFactory_contract.profileByAddressOwner(address);
 
-            //     // Extract the token URL from profileData
-            //     const tokenUrl = profileData[3];
+                // Extract the token URL from profileData
+                const tokenUrl = profileData[3];
 
-            //     // Fetch additional profile details from the token URL using fetchData function
-            //     const profileDetails = await fetchData(tokenUrl);
+                // Fetch additional profile details from the token URL using fetchData function
+                const profileDetails = await fetchData(tokenUrl);
 
-            //     // Process profile data
-            //     const processedProfiles = profileDetails.map(profile => ({
-            //         ...profile,
-            //         photo: profile.photoCID,
-            //         name: profile.name,
-            //         fullName: profile.fullName,
-            //         institution: profile.organisation,
-            //         links: profile.contacts,
-            //         bibliography: profile.bibliography,
-            //         skills: profile.skills,
-            //         profileContract: profileData[1]
-            //     }));
+                // Process profile data
+                const processedProfiles = profileDetails.map(profile => ({
+                    ...profile,
+                    photo: profile.photoCID,
+                    name: profile.name,
+                    fullName: profile.fullName,
+                    institution: profile.organisation,
+                    links: profile.contacts,
+                    bibliography: profile.bibliography,
+                    skills: profile.skills,
+                    profileContract: profileData[1]
+                }));
 
-            //     // Update store state with fetched profiles
-            //     store.state['myProfile'] = processedProfiles;
+                // Update store state with fetched profiles
+                store.state['myProfile'] = processedProfiles;
 
-            //     // Log fetched profiles
-            //     // console.log('Fetched profiles:', store.state.myProfile);
+                // Log fetched profiles
+                // console.log('Fetched profiles:', store.state.myProfile);
 
-            // } catch (error) {
-            //     console.error('Error loading profiles:', error);
-            //     // Handle error
-            //     notifyError('Error loading profiles: ' + error.message);
-            // } finally {
-            //     store.isLoading = false;
-            // }
+            } catch (error) {
+                console.error('Error loading profiles:', error);
+                // Handle error
+                notifyError('Error loading profiles: ' + error.message);
+            } finally {
+                store.isLoading = false;
+            }
         },
 
         async loadAllProfile() {
@@ -317,12 +317,12 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
 
                 console.log(receipt, "IMYSM");
 
-                const tokenIdBigNumber = receipt?.events[3].args.profileId;
+                const tokenIdBigNumber = receipt?.events[3].args.tokenId;
 
                 // Convert BigNumber to JavaScript number
-                const postId = tokenIdBigNumber.toNumber();
+                const postId = parseInt(tokenIdBigNumber);
 
-                console.log(postId);
+                console.log(tokenIdBigNumber);
 
                 
 
@@ -410,7 +410,7 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                     let profile = await nftProfileFactory_contract.profileByAddressOwner(post?.creator);
 
 
-                    let postUrl = await nftMyProfile_contract.getPostsURIById(parseInt(post.PostId._hex));
+                    let postUrl = await nftMyProfile_contract.getTokenURIById(parseInt(post.PostId._hex));
                     const responseData = await fetchToken(postUrl);
                     const image = await fetchToken(profile.profileUrl)
                     const like = await socialMedia_contract.likedBy(address, parseInt(post.PostId._hex))
@@ -483,7 +483,7 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
 
             try {
 
-                const comm = await socialMedia_contract.getAllCommentsMadeToPost(parseInt(postId))
+                const comm = await socialMedia_contract.getAllCommentsMadeToPost(parseInt(PostId))
 
                 store.isLoading = true;
 
@@ -877,46 +877,46 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
 
                 console.log("ejrheh", receipt, "IMYSM");
 
-                // const tokenIdBigNumber = receipt?.events[3].args.profileId;
+                const tokenIdBigNumber = receipt?.events[3].args.tokenId;
 
-                // // Convert BigNumber to JavaScript number
-                // const discussionId = tokenIdBigNumber.toNumber();
+                // Convert BigNumber to JavaScript number
+                const discussionId = parseInt(tokenIdBigNumber);
 
-                // console.log(discussionId);
-
-                
-                // const publishDiscussion = await discussion_contract.createDiscussion(
-                //     discussionData?.profileContract?.address,
-                //     discussionId,
-                // )
-
-                // // store.isLoading = true;
-
-                // // console.log(publishDiscussion);
-                // let publishedDiscussion = await publishDiscussion.wait()
-                // console.log(publishedDiscussion);
-
+                console.log(discussionId);
 
                 
-                // console.log(publishedDiscussion?.events[1].args.discussionId);
+                const publishDiscussion = await discussion_contract.createDiscussion(
+                    discussionData?.profileContract?.address,
+                    discussionId,
+                )
 
-                // const publishedDiscussionIdBigNumber = publishedDiscussion?.events[1].args.discussionId
-                // const publishedDiscussionId = publishedDiscussionIdBigNumber.toNumber()
+                // store.isLoading = true;
 
-                // // // not decodeFunctionData
-                // // // let decodedData = new ethers.utils.Interface(nftFactory_ABI).decodeFunctionResult('deployNFTContract', encodedData)
-                // // // encodedData is found in receipt
+                // console.log(publishDiscussion);
+                let publishedDiscussion = await publishDiscussion.wait()
+                console.log(publishedDiscussion);
 
-                // if (publishedDiscussionId) {
-                //     store.creatediscussionState = 'success'; // Set state to success after successful profile creation
-                //     notifySuccess("Added discussion successfully!");
 
-                //     // Push the storedResponse to the profiles array
-                //     // store.createddiscussions.push(storedResponse);
-                // } else {
-                //     store.creatediscussionState = 'error'; // Set state to error if contract address is not returned
-                //     notifyError('Error creating discussion: Deployed contract address not returned.');
-                // }
+                
+                console.log(publishedDiscussion?.events[1].args.discussionId);
+
+                const publishedDiscussionIdBigNumber = publishedDiscussion?.events[1].args.discussionId
+                const publishedDiscussionId = parseInt(publishedDiscussionIdBigNumber)
+
+                // // not decodeFunctionData
+                // // let decodedData = new ethers.utils.Interface(nftFactory_ABI).decodeFunctionResult('deployNFTContract', encodedData)
+                // // encodedData is found in receipt
+
+                if (publishedDiscussionId) {
+                    store.creatediscussionState = 'success'; // Set state to success after successful profile creation
+                    notifySuccess("Added discussion successfully!");
+
+                    // Push the storedResponse to the profiles array
+                    // store.createddiscussions.push(storedResponse);
+                } else {
+                    store.creatediscussionState = 'error'; // Set state to error if contract address is not returned
+                    notifyError('Error creating discussion: Deployed contract address not returned.');
+                }
 
             } catch (error) {
                 store.creatediscussionState = 'error'; // Set state to error if an error occurs during profile creation
