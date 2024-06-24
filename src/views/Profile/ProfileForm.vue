@@ -138,6 +138,8 @@ const formFields = ref([
 const CreateProfile = async (formValues) => {
   try {
     await alphaConnectStore.createProfile(formValues);
+    emits('closeDialog')
+    console.log("doen");
     await alphaConnectStore.loadMyProfile(alphaConnectStore.getConnectedAddress());
   } catch (error) {
     console.error('Error creating profile:', error);

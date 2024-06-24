@@ -6,6 +6,7 @@ export const walletAddressConnected = ref("");
 export const ipfsGateway = 'http://127.0.0.1:8080/ipfs'
 
 export const socialMedia = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+// export const socialMedia = "0x6A29eEa29B096e9CA69dce82cFB7eAc1F46c7d1c" not working
 // export const socialMedia = "0x8aFa68f231B99A650B28694ed8B79A3A0a7e8DDB"
 export const socialMedia_ABI = [
 	{
@@ -32,11 +33,6 @@ export const socialMedia_ABI = [
 			}
 		],
 		"name": "AccessControlUnauthorizedAccount",
-		"type": "error"
-	},
-	{
-		"inputs": [],
-		"name": "ReentrancyGuardReentrantCall",
 		"type": "error"
 	},
 	{
@@ -744,46 +740,6 @@ export const socialMedia_ABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "getAllPublishedNews",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "NewsId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "newsUrl",
-						"type": "string"
-					},
-					{
-						"internalType": "address",
-						"name": "creator",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "time",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bool",
-						"name": "publish",
-						"type": "bool"
-					}
-				],
-				"internalType": "struct AlphaConnect.News[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -1165,6 +1121,7 @@ export const socialMedia_ABI = [
 ]
 
 export const profileFactory_Address = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+// export const profileFactory_Address = "0xD5Fd5aA1BF7acc61282Db698B6cC2CfE4aAb21E1" not working
 // export const profileFactory_Address = "0xCdE1eBE8E1e46B6e908CbD8B971F4D4536802F79"
 export const profileFactory_ABI = [
 	{
@@ -1255,11 +1212,6 @@ export const profileFactory_ABI = [
 			{
 				"internalType": "address",
 				"name": "owner",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "ProfileContract",
 				"type": "address"
 			},
 			{
@@ -1412,11 +1364,6 @@ export const profileFactory_ABI = [
 						"type": "address"
 					},
 					{
-						"internalType": "address",
-						"name": "ProfileContract",
-						"type": "address"
-					},
-					{
 						"internalType": "string",
 						"name": "username",
 						"type": "string"
@@ -1492,6 +1439,47 @@ export const profileFactory_ABI = [
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_contractAddress",
+				"type": "address"
+			}
+		],
+		"name": "getprofileByAddressContract",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "username",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "profileUrl",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "time",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct ProfileFactory.MyNFTProfile",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "getprofileByAddressOwner",
 		"outputs": [
@@ -1503,8 +1491,44 @@ export const profileFactory_ABI = [
 						"type": "address"
 					},
 					{
+						"internalType": "string",
+						"name": "username",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "profileUrl",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "time",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct ProfileFactory.MyNFTProfile",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_username",
+				"type": "string"
+			}
+		],
+		"name": "getprofileByUsername",
+		"outputs": [
+			{
+				"components": [
+					{
 						"internalType": "address",
-						"name": "ProfileContract",
+						"name": "owner",
 						"type": "address"
 					},
 					{
@@ -1571,11 +1595,6 @@ export const profileFactory_ABI = [
 				"type": "address"
 			},
 			{
-				"internalType": "address",
-				"name": "ProfileContract",
-				"type": "address"
-			},
-			{
 				"internalType": "string",
 				"name": "username",
 				"type": "string"
@@ -1607,11 +1626,6 @@ export const profileFactory_ABI = [
 			{
 				"internalType": "address",
 				"name": "owner",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "ProfileContract",
 				"type": "address"
 			},
 			{
@@ -2391,7 +2405,8 @@ export const nftMyProfile_ABI = [
 		"type": "receive"
 	}
 ]
-export const discussionContract_Address = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
+export const discussionGround_Address = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
+// export const discussionGround_Address = "0xD02e59FB067a581689C84F55CdC6391C742b7ED6"
 export const DiscussionFactory_ABI = [
 	{
 		"inputs": [],
@@ -2825,7 +2840,7 @@ export const DiscussionFactory_ABI = [
 						"type": "uint256"
 					}
 				],
-				"internalType": "struct DiscussionFactory.Discussion[]",
+				"internalType": "struct DiscussionGround.Discussion[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -2880,7 +2895,7 @@ export const DiscussionFactory_ABI = [
 						"type": "uint256"
 					}
 				],
-				"internalType": "struct DiscussionFactory.Discussion[]",
+				"internalType": "struct DiscussionGround.Discussion[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -2935,7 +2950,7 @@ export const DiscussionFactory_ABI = [
 						"type": "uint256"
 					}
 				],
-				"internalType": "struct DiscussionFactory.Discussion[]",
+				"internalType": "struct DiscussionGround.Discussion[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -2996,7 +3011,7 @@ export const DiscussionFactory_ABI = [
 						"type": "uint256"
 					}
 				],
-				"internalType": "struct DiscussionFactory.Answer[]",
+				"internalType": "struct DiscussionGround.Answer[]",
 				"name": "",
 				"type": "tuple[]"
 			}

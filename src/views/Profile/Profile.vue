@@ -55,6 +55,7 @@ const myProfile = computed(() => {
 
 onMounted(async () => {
     await alphaConnectStore.loadMyProfile(alphaConnectStore.getConnectedAddress()); 
+    console.log(await alphaConnectStore.getConnectedAddress(), "if ts not good then its not done");
 });
 
 </script>
