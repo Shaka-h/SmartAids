@@ -1,24 +1,53 @@
 <template>
-        <div v-if="myProfile?.length" class="row h-full p-4" >
-            <div class="col-md-10 pr-10 md:w-full detail" style=""> 
-                <div class="h-1/2 rounded-lg" style="background-color: #40128B42">
+    <div v-if="myProfile?.length">
+        <div class="border p-4 flex justify-between itenms-center">
+        <div class="flex flex-row space-x-4 items-center">
+            <div><svg-icon :name="'comment'" class="icon cursor-pointer" color="#020202"></svg-icon></div>
+            <div class="text-2xl font-bold">MY ACCOUNT</div>
+        </div>
+        
+        <div class="flex">
+            <template v-for="(tab, index) of follows" :key="index">
+              <button class="primary2-action-btn mx-1" v-if="tab.id === activeTab">
+                {{ tab.name }}
+              </button>
+              <button class="primary-action-btn mx-1" v-else @click="activeTab = tab.id">
+                {{ tab.name }}
+              </button>
+            </template>
+        </div>
+
+        </div>
+
+        <div class="mt-4">
+            <div v-if="activeTab === 'all'" class="flex justify-center">
+                <div class="rounded-lg  w-2/3" style="background-color: #40128B42">
                     <Details />
                 </div>
-                <div class="mt-8 h-1/2">
+            </div>
+
+            <div v-if="activeTab === 'followers'">
+                <div class="">
+                    <Follows />
+                </div>
+            </div>
+
+            <div v-if="activeTab === 'following'">
+                <div class="">
                     <MyPosts :profile-contract="myProfile[0]?.profileContract"/>
                 </div>
             </div>
-    
-            <div class="col-md-2 border-l-2 follow">
-                <Follows />
-            </div>  
+            
+             
         </div>
-    
-       <div v-if="!myProfile?.length" class="flex justify-center h-1/3 items-center">
-        <div class="px-4  cursor-pointer ">
-            <ProfileForm @closeDialog="makeAPost=false" :open-dialog="makeAPost"  ></ProfileForm>
-        </div>
-       </div>
+        
+    </div>
+
+    <div v-if="!myProfile?.length" class="flex justify-center items-center">
+    <div class="px-4 w-full bg-gray-300 h-full flex justify-center items-center">
+        <NoProfile></NoProfile>
+    </div>
+    </div>
 
    
 </template>
@@ -33,10 +62,12 @@ import { useRoute } from 'vue-router';
 import ProfileForm from '../../views/Profile/ProfileForm.vue'
 import { useAlphaConnectStore } from "@/store/index.js";
 import {storeToRefs} from "pinia";
+import NoProfile from './NoProfile.vue';
 
 const alphaConnectStore = useAlphaConnectStore();
 const makeAPost = ref(false)
 const { getStoreItem } = storeToRefs(alphaConnectStore)
+const activeTab = ref("all")
 
 // const myProfile = computed(() => {
 //   return getStoreItem.value("myProfile").map(profile => {
@@ -47,6 +78,22 @@ const { getStoreItem } = storeToRefs(alphaConnectStore)
 //   })
 // })
 
+const follows = ref([
+    {
+        name: "Profile",
+        id: 'all'
+    },
+    {
+        name: "My Network",
+        id: 'followers'
+    },
+    {
+        name: "My Posts",
+        id: 'following'
+    },
+    
+])
+
 const myProfile = computed(() => {
   return getStoreItem.value("myProfile")
 })
@@ -55,7 +102,6 @@ const myProfile = computed(() => {
 
 onMounted(async () => {
     await alphaConnectStore.loadMyProfile(alphaConnectStore.getConnectedAddress()); 
-    console.log(await alphaConnectStore.getConnectedAddress(), "if ts not good then its not done");
 });
 
 </script>

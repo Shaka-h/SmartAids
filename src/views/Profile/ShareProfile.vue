@@ -1,48 +1,52 @@
 <template>
-    <v-dialog max-width="40%">
-        <template v-slot:activator="{ props: activatorProps }">
-          <v-btn
-            v-bind="activatorProps"
-            color="surface-variant"
-            text="Share Profile"
-            variant="flat"
-            persistent
-          ></v-btn>
-        </template>
-      
-        <template v-slot:default="{ isActive }">
-          <v-card title="Share My Profile">
-            <v-card-text>
-                <v-card-actions>
-                    <v-spacer></v-spacer>      
-                    <v-btn
-                      text="Close"
-                      @click="isActive.value = false"
-                    ></v-btn>
-                  </v-card-actions>
-              <div> 
-                <div class="flex items-center space-x-2"> 
-                    <div class="w-full p-4"><input type="text" v-model="search" placeholder="Search Username" class="form-control input" /></div>
-                </div>
-                </div>
-                <div> 
-                    <div @click="shareProfile(profile)" v-for="(profile, index) of filteredData" :key="index" class="hover:bg-blue-400 border rounded-lg py-2 px-4 w-full cursor-pointer mb-2 flex justify-between"> 
-                        <div>{{ profile[2] }}</div>
-                        <div class="cursor-pointer">
-                            <svg-icon :name="'download3'" class="icon cursor-pointer" color="#020202"></svg-icon>
-                        </div>
-                    </div>
-                </div>
-            </v-card-text>
-          </v-card>
-        </template>
-      </v-dialog>
+  <v-dialog v-model="dialog" :persistent="true" width="950">
+    <div class="bg-slate-100 rounded shadow" style="background-color: #E8E8E8">  
+      <div
+        class="flex justify-between items-center p-2 text-gray-500"
+      >
+        <span class="font-bold px-2">
+          <span v-if="title">{{ title }}</span>
+        </span>
+        <button @click="$emit('closeDialog', true)">
+          <svg-icon
+            name="close"
+            height="h-6"
+            width="w-6"
+            color="#a91926"
+            :override_color="true"
+            :stroke="false"
+          ></svg-icon>
+        </button>
+      </div>
+
+      <div class="p-5 "> 
+        <div> 
+          <div class="flex items-center space-x-2"> 
+              <div class="w-full p-4"><input type="text" v-model="search" placeholder="Search Username" class="form-control input" /></div>
+          </div>
+          </div>
+          <div> 
+              <div @click="shareProfile(profile)" v-for="(profile, index) of filteredData" :key="index" class="">
+                <div v-if="!profile?.myProfile" class="hover:bg-blue-400 border rounded-lg py-2 px-4 w-full cursor-pointer mb-2 flex space-x-2 items-center">
+                  <div>   
+                      <img :src="`http://127.0.0.1:8080/ipfs/${profile?.profilePhoto}`" class="w-10 h-10 rounded-full" alt="Profile picture"/>
+                  </div>
+                  <div>{{ profile?.username  }}</div>
+              </div>
+              </div>
+          </div>
+      </div>
+       
+     </div>
+  </v-dialog>
 </template>
 
+
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { useAlphaConnectStore } from "@/store/index.js";
 import {storeToRefs} from "pinia";
+import SvgIcon from "@/components/shared/SvgIcon.vue";
 
 const props = defineProps(["openDialog", "selectedData"]);
 const emits = defineEmits(["closeDialog"]);
@@ -75,8 +79,12 @@ const filteredData = computed(() => {
 
 const shareProfile = async (profile) => {
   await alphaConnectStore.shareProfile(profile);
-
+  emits('closeDialog')
 }
+
+watch(() => props.openDialog, (value) => {
+  dialog.value = value
+})
 
 onMounted(async () => {
   await alphaConnectStore.loadAllProfile();

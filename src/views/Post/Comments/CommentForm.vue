@@ -59,11 +59,12 @@ const formFields = ref([
 const CommentPost = async (formValues) => {
   emits('closeDialog')
   await alphaConnectStore.commentPost(formValues,props?.selectedPost?.PostId);
+  await alphaConnectStore.loadPostsComments(props?.selectedPost?.PostId);
 }
 
-  watch(() => props.openDialog, (value) => {
-    dialog.value = value
-  })
+watch(() => props.openDialog, (value) => {
+  dialog.value = value
+})
 
   
   </script>

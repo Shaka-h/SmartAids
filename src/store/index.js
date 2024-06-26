@@ -104,6 +104,50 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
             }
         },
 
+        async editProfile(profileData) {
+            const store = this;
+            console.log(profileData);
+
+            try {
+                store.createProfileState = 'pending'; // Set state to pending while profile creation is in progress
+
+                const profileCID = await addMetadataFile({
+                    "name": profileData.name,
+                    "fullName": profileData.fullName,
+                    "photoCID": profileData.photo[0].attachmentPath,
+                    "organisation": profileData.institution,
+                    "bibliography": profileData.bibliography,
+                    "skills": profileData.skills,
+                    "contacts": profileData.links
+                });
+
+                
+                const editedProfile = await nftProfileFactory_contract.editProfile(
+                    profileData?.profileContract,
+                    profileCID
+                );
+
+                store.isLoading = true;
+                let storedResponse = await editedProfile.wait();
+                console.log(storedResponse, "lol");
+
+                if (storedResponse?.events[0]?.event == "NFTProfileUpdated") {
+                    store.createProfileState = 'success'; // Set state to success after successful profile creation
+                    notifySuccess("Updated profile successfully!");
+
+                    // Push the storedResponse to the profiles array
+                    // store.profiles.push(storedResponse);
+                } else {
+                    store.createProfileState = 'error'; // Set state to error if contract address is not returned
+                    notifyError('Error creating profile: Deployed contract address not returned.');
+                }
+            } catch (error) {
+                store.createProfileState = 'error'; // Set state to error if an error occurs during profile creation
+                notifyError('Error creating profile: ' + error.message);
+            } finally {
+                store.isLoading = false;
+            }
+        },
 
         async loadMyProfile(address) {
             const store = this;
@@ -115,6 +159,7 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                 // Fetch profile data from the blockchain network
                 const profileData = await nftProfileFactory_contract.profileByAddressOwner(address);
 
+                console.log(profileData, "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
                 // Extract the token URL from profileData
                 const tokenUrl = profileData[3];
 
@@ -158,8 +203,38 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                 // Fetch profile data from the blockchain network
                 const getAllDeployedNFTCollections = await nftProfileFactory_contract.getAllDeployedNFTCollections()
 
+
+                const promises = getAllDeployedNFTCollections.map(async (profile) => {
+                    const profileDetails = await fetchData(profile[3]);
+                    const responseData = await this.loadProfile(profile[0]);
+                    const followingStatus = await this.isFollowingProfile(profile[0]);
+                    const connectedAddress = (await this.getConnectedAddress()).toLowerCase();
+                    const profileAddress = profile[0].toLowerCase();                   
+                    const myProfile = connectedAddress === profileAddress;
+
+                    console.log(connectedAddress, profile[0], myProfile);
+                    let timestamp = profile[4];
+                    let readableDate = new Date(timestamp * 1000).toLocaleString();
+
+                        return {
+                            ...profile,
+                            timestamp: readableDate,
+                            isFollowing: followingStatus,
+                            profilePhoto: profileDetails[0]?.photoCID,
+                            myProfile: myProfile
+                        };
+                });
+
+                const listItem = await Promise.all(promises);
+  
+
                 // Update store state with fetched profiles
-                store.state['allProfiles'] = getAllDeployedNFTCollections;
+                store.state['allProfiles'] = listItem;
+
+
+
+                // Update store state with fetched profiles
+                // store.state['allProfiles'] = getAllDeployedNFTCollections;
 
             } catch (error) {
                 console.error('Error loading profiles:', error);
@@ -183,9 +258,22 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                     const result = [];
                     const followName = await nftProfileFactory_contract.profileByAddressOwner(follow);
                     result.push(followName);
-                    return result;
+
+                    const profileDetails = await fetchData(followName[3]);
+                    const responseData = await this.loadProfile(followName[0]);
+                    const followingStatus = await this.isFollowingProfile(followName[0]);
+                    let timestamp = followName[4];
+                    let readableDate = new Date(timestamp * 1000).toLocaleString();
+
+                        return {
+                            ...followName,
+                            timestamp: readableDate,
+                            isFollowing: followingStatus,
+                            profilePhoto: profileDetails[0]?.photoCID
+                        };
                 });
 
+               
                 const myFollowers = await Promise.all(promises);
 
                 // Update store state with fetched profiles
@@ -209,13 +297,25 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                 // Fetch profile data from the blockchain network
                 const getMyFollowing = await nftProfileFactory_contract.getAllfollowing(myAddress)
 
-
                 const getAllfollowingpromises = getMyFollowing.map(async (follow) => {
                     const result = [];
                     const followName = await nftProfileFactory_contract.profileByAddressOwner(follow);
                     result.push(followName);
-                    return result;
+
+                    const profileDetails = await fetchData(followName[3]);
+                    const responseData = await this.loadProfile(followName[0]);
+                    const followingStatus = await this.isFollowingProfile(followName[0]);
+                    let timestamp = followName[4];
+                    let readableDate = new Date(timestamp * 1000).toLocaleString();
+
+                        return {
+                            ...followName,
+                            timestamp: readableDate,
+                            isFollowing: followingStatus,
+                            profilePhoto: profileDetails[0]?.photoCID
+                        };
                 });
+
 
                 const myFollowing = await Promise.all(getAllfollowingpromises);
 
@@ -240,11 +340,23 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                 // Fetch profile data from the blockchain network
                 const getMyBusinessCards = await nftProfileFactory_contract.getMybusinessCard()
 
-                const getMyBusinessCardspromises = getMyBusinessCards.map(async (follow) => {
+                const getMyBusinessCardspromises = getMyBusinessCardspromises.map(async (follow) => {
                     const result = [];
                     const card = await nftProfileFactory_contract.profileByAddressOwner(follow);
                     result.push(card);
-                    return result;
+
+                    const profileDetails = await fetchData(followName[3]);
+                    const responseData = await this.loadProfile(followName[0]);
+                    const followingStatus = await this.isFollowingProfile(followName[0]);
+                    let timestamp = followName[4];
+                    let readableDate = new Date(timestamp * 1000).toLocaleString();
+
+                        return {
+                            ...followName,
+                            timestamp: readableDate,
+                            isFollowing: followingStatus,
+                            profilePhoto: profileDetails[0]?.photoCID
+                        };
                 });
 
 
@@ -268,7 +380,7 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
             try {
                 store.followProfile = 'pending'; // Set state to pending while profile creation is in progress                
 
-                const follow = await nftProfileFactory_contract.followProfile(profile?.ProfileContract)
+                const follow = await nftProfileFactory_contract.followProfile(profile?.owner)
 
                 store.isLoading = true;
                 let storedResponse = await follow.wait();
@@ -370,7 +482,6 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
         },
 
         async loadMyProfileContract(address) {
-            console.log(address, "sweetness");
 
             const store = this;
 
@@ -380,7 +491,6 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                 const getprofileContract = await nftProfileFactory_contract.profileByAddressOwner(address)
 
                 const profileContract = await getprofileContract?.ProfileContract
-                console.log("jbfhrguikbkbhbi");
                 const nftMyProfile_contract = new ethers.Contract(profileContract, nftMyProfile_ABI, signer);
 
                 // Update store state with fetched profiles
@@ -627,7 +737,7 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
             const store = this;
 
             try {
-                const shareMyCard = await nftProfileFactory_contract.shareCard(profile?.ProfileContract)
+                const shareMyCard = await nftProfileFactory_contract.shareCard(profile?.owner)
 
                 store.isLoading = true;
                 const result = await shareMyCard.wait();
@@ -655,7 +765,6 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
 
 
         async loadMyPosts(myAddress) {
-            console.log(myAddress, "kimnanan");
             const store = this;
 
             try {
@@ -674,7 +783,7 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                 let nftMyProfile_contract = new ethers.Contract(myProfileContractAddress, nftMyProfile_ABI, signer);
 
                 const promises = getMyPosts.map(async (post) => {
-                    let postUrl = await nftMyProfile_contract.getPostsURIById(parseInt(post.PostId._hex));
+                    let postUrl = await nftMyProfile_contract.getTokenURIById(parseInt(post.PostId._hex));
                     console.log(postUrl, "postUrl");
                     const responseData = await fetchToken(postUrl);
                     console.log(responseData, "responseData");
@@ -842,9 +951,18 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
 
         },
 
+        async isFollowingProfile(profileAddress) {
+            try {
+                const isFollowing = await nftProfileFactory_contract.isFollowingProfile(profileAddress);
+                return isFollowing;  // Assuming it returns a boolean or similar value
+            } catch (error) {
+                console.error("Error checking follow status:", error);
+                return false;  // Or handle the error as needed
+            }
+        },
+
         async getConnectedAddress() {
             const provider= await window.ethereum.request({ method: 'eth_requestAccounts' })
-            console.log(provider[0], "provider");
             return provider[0]        
         },
         
@@ -984,6 +1102,8 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
             }
 
         },
+
+        
 
     },
 });

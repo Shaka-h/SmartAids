@@ -1,54 +1,54 @@
 <template>
-    <v-dialog max-width="60%">
-        <template v-slot:activator="{ props: activatorProps }">
-          <v-btn
-            v-bind="activatorProps"
-            color="surface-variant"
-            text="Create Profile"
-            variant="flat"
-            persistent
-          ></v-btn>
-        </template>
-      
-        <template v-slot:default="{ isActive }">
-          <v-card title="My Profile">
-            <v-card-text>
-              <div> 
-                    <dynamic-form-main
-                        :form-fields="formFields"
-                        submit-label="send"
-                        :showLabels="true"
-                        @on-submit="CreateProfile"
-                    ></dynamic-form-main>
-                </div>
-            </v-card-text>
-      
-            <v-card-actions>
-              <v-spacer></v-spacer>      
-              <v-btn
-                text="Close"
-                @click="isActive.value = false"
-              ></v-btn>
-            </v-card-actions>
-          </v-card>
-        </template>
-      </v-dialog>
+  <v-dialog v-model="dialog" :persistent="true" width="950">
+    <div class="bg-slate-100 rounded shadow" style="background-color: #E8E8E8">  
+      <div
+        class="flex justify-between items-center p-2 text-gray-500"
+      >
+        <span class="font-bold px-2">
+          <span v-if="title">{{ title }}</span>
+        </span>
+        <button @click="$emit('closeDialog', true)">
+          <svg-icon
+            name="close"
+            height="h-6"
+            width="w-6"
+            color="#a91926"
+            :override_color="true"
+            :stroke="false"
+          ></svg-icon>
+        </button>
+      </div>
+
+      <div class="p-5 "> 
+        <dynamic-form-main
+            :form-fields="formFields"
+            submit-label="send"
+            :showLabels="true"
+            @on-submit="CreateProfile"
+        ></dynamic-form-main>
+      </div>
+       
+     </div>
+  </v-dialog>
 </template>
 
+
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, computed } from 'vue';
 import DynamicFormMain from "@/components/shared/forms/DynamicFormMain.vue";
 import {getSignerContract} from '@/scripts/ContractUtils';
 import {patchFormFields} from "@/interfaces/global.interface";
 import { useAlphaConnectStore } from "@/store/index.js";
+import {storeToRefs} from "pinia";
+import SvgIcon from "@/components/shared/SvgIcon.vue";
 
 const alphaConnectStore = useAlphaConnectStore();
-const props = defineProps(["openDialog", "selectedProfile"]);
+const props = defineProps(["openDialog", "profileData", "profileContract"]);
 const emits = defineEmits(["closeDialog"]);
+const { getStoreItem } = storeToRefs(alphaConnectStore)
 
 const dialog = ref(false);
 
-const close = ref(false)
 const formFields = ref([
     {
         inputType: "file",
@@ -136,22 +136,50 @@ const formFields = ref([
 ]);
 
 const CreateProfile = async (formValues) => {
-  try {
-    await alphaConnectStore.createProfile(formValues);
-    emits('closeDialog')
-    console.log("doen");
-    await alphaConnectStore.loadMyProfile(alphaConnectStore.getConnectedAddress());
-  } catch (error) {
-    console.error('Error creating profile:', error);
-  }
-};
-
-watch(() => props.selectedProfile, (value) => {
-    if (value && value?.length){
-        formFields.value = patchFormFields(formFields.value, {...value[0], id: 1})
+  if (!props?.profileContract) {
+    try {
+      await alphaConnectStore.createProfile(formValues);
+      emits('closeDialog')
+      console.log("deno");
+      await alphaConnectStore.loadMyProfile(alphaConnectStore.getConnectedAddress());
+    } catch (error) {
+      console.error('Error creating profile:', error);
     }
+  } else {
+    try {
+      await alphaConnectStore.editProfile({ ...formValues, profileContract: props?.profileContract});
+      emits('closeDialog')
+      console.log("doen", alphaConnectStore.getConnectedAddress());
+      await alphaConnectStore.loadMyProfile(alphaConnectStore.getConnectedAddress());
+    } catch (error) {
+      console.error('Error creating profile:', error);
+    }
+  }
+ }
+
+watch(() => props.openDialog, (value) => {
+  dialog.value = value
+  if(props?.profileData){
+    formFields.value = patchFormFields(formFields.value, {...props?.profileData[0], id: 1})
+  }
 })
 
-onMounted(() => {
+// watch(() => props.profileData, (value) => {
+//     if (value && value?.length){
+//       dialog.value = true
+//       formFields.value = patchFormFields(formFields.value, {...value[0], id: 1})
+//     }
+// })
+
+
+const myProfile = computed(() => {
+  return getStoreItem.value("myProfile")
+})
+
+
+
+onMounted(async () => {
+    await alphaConnectStore.loadMyProfile(alphaConnectStore.getConnectedAddress()); 
 });
+
 </script>

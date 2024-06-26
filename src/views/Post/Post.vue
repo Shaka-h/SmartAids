@@ -14,7 +14,7 @@
       <div class="flex justify-between overflow-hidden">
         <div class="posts">
           <div v-for="(post, index) of listItem" :key="index"
-            class="col-md-12 border cursor-pointer items-center flex flex-col mb-8 mt-4 rounded-lg">
+            class="col-md-12 border items-center flex flex-col mb-8 mt-4 rounded-lg">
             <div>
               <div class="flex space-x-4 mt-4 items-center">
                 <div v-if="!post?.image"
