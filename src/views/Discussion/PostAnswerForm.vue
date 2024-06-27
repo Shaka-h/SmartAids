@@ -5,7 +5,7 @@
         class="flex justify-between items-center p-2 text-gray-500"
       >
         <span class="font-bold px-2">
-          <span v-if="title">{{ $t(title) }}</span>
+          <span v-if="title">{{ $t(title) }}</span>{{ props?.discussionId }}
         </span>
         <button @click="$emit('closeDialog', true)">
           <svg-icon
@@ -22,9 +22,9 @@
       <div class="p-5 "> 
           <dynamic-form-main
               :form-fields="formFields"
-              submit-label="Comment"
+              submit-label="Post Answer"
               :showLabels="true"
-              @on-submit="CommentPost"
+              @on-submit="postAnswer"
           ></dynamic-form-main>
       </div>
        
@@ -36,14 +36,17 @@
 
 <script setup>
 import SvgIcon from "@/components/shared/SvgIcon.vue";
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, computed } from 'vue';
 import DynamicFormMain from "@/components/shared/forms/DynamicFormMain.vue";
 import { useAlphaConnectStore } from "@/store/index.js";
+import {storeToRefs} from "pinia";
 
 const alphaConnectStore = useAlphaConnectStore();
 const dialog = ref(false)
 
-const props = defineProps(['openDialog', 'selectedPost'])
+const { getStoreItem } = storeToRefs(alphaConnectStore)
+
+const props = defineProps(['openDialog', 'discussionId'])
 const emits = defineEmits(['closeDialog'])
 
 const formFields = ref([
@@ -56,18 +59,33 @@ const formFields = ref([
 }
 ]);       
 
-const CommentPost = async (formValues) => {
-await alphaConnectStore.commentPost(formValues,props?.selectedPost);
+watch(() => props.openDialog, (value) => {
+  dialog.value = value
+})
+
+
+
+const myProfileContract = computed(() => {
+  return getStoreItem.value("myProfileContract")
+})
+
+const postAnswer = async (formValues) => {
+  await alphaConnectStore.postAnswer({ ...formValues, discussionId: props?.discussionId });
+
+  emits('closeDialog')
 }
 
 watch(() => props.openDialog, (value) => {
   dialog.value = value
 })
 
-
+onMounted( async () => {
+    await alphaConnectStore.loadMyProfileContract(alphaConnectStore.getConnectedAddress()); //hii ndo ina loaf myProfileContract
+})
 </script>
-
 
 <style scoped>
 
 </style>
+
+

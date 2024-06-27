@@ -107,22 +107,28 @@
                     <div class="w-full p-4"><input type="text" v-model="search" placeholder="Search Username" class="form-control input" /></div>
                 </div>
 
-                <div class="border w-1/2 p-4">
+                <div class="border ml-5 p-4 w-2/3">
                     <div v-for="(card, index) of businessCards" :key="index" class="bg-gradient border rounded-lg py-2 px-4 w-full mb-2 flex justify-between"> 
-                        <div>          
-                            <!-- <img :src="`http://127.0.0.1:8080/ipfs/${profile?.profileUrl}`" class="w-10 h-10 rounded-full" alt="Profile picture"/> -->
+                        <div class="rows flex items-center col-md-8">
+                            <div class="col-md-6 flex items-center space-x-2">
+                                <div>   
+                                    <img :src="`http://127.0.0.1:8080/ipfs/${card?.profilePhoto}`" class="w-10 h-10 rounded-full" alt="card picture"/>
+                                </div>
+                                <div>{{ card?.username  }}</div>
+                            </div>
+                            <div class="col-md-6"> <span>Since :</span> {{ card?.timestamp }}</div>
+
                         </div>
-                        <div>{{ card[0][2] }}</div>
-                        <!-- <div> <span>Since :</span> {{ card.timestamp }}</div> -->
-                        <!-- <div @click="follow(profile)" class="hover:border-b cursor-pointer">follow</div> -->
                         <div @click="viewProfile(card)"  class="cursor-pointer hover:bg-white p-1 rounded-lg">
                             <svg-icon name='view' class="icon cursor-pointer" color="#020202"></svg-icon>
                         </div>
                         <div @click="viewProfile(card)" class="cursor-pointer hover:bg-white p-1 rounded-lg">
                             <svg-icon :name="'download3'" class="icon cursor-pointer" color="#020202"></svg-icon>
-                        </div>
-                    </div>
+                        </div>                    
+                    </div>                           
                 </div>
+
+                
               </div>
 
                 <div v-if="!businessCards.length">
@@ -193,11 +199,11 @@ const allfollowing = computed(() => {
   return getStoreItem.value("myFollowing")
 })
 
-const businessCard = computed(() => {
+const businessCards = computed(() => {
   return getStoreItem.value("myCards")
 })
 
-const businessCards = computed(() => {
+const businessCard = computed(() => {
   return getStoreItem.value("myCards").map(profile => {   
     // const responseData = await alphaConnectStore.loadProfile(profile[0]);
     // let timestamp = businessCard[0][0][4];
@@ -233,20 +239,21 @@ onBeforeMount(async () => {
     await alphaConnectStore.loadMyFollowing(alphaConnectStore.getConnectedAddress());
 
     await alphaConnectStore.loadMyCards();
+
 })
 
 onMounted(async () => {
 
-nftProfileFactory_contract.on("ProfileFollowed", async () => {
-    await alphaConnectStore.loadMyFollowing(alphaConnectStore.getConnectedAddress());
-    await alphaConnectStore.loadMyFollowers(alphaConnectStore.getConnectedAddress());
-    await alphaConnectStore.loadAllProfile();
+    nftProfileFactory_contract.on("ProfileFollowed", async () => {
+        await alphaConnectStore.loadMyFollowing(alphaConnectStore.getConnectedAddress());
+        await alphaConnectStore.loadMyFollowers(alphaConnectStore.getConnectedAddress());
+        await alphaConnectStore.loadAllProfile();
 
-})
+    })
 
-nftProfileFactory_contract.on("cardShared", async () => {
-    await alphaConnectStore.loadMyCards(alphaConnectStore.getConnectedAddress());
-})
+    nftProfileFactory_contract.on("cardShared", async () => {
+        await alphaConnectStore.loadMyCards();
+    })
 
 })
 

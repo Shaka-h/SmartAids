@@ -13,27 +13,27 @@
     </div>
 
     <div v-if="listItem?.length">
-      
-      <div v-for="(post, index) of posts" :key="index"
-        class="border mt-4 flex flex-row space-x-4 cursor-pointer items-center" @click="viewDiscussion(post)">
+      <div v-for="(discussion, index) of listItem" :key="index"
+        class="border mt-4 flex flex-row space-x-4 items-center" >
         <div class="flex flex-col justify-between border-r-4 p-4">
           <div class="flex items-center">
-            <div><svg-icon :name="'comment'" class="icon cursor-pointer border-b-4 p-2" color="#020202"></svg-icon>
+            <div><svg-icon :name="'comment'" class="icon border-b-4 p-2" color="#020202"></svg-icon>
             </div>
             <div class="flex">0</div>
           </div>
           <div class="flex items-center">
-            <div><svg-icon :name="'like'" class="icon cursor-pointer p-2" color="#020202"></svg-icon></div>
+            <div><svg-icon :name="'like'" class="icon p-2" color="#020202"></svg-icon></div>
             <div class="flex">0</div>
           </div>
         </div>
-        <div>
-          <div class="text-2xl font-bold">{{ post.title }}</div>
+        <div @click="viewDiscussion(discussion)" class="cursor-pointer">
+          <div class="text-2xl font-bold">{{ discussion?.discussionData?.name }}</div>
           <div class="flex space-x-4 items-center mt-4">
-            <div class="text-4xl font-mono text-white w-10"><img width="100%" src="/src/assets/images/eGAlogo.png"
-                alt=""></div>
-            <div class="">{{ post.owner }}</div>
-            <div class="">{{ post.date }}</div>
+            <div class="text-4xl font-mono text-white w-10">
+              <img :src="`http://127.0.0.1:8080/ipfs/${discussion.image}`" class="rounded-lg"></img>
+            </div>
+            <div class="">{{ discussion.owner }}</div>
+            <div class="">{{ discussion.timestamp }}</div>
           </div>
         </div>
       </div>
@@ -59,7 +59,7 @@ import { useAlphaConnectStore } from "@/store/index.js";
 import { storeToRefs } from "pinia";
 import MakeDiscussionForm from "@/views/Discussion/MakeDiscussionForm.vue";
 
-let { signer, nftProfileFactory_contract, socialMedia_contract } = getSignerContract();
+let { signer, nftProfileFactory_contract, socialMedia_contract, discussion_contract } = getSignerContract();
 const router = useRouter()
 const alphaConnectStore = useAlphaConnectStore();
 
@@ -99,7 +99,8 @@ const MakeDiscussion = () => {
 };
 
 const viewDiscussion = (discussion) => {
-  router.push(`/discussion/${discussion.id}`)
+  console.log(discussion);
+  router.push(`/discussion/${discussion?.discussionTokenId}`)
 };
 
 
@@ -114,9 +115,9 @@ onBeforeMount(async () => {
 })
 
 onMounted(async () => {
-  // socialMedia_contract.on("PostCreated", async () => {
-  //   await alphaConnectStore.loadAllPosts(await alphaConnectStore.getConnectedAddress());
-  // })
+  discussion_contract.on("DiscussionCreated", async () => {
+    await alphaConnectStore.loadAllDiscussions(await alphaConnectStore.getConnectedAddress());
+  })
 
   // socialMedia_contract.on("commentMade", async () => {
   //   await alphaConnectStore.loadPostsComments(1);

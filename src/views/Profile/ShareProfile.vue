@@ -27,12 +27,18 @@
           </div>
           <div> 
               <div @click="shareProfile(profile)" v-for="(profile, index) of filteredData" :key="index" class="">
-                <div v-if="!profile?.myProfile" class="hover:bg-blue-400 border rounded-lg py-2 px-4 w-full cursor-pointer mb-2 flex space-x-2 items-center">
+                <div v-if="!profile?.isShared && !profile.myProfile" class="hover:bg-blue-400 border rounded-lg py-2 px-4 w-full cursor-pointer mb-2 flex space-x-2 items-center">
                   <div>   
                       <img :src="`http://127.0.0.1:8080/ipfs/${profile?.profilePhoto}`" class="w-10 h-10 rounded-full" alt="Profile picture"/>
                   </div>
                   <div>{{ profile?.username  }}</div>
-              </div>
+                </div>
+                <div v-if="profile?.isShared && !profile.myProfile" class="bg-gray-400 border rounded-lg py-2 px-4 w-full mb-2 flex space-x-2 items-center">
+                  <div>   
+                      <img :src="`http://127.0.0.1:8080/ipfs/${profile?.profilePhoto}`" class="w-10 h-10 rounded-full" alt="Profile picture"/>
+                  </div>
+                  <div>{{ profile?.username  }}</div>
+                </div>
               </div>
           </div>
       </div>
@@ -43,10 +49,11 @@
 
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, computed, watch, onBeforeMount } from 'vue';
 import { useAlphaConnectStore } from "@/store/index.js";
 import {storeToRefs} from "pinia";
 import SvgIcon from "@/components/shared/SvgIcon.vue";
+import { notifyError, confirmAlert } from '@/services/notificationService';
 
 const props = defineProps(["openDialog", "selectedData"]);
 const emits = defineEmits(["closeDialog"]);
@@ -68,7 +75,7 @@ const formFields = [
 ];
 
 const allDeployedNFTCollections = computed(() => {
-  return getStoreItem.value("allProfiles")
+  return getStoreItem.value("cardsToShare")
 })
 
 const filteredData = computed(() => {
@@ -78,16 +85,34 @@ const filteredData = computed(() => {
 });
 
 const shareProfile = async (profile) => {
-  await alphaConnectStore.shareProfile(profile);
-  emits('closeDialog')
+
+  if(!profile?.isShared){
+    emits('closeDialog')  
+
+    const result = await confirmAlert("Are you sure?", "Share");
+
+    if (result.isConfirmed) {
+      await alphaConnectStore.shareProfile(profile);
+    }    
+  }
+
+  else{
+    notifyError("You have already shared to this account");
+  }  
 }
 
 watch(() => props.openDialog, (value) => {
   dialog.value = value
 })
 
-onMounted(async () => {
-  await alphaConnectStore.loadAllProfile();
+onBeforeMount(async () => {
+  await alphaConnectStore.cardsToShare();
+})
 
-});
+onMounted(async () => {
+nftProfileFactory_contract.on("cardShared", async () => {
+    await alphaConnectStore.loadMyCards();
+})
+
+})
 </script>
