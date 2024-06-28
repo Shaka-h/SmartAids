@@ -19,14 +19,17 @@
           <div class="flex items-center">
             <div><svg-icon :name="'comment'" class="icon border-b-4 p-2" color="#020202"></svg-icon>
             </div>
-            <div class="flex">0</div>
+            <div class="flex">{{ discussion?.answer }}</div>
           </div>
           <div class="flex items-center">
-            <div><svg-icon :name="'like'" class="icon p-2" color="#020202"></svg-icon></div>
-            <div class="flex">0</div>
+            <div v-if="!discussion?.liked"><svg-icon :name="'like'" class="icon p-2"
+                color="#020202"></svg-icon></div>
+            <div v-if="discussion?.liked"><svg-icon :name="'likefill'" class="icon p-2"
+                color="#020202"></svg-icon></div>
+            <div>{{ discussion?.like }}</div>
           </div>
         </div>
-        <div @click="viewDiscussion(discussion)" class="cursor-pointer">
+        <div @click="viewDiscussion(discussion)" class="cursor-pointer w-full">
           <div class="text-2xl font-bold">{{ discussion?.discussionData?.name }}</div>
           <div class="flex space-x-4 items-center mt-4">
             <div class="text-4xl font-mono text-white w-10">

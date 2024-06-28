@@ -46,8 +46,9 @@
             <EmptyPage :message="'You Have No Published Tweets'"></EmptyPage>
           </div>
         </div>
+        
         <div v-if="activeTab === 'discussions'">
-          <EmptyPage :message="'You Have No Published Discussions'"></EmptyPage>
+          <MyDiscussions></MyDiscussions>
         </div>
         <div v-if="activeTab === 'presentations'">
           <EmptyPage :message="'You have No Published Presentations'"></EmptyPage>
@@ -64,8 +65,9 @@ import { useAlphaConnectStore } from "@/store/index.js";
 import { storeToRefs } from "pinia";
 import { useRoute } from 'vue-router';
 import { walletAddressConnected, walletConnected } from "@/scripts/ContractConstants";
-import { getSignerContract } from '../../scripts/ContractUtils';
+import { getSignerContract } from '../../../scripts/ContractUtils';
 import EmptyPage from '@/components/shared/emptyPage.vue';
+import MyDiscussions from './MyDiscussions.vue';
 
 let { socialMedia_contract } = getSignerContract();
 

@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <MakeDiscussionForm :selected-post="selectedPost" :open-dialog="showCard" @close-dialog="showCard = false;"></MakeDiscussionForm>
+    <MakeTutorialForm :selected-post="selectedPost" :open-dialog="showCard" @close-dialog="showCard = false;"></MakeTutorialForm>
 
     <div v-if="!listItem?.length">
       <div class="border p-4 flex justify-between itenms-center">
@@ -57,7 +57,7 @@ import { getSignerContract } from '../../scripts/ContractUtils';
 import { useRouter } from 'vue-router';
 import { useAlphaConnectStore } from "@/store/index.js";
 import { storeToRefs } from "pinia";
-import MakeDiscussionForm from "@/views/Discussion/MakeDiscussionForm.vue";
+import MakeTutorialForm from "@/views/Tutorial/MakeTutorialForm.vue";
 
 let { signer, nftProfileFactory_contract, socialMedia_contract } = getSignerContract();
 const router = useRouter()

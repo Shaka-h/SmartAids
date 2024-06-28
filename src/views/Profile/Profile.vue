@@ -55,7 +55,7 @@
 <script setup>
 import Follows from '../Profile/Follows.vue';
 import Details from './Details.vue';
-import MyPosts from '../Profile/MyPosts.vue'
+import MyPosts from '../Profile/MyPosts/MyPosts.vue'
 import { onMounted, ref, computed } from 'vue';
 import {getSignerContract} from '../../scripts/ContractUtils';
 import { useRoute } from 'vue-router';

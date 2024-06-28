@@ -47,7 +47,7 @@
     </div>
 
     <div v-if="!newsList?.length" class="h-full flex items-center justify-center text-center p-2">
-      <span class="font-semibold text-base">NO NEWS PUBLISHED</span>
+      <EmptyPage :message="'NO NEWS AVAILABLE'"></EmptyPage>
     </div>
 
   </div>
@@ -62,6 +62,7 @@ import SvgIcon from "@/components/shared/SvgIcon.vue";
 import { getSignerContract } from '../../scripts/ContractUtils';
 import { useAlphaConnectStore } from "@/store/index.js";
 import { storeToRefs } from "pinia";
+import EmptyPage from '@/components/shared/emptyPage.vue';
 
 const alphaConnectStore = useAlphaConnectStore();
 let { socialMedia_contract } = getSignerContract();

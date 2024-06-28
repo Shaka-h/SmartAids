@@ -57,36 +57,7 @@ const formFields = ref([
       size: "large",
       required: true,
   },
-  // {
-  //   inputType: "input",
-  //   type: "date",
-  //   label: "startDate",
-  //   label: "Start date",
-  //   size: "medium",
-  //   required: true,
-  // },
-  // {
-  //   inputType: "time",
-  //   name: "startTime",
-  //   label: "Start time",
-  //   size: "medium",
-  //   required: false,
-  // },
-  // {
-  //   inputType: "input",
-  //   type: "date",
-  //   label: "endDate",
-  //   label: "end date",
-  //   size: "medium",
-  //   required: true,
-  // },
-  // {
-  //   inputType: "time",
-  //   name: "endTime",
-  //   label: "end time",
-  //   size: "medium",
-  //   required: false,
-  // },
+  
   {
       inputType: "rich-text",
       name: "description",

@@ -68,7 +68,7 @@
     </div>
 
     <div v-if="!listItem?.length" class="h-full flex items-center justify-center text-center p-2">
-      <span class="font-semibold text-base">NO POSTS AVAILABLE</span>
+      <EmptyPage :message="'NO POSTS AVAILABLE'"></EmptyPage>
     </div>
   </div>
 </template>
@@ -84,6 +84,7 @@ import { useAlphaConnectStore } from "@/store/index.js";
 import { storeToRefs } from "pinia";
 import CommentsList from "@/views/Post/Comments/CommentsList.vue";
 import { walletAddressConnected, walletConnected } from "@/scripts/ContractConstants";
+import EmptyPage from '@/components/shared/emptyPage.vue';
 
 let { signer, nftProfileFactory_contract, socialMedia_contract } = getSignerContract();
 const router = useRoute()

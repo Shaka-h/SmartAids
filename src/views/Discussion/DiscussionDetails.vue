@@ -68,7 +68,7 @@
     <div class="mt-8 flex justify-between items-center">
         <div class="font-bold text-2xl flex items-center">
             <span>ANSWERS</span>
-            <span class="ml-4 flex items-center"> <span>(</span>{{ discussion?.answer }}<span>)</span> </span>
+            <span class="ml-4 flex items-center"> <span>(</span>{{ answers?.length }}<span>)</span> </span>
         </div>
         <div @click="postAnswer()" class="justify-end flex border p-2 rounded-lg bg-primary cursor-pointer">Post Answer
         </div>
@@ -86,7 +86,7 @@
             </div>
 
             <div class="flex items-center space-x-2 mt-2">
-                <div @click="likeAnswer(post)" class="flex space-x-2">
+                <div @click="likeAnswer(answer)" class="flex space-x-2">
                     <div v-if="!answer?.liked"><svg-icon :name="'like'" class="icon cursor-pointer"
                         color="#020202"></svg-icon></div>
                     <div v-if="answer?.liked"><svg-icon :name="'likefill'" class="icon cursor-pointer"
@@ -174,11 +174,11 @@ const unLikeDiscussion = async (discussion) => {
 
 
 const likeAnswer = async (answer) => {
-    console.log(answer);
+    console.log(parseInt(answer?.answerID), route?.params?.discussionId);
   try {
     const likeAnswer = await discussion_contract.likeAnswer(
-      answer.id,
-      route?.params?.discussionId
+        parseInt(answer?.answerID),
+        route?.params?.discussionId
     )
 
     let like = await likeAnswer.wait()
@@ -192,7 +192,8 @@ const likeAnswer = async (answer) => {
 const unLikeAnswer = async (answer) => {
   try {
     const unLikeAnswer = await discussion_contract.unLikeAnswer(
-      parseInt(answer?.answerId)
+        parseInt(answer?.answerID),
+        route?.params?.discussionId
     )
 
     let unlike = await unLikeAnswer.wait()
@@ -218,9 +219,9 @@ onMounted(async () => {
         await alphaConnectStore.loadADiscussion(await alphaConnectStore.getConnectedAddress(), route?.params?.discussionId);
     })
 
-    // socialMedia_contract.on("PostLiked", async () => {
-    //   await alphaConnectStore.loadAllPosts(await alphaConnectStore.getConnectedAddress());
-    // })
+    discussion_contract.on("AnswerLiked", async () => {
+        await alphaConnectStore.loadDiscussionAnswers(route?.params?.discussionId);
+    })
 
 })
 

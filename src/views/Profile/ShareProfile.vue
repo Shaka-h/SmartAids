@@ -54,11 +54,13 @@ import { useAlphaConnectStore } from "@/store/index.js";
 import {storeToRefs} from "pinia";
 import SvgIcon from "@/components/shared/SvgIcon.vue";
 import { notifyError, confirmAlert } from '@/services/notificationService';
+import {getSignerContract} from '../../scripts/ContractUtils';
 
 const props = defineProps(["openDialog", "selectedData"]);
 const emits = defineEmits(["closeDialog"]);
 const alphaConnectStore = useAlphaConnectStore();
 const { getStoreItem } = storeToRefs(alphaConnectStore)
+let {nftProfileFactory_contract} = getSignerContract();
 
 const dialog = ref(false);
 const search = ref("")
