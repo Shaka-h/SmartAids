@@ -91,14 +91,10 @@ const router = useRoute()
 const alphaConnectStore = useAlphaConnectStore();
 const showComments = ref(false)
 // Define posts as a reactive reference
-const posts = ref([]);
-const postDetails = ref();
+
 const showCard = ref(false)
 const selectedPost = ref()
-const postComments = ref()
 const props = defineProps(['profileContract'])
-const nftMyProfile_contract = ref()
-const profile = ref()
 const { getStoreItem } = storeToRefs(alphaConnectStore)
 
 const listItem = computed(() => {

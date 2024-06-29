@@ -37,7 +37,7 @@
       </div>
     </div>
     <div v-if="!listItem.length">
-      <EmptyPage :message="'You Have No Published Tweets'"></EmptyPage>
+      <EmptyPage :message="'You have No Published Presentations'"></EmptyPage>
     </div>
   </div>
 </template>
@@ -54,7 +54,7 @@ import EmptyPage from '@/components/shared/emptyPage.vue';
 import MakeDiscussionForm from "@/views/Discussion/MakeDiscussionForm.vue";
 import { useRouter } from 'vue-router';
 
-let { discussion_contract } = getSignerContract();
+let { tutorial_contract } = getSignerContract();
 
 const alphaConnectStore = useAlphaConnectStore();
 const showCard = ref(false)
@@ -66,38 +66,38 @@ const props = defineProps(['profileContract'])
 const { getStoreItem } = storeToRefs(alphaConnectStore)
 
 const listItem = computed(() => {
-  return getStoreItem.value("myDiscussions")
+  return getStoreItem.value("myTutorials")
 })
 
 const MakeDiscussion = () => {
     showCard.value = true
 };
 
-const viewDiscussion = (discussion) => {
-  console.log(discussion);
-  router.push(`/discussion/${discussion?.discussionId}`)
+const viewDiscussion = (tutorial) => {
+  console.log(tutorial);
+  router.push(`/tutorial/${tutorial?.tutorialId}`)
 };
 
 
 onBeforeMount(async () => {
-  await alphaConnectStore.loadMyDiscussions(await alphaConnectStore.getConnectedAddress());
+  await alphaConnectStore.loadMyTutorials(await alphaConnectStore.getConnectedAddress());
 })
 
 onMounted(async () => {
-  discussion_contract.on("AnswerLiked", async () => {
-    await alphaConnectStore.loadMyDiscussions(await alphaConnectStore.getConnectedAddress());
+  // tutorial_contract.on("AnswerLiked", async () => {
+  //   await alphaConnectStore.loadMyTutorials(await alphaConnectStore.getConnectedAddress());
+  // })
+
+  // tutorial_contract.on("AnswerMade", async () => {
+  //   await alphaConnectStore.loadMyTutorials(await alphaConnectStore.getConnectedAddress());
+  // })
+
+  tutorial_contract.on("DiscussionLiked", async () => {
+    await alphaConnectStore.loadMyTutorials(await alphaConnectStore.getConnectedAddress());
   })
 
-  discussion_contract.on("AnswerMade", async () => {
-    await alphaConnectStore.loadMyDiscussions(await alphaConnectStore.getConnectedAddress());
-  })
-
-  discussion_contract.on("DiscussionLiked", async () => {
-    await alphaConnectStore.loadMyDiscussions(await alphaConnectStore.getConnectedAddress());
-  })
-
-  discussion_contract.on("DiscussionCreated", async () => {
-    await alphaConnectStore.loadMyDiscussions(await alphaConnectStore.getConnectedAddress());
+  tutorial_contract.on("TutorialCreated", async () => {
+    await alphaConnectStore.loadMyTutorials(await alphaConnectStore.getConnectedAddress());
   })
 
 })

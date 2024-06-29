@@ -12,7 +12,7 @@
         </button>
       </template>
     </div>
-
+    
     <div class="post ">
       <div class=" justify-between">
         <div v-if="activeTab === 'posts'" >
@@ -21,18 +21,24 @@
               <div>
                 <div v-html="post.postData.description" class=""></div>
                 <img :src="`http://127.0.0.1:8080/ipfs/${post.postData.post}`" class="rounded-lg h-64"></img>
-                <div class="flex space-x-4 m-4">
-                  <div class="flex space-x-2">
-                    <div><svg-icon :name="'comment'" class="icon cursor-pointer" color="#020202"></svg-icon></div>
-                    <div>{{ post[6] }}</div>
+                <div  class="flex space-x-4 m-4">
+                  <div @click="commentPost(post)" class="flex space-x-2">
+                    <div><svg-icon :name="'comment'" class="icon " color="#020202"></svg-icon></div>
+                    <div>{{ post?.comment }}</div>
                   </div>
-                  <div class="flex space-x-2">
-                    <div><svg-icon :name="'like'" class="icon cursor-pointer" color="#020202"></svg-icon></div>
-                    <div>{{ post[4] }}</div>
+                  <div @click="likePost(post)" class="flex space-x-2">
+                    <div v-if="!post.liked"><svg-icon :name="'like'" class="icon cursor-pointer"
+                        color="#020202"></svg-icon></div>
+                    <div v-if="post.liked"><svg-icon :name="'likefill'" class="icon cursor-pointer"
+                        color="#020202"></svg-icon></div>
+                    <div>{{ post?.like }}</div>
                   </div>
-                  <div class="flex space-x-2">
-                    <div><svg-icon :name="'dislike'" class="icon cursor-pointer" color="#020202"></svg-icon></div>
-                    <div>{{ post[5] }}</div>
+                  <div @click="unLikePost(post)" class="flex space-x-2">
+                    <div v-if="!post.unliked"><svg-icon :name="'dislike'" class="icon cursor-pointer"
+                        color="#020202"></svg-icon></div>
+                    <div v-if="post.unliked"><svg-icon :name="'dislikefill'" class="icon cursor-pointer"
+                        color="#020202"></svg-icon></div>
+                    <div>{{ post?.dislike }}</div>
                   </div>
                   <div class="flex space-x-2">
                     <!-- <div><svg-icon :name="'dislike'" class="icon cursor-pointer" color="#020202"></svg-icon></div> -->
@@ -41,6 +47,9 @@
                 </div>
               </div>
             </div>
+            <!-- <div class="comments" :style="commentsList">
+              <CommentsList :selected-post="selectedPost" @show-comments="showComments=false"></CommentsList>
+             </div> -->
           </div>
           <div v-if="!listItem.length">
             <EmptyPage :message="'You Have No Published Tweets'"></EmptyPage>
@@ -50,8 +59,11 @@
         <div v-if="activeTab === 'discussions'">
           <MyDiscussions></MyDiscussions>
         </div>
+        <div v-if="activeTab === 'tutorial'">
+          <MyTutorials></MyTutorials>
+        </div>
         <div v-if="activeTab === 'presentations'">
-          <EmptyPage :message="'You have No Published Presentations'"></EmptyPage>
+          <EmptyPage :message="'This module is still in development'"></EmptyPage>
         </div>
       </div>
     </div>
@@ -68,6 +80,7 @@ import { walletAddressConnected, walletConnected } from "@/scripts/ContractConst
 import { getSignerContract } from '../../../scripts/ContractUtils';
 import EmptyPage from '@/components/shared/emptyPage.vue';
 import MyDiscussions from './MyDiscussions.vue';
+import MyTutorials from './MyTutorials.vue';
 
 let { socialMedia_contract } = getSignerContract();
 
@@ -82,6 +95,8 @@ const listItem = computed(() => {
   return getStoreItem.value("myPosts")
 })
 const activeTab = ref("posts")
+const showComments = ref(false)
+const selectedPost = ref()
 
 const follows = ref([
     {
@@ -93,12 +108,56 @@ const follows = ref([
         id: 'discussions'
     },
     {
+        name: "Tutorial",
+        id: 'tutorial'
+    },
+    {
         name: "Presentations",
         id: 'presentations'
     },
     
     
 ])
+
+const commentPost = (post) => {
+  showComments.value = true
+  // showCard.value = true
+  // selectedPost.value = parseInt(post?.PostId)
+  selectedPost.value = post
+
+};
+
+const likePost = async (post) => {
+  try {
+    const likePost = await socialMedia_contract.likePost(
+      parseInt(post?.PostId)
+    )
+
+    let like = await likePost.wait()
+    console.log(like);
+
+  } catch (error) {
+    console.error('Error creating collection:', error);
+  }
+};
+
+const unLikePost = async (post) => {
+  try {
+    const unLikePost = await socialMedia_contract.unLikePost(
+      parseInt(post?.PostId)
+    )
+
+    let like = await unLikePost.wait()
+    console.log(like);
+
+  } catch (error) {
+    console.error('Error creating collection:', error);
+  }
+};
+
+const commentsList = computed(() => {
+  return { width:  !showComments.value ? '0%' : '40%' }
+})
 
 onBeforeMount(async () => {
   await alphaConnectStore.loadMyPosts(await alphaConnectStore.getConnectedAddress());

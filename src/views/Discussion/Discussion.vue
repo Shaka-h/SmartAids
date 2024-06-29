@@ -103,7 +103,7 @@ const MakeDiscussion = () => {
 
 const viewDiscussion = (discussion) => {
   console.log(discussion);
-  router.push(`/discussion/${discussion?.discussionTokenId}`)
+  router.push(`/discussion/${discussion?.discussionId}`)
 };
 
 

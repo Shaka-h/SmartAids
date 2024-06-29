@@ -49,7 +49,10 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                 discussionAnswers: [],
                 discussionAnswered: 'idle',
                 myDiscussions: [],
-                createdTutorialsState: 'idle'
+                createdTutorialsState: 'idle',
+                allTutorials: [],
+                currentTutorial: [],
+                myTutorials: []
 
             }
         }
@@ -822,7 +825,7 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
 
 
 
-                    let postUrl = await nftMyProfile_contract.getTokenURIById(parseInt(post.PostId._hex));
+                    let postUrl = await nftMyProfile_contract.getTokenURIById(parseInt(post.postTokenId._hex));
                     const responseData = await fetchToken(postUrl);
                     const image = await fetchToken(profile.profileUrl)
                     const like = await socialMedia_contract.likedBy(address, parseInt(post.PostId._hex))
@@ -831,7 +834,6 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                     let timestamp = parseInt(post);
                     let readableDate = new Date(timestamp * 1000).toLocaleString();
 
-                    console.log(post, "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
                     if (typeof post === 'object') {
                         return {
                             ...post,
@@ -885,13 +887,15 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                 let nftMyProfile_contract = new ethers.Contract(myProfileContractAddress, nftMyProfile_ABI, signer);
 
                 const promises = getMyPosts.map(async (post) => {
-                    let postUrl = await nftMyProfile_contract.getTokenURIById(parseInt(post.PostId._hex));
+                    let postUrl = await nftMyProfile_contract.getTokenURIById(parseInt(post.postTokenId._hex));
                     console.log(postUrl, "postUrl");
                     const responseData = await fetchToken(postUrl);
                     console.log(responseData, "responseData");
 
                     let timestamp = parseInt(post);
                     let readableDate = new Date(timestamp * 1000).toLocaleString();
+                    const like = await socialMedia_contract.likedBy(myAddress, parseInt(post.PostId._hex))
+                    const unlike = await socialMedia_contract.unLikedBy(myAddress, parseInt(post.PostId._hex))
 
                     if (typeof post === 'object') {
                         return {
@@ -899,7 +903,9 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                             hex: parseInt(post._hex),
                             timestamp: readableDate,
                             postUrl: postUrl,
-                            postData: responseData
+                            postData: responseData,
+                            liked: like,
+                            unliked: unlike
                         };
                     }
                     else {
@@ -1107,6 +1113,7 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
             try {
                 const getAllDiscussion = await discussion_contract.fetchAllDiscussionsCreated()
 
+                console.log(getAllDiscussion, "VVVVVVVVVVVVVVVVVVVVVVVV");
                 const promises = getAllDiscussion.map(async (discussion) => {
 
                     let nftMyProfile_contract = new ethers.Contract(discussion?.profileContract, nftMyProfile_ABI, signer);
@@ -1114,7 +1121,7 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
                     let profile = await nftProfileFactory_contract.profileByAddressOwner(discussion?.creator);
 
 
-                    let discussionUrl = await nftMyProfile_contract.getTokenURIById(parseInt(discussion.discussionId._hex));
+                    let discussionUrl = await nftMyProfile_contract.getTokenURIById(parseInt(discussion.discussionTokenId._hex));
                     const responseData = await fetchToken(discussionUrl);
                     const image = await fetchToken(profile.profileUrl)
                     const like = await discussion_contract.likedBy(address, parseInt(discussion.discussionId._hex))
@@ -1168,17 +1175,16 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
 
                 let profile = await nftProfileFactory_contract.profileByAddressOwner(discussion?.creator);
 
-
-                console.log(profile);
-
-                let discussionUrl = await nftMyProfile_contract.getTokenURIById(parseInt(discussion.discussionId._hex));
+                let discussionUrl = await nftMyProfile_contract.getTokenURIById(parseInt(discussion.discussionTokenId._hex));
                 const responseData = await fetchToken(discussionUrl);
+                console.log(parseInt(discussion.discussionTokenId._hex), "ppppppppppppppppppppppppppppppppp");
                 const image = await fetchToken(profile.profileUrl)
                 const like = await discussion_contract.likedBy(address, parseInt(discussion.discussionId._hex))
                 const unlike = await discussion_contract.unLikedBy(address, parseInt(discussion.discussionId._hex))
 
                 let timestamp = parseInt(discussion);
                 let readableDate = new Date(timestamp * 1000).toLocaleString();
+
 
                 // Construct the discussion object with additional data
                 const discussionItem = {
@@ -1228,7 +1234,10 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
 
                 const promises = getMyDiscussion.map(async (post) => {
                     let postUrl = await nftMyProfile_contract.getTokenURIById(parseInt(post.discussionTokenId._hex));
+
                     const responseData = await fetchToken(postUrl);
+                    console.log(responseData, "tttttttttttttttttttttttt");
+
                     let timestamp = parseInt(post);
                     let readableDate = new Date(timestamp * 1000).toLocaleString();
 
@@ -1402,33 +1411,196 @@ export const useAlphaConnectStore = defineStore('alphaConnectStore', {
 
 
                 
-                console.log(publishedDiscussion?.events[1].args.discussionID);
+                console.log(publishedDiscussion?.events[1].args.tutorialId);
 
-                const publishedDiscussionIdBigNumber = publishedDiscussion?.events[1].args.discussionID
-                const publishedDiscussionId = parseInt(publishedDiscussionIdBigNumber)
+                const publishedTutorialIdBigNumber = publishedDiscussion?.events[1].args.tutorialId
+                const publishedTutorialId = parseInt(publishedTutorialIdBigNumber)
 
                 // // not decodeFunctionData
                 // // let decodedData = new ethers.utils.Interface(nftFactory_ABI).decodeFunctionResult('deployNFTContract', encodedData)
                 // // encodedData is found in receipt
 
-                if (publishedDiscussionId) {
+                if (publishedTutorialId) {
                     store.createdTutorialsState = 'success'; // Set state to success after successful profile creation
-                    notifySuccess("Added discussion successfully!");
+                    notifySuccess("Added tutorial successfully!");
 
                     // Push the storedResponse to the profiles array
-                    // store.createddiscussions.push(storedResponse);
+                    // store.createdtutorials.push(storedResponse);
                 } else {
                     store.createdTutorialsState = 'error'; // Set state to error if contract address is not returned
-                    notifyError('Error creating discussion: Deployed contract address not returned.');
+                    notifyError('Error creating tutorial: Deployed contract address not returned.');
                 }
 
             } catch (error) {
                 store.createdTutorialsState = 'error'; // Set state to error if an error occurs during profile creation
-                notifyError('Error creating discussion: ' + error.message);
+                notifyError('Error creating tutorial: ' + error.message);
             }
             finally {
                 store.isLoading = false;
             }
+        },
+
+        async loadAllTutorials(address) {
+
+            const store = this;
+
+            try {
+                const getAllTutorial = await tutorial_contract.fetchAllTutorialCreated()
+
+                const promises = getAllTutorial.map(async (tutorial) => {
+
+                    let nftMyProfile_contract = new ethers.Contract(tutorial?.profileContract, nftMyProfile_ABI, signer);
+
+                    let profile = await nftProfileFactory_contract.profileByAddressOwner(tutorial?.creator);
+
+
+                    let tutorialUrl = await nftMyProfile_contract.getTokenURIById(parseInt(tutorial.tutorialTokenId._hex));
+                    const responseData = await fetchToken(tutorialUrl);
+                    const image = await fetchToken(profile.profileUrl)
+                    const like = await tutorial_contract.likedBy(address, parseInt(tutorial.tutorialId._hex))
+                    const unlike = await tutorial_contract.unLikedBy(address, parseInt(tutorial.tutorialId._hex))
+
+                    let timestamp = parseInt(tutorial);
+                    let readableDate = new Date(timestamp * 1000).toLocaleString();
+
+                    if (typeof tutorial === 'object') {
+                        return {
+                            ...tutorial,
+                            hex: parseInt(tutorial._hex),
+                            timestamp: readableDate,
+                            tutorialUrl: tutorialUrl,
+                            tutorialData: responseData,
+                            owner: profile?.username,
+                            image: image?.photoCID,
+                            liked: like,
+                            unliked: unlike
+                        };
+                    }
+                    else {
+                        return tutorial;
+                    }
+                });
+
+                const listItem = await Promise.all(promises);
+  
+
+                // Update store state with fetched profiles
+                store.state['allTutorials'] = listItem;
+
+            } catch (error) {
+                console.error('Error loading Tutorials created:', error);
+                // Handle error
+                notifyError('Error loading Tutorials created: ' + error.message);
+            } finally {
+                store.isLoading = false;
+            }
+
+        },
+
+        async loadATutorial(address, tutorialId) {
+
+            const store = this;
+
+            try {
+                const tutorial = await tutorial_contract.getADiscussion(tutorialId)
+
+                let nftMyProfile_contract = new ethers.Contract(tutorial?.profileContract, nftMyProfile_ABI, signer);
+
+                let profile = await nftProfileFactory_contract.profileByAddressOwner(tutorial?.creator);
+
+                let tutorialUrl = await nftMyProfile_contract.getTokenURIById(parseInt(tutorial.tutorialTokenId._hex));
+                const responseData = await fetchToken(tutorialUrl);
+                console.log(parseInt(tutorial.tutorialTokenId._hex), "ppppppppppppppppppppppppppppppppp");
+                const image = await fetchToken(profile.profileUrl)
+                const like = await tutorial_contract.likedBy(address, parseInt(tutorial.tutorialId._hex))
+                const unlike = await tutorial_contract.unLikedBy(address, parseInt(tutorial.tutorialId._hex))
+
+                let timestamp = parseInt(tutorial);
+                let readableDate = new Date(timestamp * 1000).toLocaleString();
+
+
+                // Construct the tutorial object with additional data
+                const tutorialItem = {
+                    ...tutorial,
+                    hex: parseInt(tutorial.tutorialId._hex),
+                    timestamp: readableDate,
+                    tutorialUrl: tutorialUrl,
+                    tutorialData: responseData,
+                    owner: profile?.username,
+                    image: image?.photoCID,
+                    liked: like,
+                    unliked: unlike
+                };
+
+                // Update the store state with the new tutorial
+                store.state.currentTutorial = tutorialItem;
+
+                console.log('tutorial loaded:', tutorialItem);
+
+                // // Update store state with fetched profiles
+                // store.state['alltutorials'] = listItem;
+
+            } catch (error) {
+                console.error('Error loading tutorials created:', error);
+                // Handle error
+                notifyError('Error loading tutorials created: ' + error.message);
+            } finally {
+                store.isLoading = false;
+            }
+
+        },
+
+        async loadMyTutorials(myAddress) {
+            const store = this;
+
+            try {
+                store.isLoading = true;
+
+                const getMyTutorial = await tutorial_contract?.fetchMyTutorialCreated()
+
+                console.log(getMyTutorial, "gvdgvdtyefyvgy");
+
+                this.loadMyProfileContract(myAddress)
+
+                const myProfileContractAddress = store.state['myProfileContract'].address
+                let nftMyProfile_contract = new ethers.Contract(myProfileContractAddress, nftMyProfile_ABI, signer);
+
+                const promises = getMyTutorial.map(async (post) => {
+                    let postUrl = await nftMyProfile_contract.getTokenURIById(parseInt(post.tutorialTokenId._hex));
+
+                    const responseData = await fetchToken(postUrl);
+                    console.log(responseData, "tttttttttttttttttttttttt");
+
+                    let timestamp = parseInt(post);
+                    let readableDate = new Date(timestamp * 1000).toLocaleString();
+
+                    if (typeof post === 'object') {
+                        return {
+                            ...post,
+                            hex: parseInt(post._hex),
+                            timestamp: readableDate,
+                            postUrl: postUrl,
+                            postData: responseData
+                        };
+                    }
+                    else {
+                        return post;
+                    }
+                });
+
+                const listItem = await Promise.all(promises);
+
+                // Update store state with fetched profiles
+                store.state['myTutorials'] = listItem;
+
+            } catch (error) {
+                console.error('Error loading myTutorials:', error);
+                // Handle error
+                notifyError('Error loading myTutorials: ' + error.message);
+            } finally {
+                store.isLoading = false;
+            }
+
         },
     },
 });

@@ -7,6 +7,7 @@
             Back
         </div>
     </div>
+
     <div class="flex items-center border">
         <div class=" border-r-2 flex flex-col p-4">
             <div class="flex items-center space-x-2">
@@ -43,8 +44,7 @@
     </div>
 
     <div class="border p-4 mt-4">
-        <div>
-            {{ discussion?.discussionData?.name }}
+        <div v-html="discussion?.discussionData?.description">
         </div>
         <!-- <div class="p-2 border bg-gray-400 mt-4">
             <div class="w-full hover:text-blue flex justify-end cursor-pointer">
@@ -133,6 +133,7 @@ const { getStoreItem } = storeToRefs(alphaConnectStore)
 const discussion = computed(() => {
   return getStoreItem.value("currentDiscussion")
 })
+
 const postAnswer = () => {
     showCard.value = true
     discussionId.value = route?.params?.discussionId
