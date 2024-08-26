@@ -146,7 +146,7 @@ const connect = () => {
             .then((accounts) => {
                 walletAddressConnected.value = accounts[0];
                 console.log('Connected with account:', walletAddressConnected.value);
-                router.push("/posts"); // Access the value of wallet using .value
+                router.push("/register"); // Access the value of wallet using .value
 
                 // Attempt to switch to the desired network
                 // switchToNetwork().then(() => {
