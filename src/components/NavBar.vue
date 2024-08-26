@@ -1,25 +1,39 @@
 <template>
-    <div class="flex flex-row justify-between pt-0 px-4 items-center" style="background-color: #0D1042">
-      <div class="h-16 flex items-center w-16 cursor-pointer" @click="router.push('/')"> 
-        <img src="/src/assets/images/eGAlogo.png"/>
-      </div>
-      <div class="flex space-x-4"> 
-        <div v-for="(component, index) of components" :key="index">
-          <div
-            v-if="component.id === activeComponent"
-            class="text-white hover:border-b cursor-pointer"
-            @click="handleComponentClick(component.id)"
-          >
-            {{ component.name }}
-          </div>
-          <div
-            v-else
-            class="text-white hover:border-b cursor-pointer"
-            @click="handleComponentClick(component.id)"
-          >
-            {{ component.name }}
-          </div>
+    <div class="flex flex-row justify-between pt-0 px-4 items-center" style="background-color: #6B5F88">
+      <div class="px-4 py-3" @click="router.push('/')" style="width: 280px;"> 
+        <div v-if="panelName" class="capitalize font-bold text-white">
+          {{ panelName }}
         </div>
+      </div>
+      <div class="flex justify-between w-full items-center">
+        <div class="flex space-x-4 items-center "> 
+          <div>
+            <svg-icon
+              name="menu"
+              class="h-5 w-5"
+            ></svg-icon>
+          </div>
+          <div class="flex items-center justify-center">
+            <v-breadcrumbs class="text-white flex items-center font-bold justify-center mb-0" :items="hasBreadcrumb" v-if="hasBreadcrumb">
+              <template v-slot:divider>
+                <svg-icon
+                  name="chevronright"
+                  height="h-5"
+                  width="w-5"
+                  class="icon items-center flex"
+                  color="#ffffff"
+                ></svg-icon>
+              </template>
+            </v-breadcrumbs>
+          </div>
+         </div>
+         <div class="px-4 cursor-pointer flex">
+          <svg-icon
+            name="powerOff"
+            class="h-5 w-5"
+            color="#FFFFFF"
+          ></svg-icon>
+          </div>
       </div>
     </div>
   </template>
@@ -28,6 +42,9 @@
   import { useRouter } from 'vue-router';
   import { ref } from 'vue';
   import {walletAddressConnected} from "@/scripts/ContractConstants";
+  import SvgIcon from "@/components/shared/SvgIcon.vue";
+
+  const props = defineProps(['navigationLinks', 'panelName', 'hasBreadcrumb'])
 
   
   const router = useRouter();

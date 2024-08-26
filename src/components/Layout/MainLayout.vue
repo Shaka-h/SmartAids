@@ -1,12 +1,14 @@
 <template>
-    <div>
-      <nav-bar></nav-bar>
+    <div style="background-color: #EFEFEF;">
+      <top-bar></top-bar>
 
-      <div class="mx-4 mt-4 rounded-t-xl shadow flex overflow-hidden" style="font-family: 'Quicksand', sans-serif;background-color: #fff; height: 100vh;">
+      <nav-bar class="mt-1" :panel-name="panelName" :has-breadcrumb="directories"></nav-bar>
+
+      <div class="mx-4 mt-4 flex overflow-hidden" style="font-family: 'Quicksand', sans-serif; height: 100vh;">
          
-        <side-bar></side-bar>
-  
-        <div class="py-3 px-4 w-full rounded-r-xl shadow-lg overflow-y-scroll" style="background-color: #70426418; height: 100%;">
+        <side-bar :navigation-links="navigationLinks" :panel-name="panelName"></side-bar>
+
+        <div class="py-3 px-4 w-full rounded-r-xl shadow-lg overflow-y-scroll" style="background-color: #FAFAFA; height: 100%;">
           <router-view></router-view>
         </div>
       </div>
@@ -15,5 +17,11 @@
 
 <script setup>
 import NavBar from '../NavBar.vue';
-import SideBar from '../Layout/SideBar.vue'
+import SideBar from '../Layout/SideBar.vue';
+import TopBar from '../Layout/TopBar.vue';
+
+const props = defineProps(['navigationLinks', 'panelName', 'directories'])
+
+
+
 </script>
